@@ -532,8 +532,14 @@ to pull data broken down by day, see the Time Series Report.
       
         + aggregate_by: "day" (string) - if supplied, will get a Time Series Report instead.
         + networks: "adwords" (string) - list of networks to include in the result, can be array, single value, or comma-separated list
-        + statuses: "all_visible" (string) - use `"all_with_deleted"` to filter to include deleted entities, 
-          or `"all_active"` for only active entities. This is a shorthand to add a specific filter.
+        + statuses: "all_visible" (string)
+            filter based on entity status codes
+        
+            * `all_visible` includes Active, Paused, and Completed entities (this is the default option)
+            * `all_active` includes Active entities
+            * `all_inactive` includes Paused and Completed entities
+            * `all_with_deleted` includes Active, Paused, Completed, Archived, and Deleted entities
+        
         + filters (array) - a set of filters to limit the results by (AND conditions)
             
             + (object) - filter object
@@ -694,8 +700,14 @@ day, week, or month datapoints. The request is the same as a standard report but
         + order: "desc" (string) - sort either ascending (`"asc"`) or descending (`"desc"`)
         + `group_by`: "network" (string) - if supplied, metrics will be grouped by this meta key
         + networks: "adwords" (string) - list of networks to include in the result, can be array, single value, or comma-separated list
-        + statuses: "all_visible" (string) - use `"all_with_deleted"` to filter to include deleted entities, 
-          or `"all_active"` for only active entities. This is a shorthand to add a specific filter.
+        + statuses: "all_visible" (string)
+            filter based on entity status codes
+        
+            * `all_visible` includes Active, Paused, and Completed entities (this is the default option)
+            * `all_active` includes Active entities
+            * `all_inactive` includes Paused and Completed entities
+            * `all_with_deleted` includes Active, Paused, Completed, Archived, and Deleted entities
+        
         + filters (array) - a set of filters to limit the results by (AND conditions)
             
             + (object) - filter object
@@ -733,8 +745,12 @@ day, week, or month datapoints. The request is the same as a standard report but
             Optional list of AdStage Entity IDs to pull a report for, if not included all data available for 
             the organization will be used. This can be a list of accounts, account groups, 
             folders, or campaigns.
-        + dimensions (array) - only available if you use a non-AdStage provider - a list of dimension names
-     
+        + dimensions (array) - only available if you use a non-AdStage provider - a list of 
+          dimension names to break a report by. 
+          
+          * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
+          * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
+          * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
 
     + Body
         
