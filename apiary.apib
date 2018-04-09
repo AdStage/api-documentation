@@ -490,6 +490,83 @@ like `"/network/{network}/{entity}/{remote_id}"` where:
         }
 
 
+### Get Import Status [GET /users/{user_id}/sync_information]
+
++ Parameters
+
+    + user_id (integer) - the fetch ID of the user
+
++ Request
+    + Headers
+    
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+            
++ Response 200 (application/json)
+
+    A list containing import status information for each linked account.
+
+    + Attributes
+        + accounts (array)
+            + (object)
+                + name: "Account #1" (string) - the name of the account
+                + network: "adwords" (string) - the network of the account
+                + import_status (object) - details about the import status of the account
+                    + code: "good" (string)
+                        status code for the account import
+                        * `good`: the most recent import has completed
+                        * `currently_importing`: an import is currently running
+                        * `permanent_authentication_error`: the account needs to be relinked due to an expired token or other authentication issue
+                    + is_importing: false (boolean) - whether or not an import is currently running for the account
+                    + last_import_started: (string) - start timestamp of the most recent import
+                    + last_import_finished: (string)
+                        if the most recent import has completed, this timestamp represents the 
+                        end timestamp of the most recent import; if an import is currently
+                        running, this timestamp represents the end timestamp of the previous
+                        completed import
+                 
+    + Body
+    
+        {
+            "accounts": [
+                {
+                    "name": "Account #1",
+                    "network": "adwords",
+                    "import_status": {
+                        "code": "good",
+                        "is_importing": false,
+                        "last_import_started": "2018-01-01T08:30:00Z",
+                        "last_import_finished": "2018-01-01T11:11:00Z",
+                        "last_import_failed": null,
+                        "importable": true
+                    }
+                },
+                {
+                    "name": "Account #2",
+                    "network": "facebook",
+                    "import_status": {
+                        "code": "currently_importing",
+                        "is_importing": true,
+                        "last_import_started": "2018-01-01T12:00:00Z",
+                        "last_import_finished": "2018-01-01T11:45:00Z",
+                        "last_import_failed": null,
+                        "importable": true
+                    }
+                },
+                {
+                    "name": "Account #3",
+                    "network": "linkedin",
+                    "import_status": {
+                        "code": "permanent_authentication_error",
+                        "is_importing": false,
+                        "last_import_started": "2018-01-01T03:15:00Z",
+                        "last_import_finished": "2018-01-01T03:20:00Z",
+                        "last_import_failed": null,
+                        "importable": false
+                    }
+                }
+            ]
+        }
 
 ## Building Reports [/organizations/{org_id}/build_report] 
 
