@@ -1,0 +1,1146 @@
+FORMAT: 1A
+HOST: https://platform.adstage.io/api
+
+# AdStage API
+
+The AdStage API is a cross-network advertising API allowing access to AdWords, 
+Bing Ads, Facebook, LinkedIn, Twitter, Instagram, Gemini, and Google Analytics data from a unified 
+interface.
+
+
+## Authentication 
+
+To get started using the AdStage API you will need a token. You can get one by talking to our support team.
+
+__Note__: If you are a developer that would like to create applications for multiple AdStage users, our API has OAuth 2 
+support, but we don't currently have a self-service way to create new OAuth2 applications. Contact us and we
+can get you started with a `client_id` and `client_secret`
+
+
+## Status
+
+Keep up to date with any problems we might be experiencing here: [http://status.adstage.io/](http://status.adstage.io/)
+
+## AdStage API Concepts
+
+### Date Ranges
+
+The AdStage endpoint uses date range strings to represent time periods. These can be strings of format: 
+`"last_30_days"`, or `"this_month"`, or you can use hardcoded dates such as `"2016-12-25..2016-12-31"`.  
+Hardcoded date ranges will give you data for all calendar days between the two dates provided (inclusive).
+
+### Entity IDs
+
+AdStage has two styles of IDs available for external use. The newer versions are called entity ids in our API.
+When you pull a report from the Build Report endpoint, each row, where available, will include an `entity_id` 
+in the `meta` section of that row. 
+
+To generate these ids manually, the syntax is a string that looks 
+like `"/network/{network}/{entity}/{remote_id}"` where:
+
++ the `{network}` variable can be one of: 
+  + `adwords`
+  + `bing_ads`
+  + `twitter`
+  + `linkedin`
+  + `facebook`
+  + `adstage` (with special entities: `account_group`, `user`, `organization` and `folder`) 
++ the `{entity}` variable can be one of: 
+  + `account`
+  + `campaign`
+  + `ad_group`
+  + `ad`
+  + `keyword`
+  + `criterion` (adwords keywords)
++ the `{remote_id}` variable is the ID provided by the network, these can be obtained from our 
+  reporting endpoint as `remote_account_id`, `remote_campaign_id`, `remote_ad_group_id`, `remote_ad_id`, `remote_keyword_id`
+   
+     
+## Basics [/]
+
+
+
+### Get Current User Info [GET /me]
+
+
++ Request
+    + Headers
+    
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+            
++ Response 200 (application/json)
+        
+        {
+            "first_name": "Clark",
+            "last_name": "Gates-George",
+            "email": "clark@adstage.io",
+            "created_at": 1351707901,
+            "id": "/api/users/1",
+            "fetch_id": 1,
+            "has_linked": true,
+            "account_status": {
+                "adwords": "unimportable",
+                "bing_ads": "unimportable",
+                "facebook": "currently_importing",
+                "linkedin": "permanent_authentication_error",
+                "twitter": "currently_importing"
+              },
+              "visible_account_status": {
+                "adwords": "unimportable",
+                "bing_ads": "unimportable",
+                "facebook": "currently_importing",
+                "linkedin": "currently_importing",
+                "twitter": "currently_importing"
+              },
+              "_embedded": {
+                "adstage:organizations": [
+                  {
+                    "id": "/api/organizations/1",
+                    "fetch_id": 40,
+                    "active_accounts_count": 45,
+                    "is_active_customer": true,
+                    "additional_accounts_purchased": 23,
+                    "advertiser_type": "Agency / Consultant",
+                    "advertising_objective": "Unknown",
+                    "billable_accounts_count": 43,
+                    "billing_contact_email": "clark@adstage.io",
+                    "is_billing_error": false,
+                    "blurb": "Connect ad accounts to the AdStage analytics dashboard and compare performance.  View current key performance metrics (CPA, CPM, CTR) at a glance. Measure your advertising ROS with customizable graphs that allow you to easily gauge performance across multiple networks for any historical period. AdStage identifies your top-performing ads and keywords, which helps you determine what wording resonates well with your audience. Use that ad messaging in your sales pitch, blog posts, or website copy. ",
+                    "company_name": "AdStage",
+                    "customer_status": "paying",
+                    "is_former_customer": false
+                 }
+                ]
+            }
+        }
+                                
+
+### Get Organization Info [GET /organizations/{org_id}]
+
+
++ Parameters
+
+    + org_id (integer) - the fetch id of the user's organization
+
++ Request
+    + Headers
+    
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+            
++ Response 200 (application/json)
+
+    + Attributes
+    
+        + id: /api/organizations/1 (string)
+        
+            The path to the organization in the AdStage API
+            
+        + fetch_id: 40 (number)
+        
+            The fetch id of the organization
+
+    + Body
+    
+            {
+              "active_accounts_count": 45,
+              "is_active_customer": true,
+              "additional_accounts_purchased": 23,
+              "advertiser_type": "Agency / Consultant",
+              "advertising_objective": "Unknown",
+              "billable_accounts_count": 43,
+              "billing_contact_email": "clark@adstage.io",
+              "is_billing_error": false,
+              "blurb": "Connect ad accounts to the AdStage analytics dashboard and compare performance.",
+              "company_name": "AdStage",
+              "company_url": "http://www.adstage.io",
+              "cumulative_monthly_spend": 12654,
+              "customer_status": "paying",
+              "fetch_id": 40
+            }
+
+
+### List Accounts [GET /users/{user_id}/list_network_accounts/all]    
+
+
+
++ Parameters
+    
+    + user_id: 40 (string)
+        
+        which user you want an account list for. 
+
++ Request
+
+    + Headers
+        
+        Accept: application/json
+        Authorization: Bearer de4dxxxxb33f
+        
++ Response 200
+
+  A list of accounts. 
+  
+  + Attributes
+        + _links (object)
+            + next (object)
+                + href (string) - url to get next page of accounts
+                
+                     `"https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=10&offset=10"` 
+        
+        + _embedded (object)
+            + item (array)
+                + (object)
+                    + remote_id: "12345" (string) - the identifier assigned to this account by the ad network
+                    + network: "adwords" (string) - the ad network for the given account
+                    + name: "AdWords Account #1" (string) - the human readable name for the account
+                    + is_visible: true (boolean) - whether or not this account is visible
+  
+  + Body
+  
+        {
+            "_embedded": {
+                "item": [
+                    {
+                        "remote_id": "12345",
+                        "network": "adwords",
+                        "network_name": "AdWords",
+                        "name": "AdWords Account #1",
+                        "is_visible": true,
+                        "currency_code": "USD",
+                        "status": "ACTIVE",
+                        "_embedded": {},
+                        "_forms": {
+                            "adstage:unlink": {
+                                "href": "https://platform.adstage.io/api/organizations/40/unlink_network_account",
+                                "method": "PUT",
+                                "fields": {
+                                    "network": {
+                                        "type": "hidden",
+                                        "value": "adwords"
+                                    },
+                                    "network_account_id": {
+                                        "type": "hidden",
+                                        "value": "12345"
+                                    }
+                                }
+                            }
+                        },
+                        "_links": {
+                            "self": {
+                                "href": "https://platform.adstage.io/api/network/adwords/accounts/12345",
+                                "title": "AdWords Account #1"
+                            }
+                        }
+                    }
+                ]
+            },
+            "_links": {
+                "next": {
+                    "href": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc"
+                }
+            },
+            "counts": {
+                "overall": 5,
+                "page": 1
+            },
+            "current_page": 1,
+            "id": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc",
+            "list_of": "item",
+            "page_options": {
+                "limit": 1,
+                "offset": 0
+            },
+            "page_size": 1,
+            "page_total": 1,
+            "total": 5,
+            "total_pages": 5
+        }
+
+
+### List Account Groups [GET /users/{user_id}/account_groups]    
+
+
+
++ Parameters
+    
+    + user_id: 40 (string)
+        
+        which user you want an account group list for. 
+
++ Request
+
+    + Headers
+        
+        Accept: application/json
+        Authorization: Bearer de4dxxxxb33f
+        
++ Response 200
+
+  A list of account groups. 
+  
+  + Attributes
+        + _links (object)
+            + next (object)
+                + href (string) - url to get next page of account groups
+                
+                     `"https://platform.adstage.io/api/users/40/account_groups?limit=10&offset=10&networks=all"` 
+        
+        + _embedded (object)
+            + item (array)
+                + (object)
+                    + id: 40 (number) - the identifier assigned to this account group
+                    + name: "Client #1" (string) - the full human readable name for the metric
+                    + is_visible: true (boolean) - whether all the accounts are visible in this group
+                    + account_count: 5 (number) - total number of accounts in the group
+                    + _forms (object) - list of actions available on the account group
+  
+  + Body
+  
+        {
+            "_embedded": {
+                "item": [
+                    {
+                        "account_count": 1,
+                        "id": 988,
+                        "is_visible": false,
+                        "name": "Client 3 Marketing",
+                        "_embedded": {},
+                        "_forms": {
+                            "adstage:add": {
+                                "fields": {
+                                    "network": "string",
+                                    "network_account_id": "integer"
+                                },
+                                "href": "https://platform.adstage.io/api/users/40/account_groups/988/add",
+                                "method": "POST",
+                                "name": "account_group"
+                            }
+                        },
+                        "_links": {
+                            "adstage:add": {
+                                "form": true,
+                                "href": "https://platform.adstage.io/api/users/40/account_groups/988/add",
+                                "method": "POST",
+                                "name": "account_group"
+                            },
+                            "adstage:list": [
+                                {
+                                    "href": "https://platform.adstage.io/api/users/40/account_groups/988/list_accounts{?limit,offset}",
+                                    "name": "network_accounts",
+                                    "templated": true
+                                }
+                            ],
+                            "self": {
+                                "href": "/api/users/40/account_groups/988"
+                            }
+                        }
+                    }
+                ]
+            },
+            "_links": {
+                "next": {
+                    "href": "https://platform.adstage.io/api/users/40/account_groups?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc"
+                }
+            },
+            "counts": {
+                "overall": 5,
+                "page": 1
+            },
+            "current_page": 1,
+            "id": "https://platform.adstage.io/api/users/40/account_groups?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc",
+            "list_of": "item",
+            "page_options": {
+                "limit": 1,
+                "offset": 0
+            },
+            "page_size": 1,
+            "page_total": 1,
+            "total": 5,
+            "total_pages": 5
+        }
+
+
+### List Folders [GET /users/{user_id}/list_folders]    
+
+
+
++ Parameters
+    
+    + user_id: 40 (string)
+        
+        which user you want an account group list for. 
+
++ Request
+
+    + Headers
+        
+        Accept: application/json
+        Authorization: Bearer de4dxxxxb33f
+        
++ Response 200
+
+  A list of folders. 
+  
+  + Attributes
+        + _links (object)
+            + next (object)
+                + href (string) - url to get next page of folders
+                
+                     `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=10&networks=all"` 
+        
+        + _embedded (object)
+            + item (array) - list of folders
+                + (object)
+                    + fetch_id: 40 (string) - the identifier assigned to this folder
+                    + id: "/api/folders/40" (string) - a uri identifier for the folder
+                    + name: "Folder #1" (string) - name of the folder
+                    + network_counts (object) - count of campaigns in folder by network
+                    + _forms (object) - list of actions available on the folder
+                    + _links (object) - list of actions and related entities to the folder
+                        + `adstage:network_campaign` - HAL links to adstage campaigns
+  
+  + Body
+  
+        {
+            "_embedded": {
+                "item": [
+                    {
+                        "daily_budget_value": 0.0,
+                        "fetch_id": "168",
+                        "id": "/api/folders/168",
+                        "lifetime_budget_value": 0.0,
+                        "monthly_budget_value": 0.0,
+                        "name": "040414 Updated",
+                        "network_counts": {
+                            "bing_ads": 1,
+                            "totals": 1
+                        },
+                        "_forms": {
+                            "adstage:link": {
+                                "fields": {
+                                    "folder_id": {
+                                        "title": "Choose a folder",
+                                        "type": "adstage:folder",
+                                        "validators": [
+                                            "required"
+                                        ],
+                                        "value": "/api/folders/168"
+                                    },
+                                    "network_campaign_ids": {
+                                        "title": "Choose one or more campaigns",
+                                        "type": "adstage:folder",
+                                        "validators": [
+                                            "required"
+                                        ],
+                                        "value": []
+                                    }
+                                },
+                                "href": "https://platform.adstage.io/api/folders/168/add",
+                                "method": "POST",
+                                "title": "Link Campaigns to Folder"
+                            }
+                        },
+                        "_links": {
+                            "adstage:network_campaign": [
+                                {
+                                    "data-fetch_id": 6745,
+                                    "data-id": "/api/network/bing_ads/campaigns/6745",
+                                    "data-navgroup": "search",
+                                    "data-network": "bing_ads",
+                                    "data-network_name": "Bing",
+                                    "href": "https://platform.adstage.io/api/network/bing_ads/accounts/506/campaigns/6745",
+                                    "name": "/api/network/bing_ads/campaigns/6745",
+                                    "network_account_id": "/api/network/bing_ads/accounts/506",
+                                    "network_account_name": "AdStage, Inc.",
+                                    "title": "AdStage: 040414"
+                                }
+                            ],
+                            "self": {
+                                "data-fetch_id": "168",
+                                "href": "https://platform.adstage.io/api/folders/168",
+                                "name": "168",
+                                "title": "040414 Updated"
+                            }
+                        }
+                    }
+                ]
+            },
+            "_links": {
+                "next": {
+                    "href": "https://platform.adstage.io/api/users/40/list_folders?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc"
+                },
+                "self": {
+                    "href": "https://platform.adstage.io/api/users/40/list_folders?limit=1&access_token=57a082a0de5d9eba2d6580a3b1a7ba1876c23d0a46177f327a4289a3b272b670"
+                }
+            },
+            "counts": {},
+            "current_page": 1,
+            "id": "https://platform.adstage.io/api/users/40/list_folders?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc",
+            "list_of": "item",
+            "page_options": {
+                "limit": 1,
+                "offset": 0
+            },
+            "page_size": 1,
+            "page_total": 1,
+            "total": 2309,
+            "total_pages": 2309
+        }
+
+
+
+## Building Reports [/organizations/{org_id}/build_report] 
+
+
+This endpoint is used to pull your advertising data. To use this you will need your token and your organization's fetch id.
+
+Use this endpoint to pull reports at any level of reporting available within AdStage.
+
+### Getting a Basic Report [POST /organizations/{org_id}/build_report]
+
+This type of report will return one row per requested entity with metrics aggregated across the requested timeframe,
+to pull data broken down by day, see the Time Series Report.
+
++ Parameters
+
+    + org_id (integer) - the fetch id of the user's organization
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+        
+        + `entity_level`: "accounts", "campaigns", "ad_groups", "ads", "keywords" (enum, required)
+            
+            which entity level of report you want to fetch (`"accounts"`, `"campaigns"`, 
+            `"ad_groups"`, `"ads"`, `"keywords"`)
+        
+        + `date_range`: "last_30_days" (string, required)
+            
+            an adstage date range string (`"this_month"`, `"last_30_days"`, `"2016-12-12..2016-12-15"`)
+        
+        + limit: 10 (number) - number of rows to include
+        + `sort_by`: "clicks" (string) - metric name/meta name to sort by
+        + order: "desc" (string) - sort either ascending (`"asc"`) or descending (`"desc"`)
+        + `group_by`: "network" (string) - if supplied, metrics will be grouped by this meta key
+      
+        + aggregate_by: "day" (string) - if supplied, will get a Time Series Report instead.
+        + networks: "adwords" (string) - list of networks to include in the result, can be array, single value, or comma-separated list
+        + statuses: "all_visible" (string) - use `"all_with_deleted"` to filter to include deleted entities, 
+          or `"all_active"` for only active entities. This is a shorthand to add a specific filter.
+        + filters (array) - a set of filters to limit the results by (AND conditions)
+            
+            + (object) - filter object
+                + path: "meta/campaign_name" (string) - metric name or meta name prefixed with `"meta/"`
+                + value: 5 - a number, string or array, depending on operator 
+                + op (enum)
+                    + "gt" - greater than
+                    + "lt" - less than
+                    + "gte" - greater than or equal
+                    + "lte" - less than or equal
+                    + "in" - exact match to one of the values provided in the filter
+                    + "iin" - case-insensitive match for one of the values provided in the filter
+                    + "match" - case-sensitive string matching
+                    + "nomatch" - case-sensitive string NOT matching
+                    + "imatch" - case-insensitive string matching
+                    + "inomatch" - case-insensitive string NOT matching
+                    
+            
+        + fields: "clicks", "spend", "impressions" (array) - optional list of fields to include in the result. If fields are not requested, all possible fields will be returned in the report.
+        + query (object) - This is used to dynamically include or exclude certain fields in the response. 
+          set to true to include all available metadata, or pick and choose specific keys to show with an object like 
+          
+              ```
+              {"_embedded": 
+                {"adstage:metrics/totals": {"data": true}}}
+              ```
+        + provider: "adstage" (string) - to pull reports from other sources, you can set this to a source name. 
+          The default is "adstage", which relies on data imported into AdStage. For external providers - 
+          currently we support "facebook", which requires `"targets"` to be set to a single Facebook account,
+          "adwords", which requires `"targets"` to be set to a single AdWords account, "gemini", which requires `"targets"`
+          to be set to a single Gemini account (beta access only),
+          and `"google_analytics"`, which requires `"targets"` to be set to a single GA Profile.
+        + targets: "/network/adstage/user/292", "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array)
+            
+            Optional list of AdStage Entity IDs to pull a report for, if not included all data available for 
+            the organization will be used. This can be a list of accounts, account groups, 
+            folders, or campaigns.
+        + dimensions (array) - only available if you use a non-AdStage provider - a list of 
+          dimension names to break a report by. 
+          
+          * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
+          * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
+          * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
+
+    + Body
+        
+            {
+                "entity_level": "campaigns",
+                "date_range": "last_30_days",
+                "fields": ["clicks", "spend", "campaign_name", "remote_campaign_id", "network"]
+            }
+
++ Response 200 (application/json)
+
+    + Attributes
+    
+        + _embedded
+            - `adstage:metrics` (array) - list of report rows (if `"aggregate_by"` is set, will return `"adstage:time_series"` instead)
+                - (object)
+                    - data (object) - key-value pairs of metric identifiers to floats
+                    - meta (object) - key-value pairs of metadata names to strings or objects
+            - `adstage:metrics/totals` (object) - totals row for the result
+                - data (object) - key-value pairs of metric identifiers to floats
+                - meta (object) - key-value pairs of metadata names to arrays of unique values in the results
+            
+        
+    + Body
+
+            {
+              "_embedded": {
+                "adstage:metrics": [
+                  {
+                    "data": {
+                      "clicks": 1014,
+                      "spend": 339.460006713867
+                    },
+                    "timeframe": {
+                      "start": "2016-12-22T00:00:00Z",
+                      "end": "2017-01-20T23:59:59Z"
+                    },
+                    "meta": {
+                      "campaign_name": "Display - US - Gmail Ads v2",
+                      "entity_id": "/network/adwords/campaign/735025362",
+                      "remote_campaign_id": "735025362",
+                      "network": "adwords",
+                      "currency_code": "USD",
+                      "currency_symbol": "$",
+                      "row_name": "Display - US - Gmail Ads v2"
+                    }
+                  }
+                ],
+                "adstage:metrics/totals": {
+                  "id": "totals",
+                  "data": {
+                    "clicks": 8783,
+                    "spend": 23780.8718175292
+                  },
+                  "timeframe": {
+                    "start": "2016-12-01T00:00:00Z",
+                    "end": "2017-01-31T23:59:59Z"
+                  },
+                  "meta": {
+                    "currency_code": "USD",
+                    "currency_symbol": "$",
+                    "series_name": "All"
+                  }
+                }
+              },
+              "counts": {
+                "overall": 73262,
+                "filtered_buckets": 11820,
+                "page": 10,
+                "filtered": 11820,
+                "overall_buckets": 73262
+              },
+              "_links": {
+                "next": {
+                  "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=10&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                },
+                "last": {
+                  "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=11810&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                }
+              }
+            }
+
+### Time Series Report [POST /organizations/{org_id}/build_report]
+
+This type of report will return one row per requested entity with metrics broken into a series of 
+day, week, or month datapoints. The request is the same as a standard report but using the special 
+`"aggregate_by"` option to change the format of the returned data.
+
+
++ Parameters
+
+    + org_id (integer) - the fetch id of the user's organization
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+        
+        + `entity_level`: "accounts", "campaigns", "ad_groups", "ads", "keywords" (enum, required)
+            
+            which entity level of report you want to fetch (`"accounts"`, `"campaigns"`, 
+            `"ad_groups"`, `"ads"`, `"keywords"`)
+        
+        + `aggregate_by`: "day", "week", "month" (enum) - the level of detail to include in the time series
+        + `date_range`: "last_30_days" (string, required)
+            
+            an adstage date range string (`"this_month"`, `"last_30_days"`, `"2016-12-12..2016-12-15"`)
+        
+        + limit: 10 (number) - number of rows to include
+        + `sort_by`: "clicks" (string) - metric name/meta name to sort by
+        + order: "desc" (string) - sort either ascending (`"asc"`) or descending (`"desc"`)
+        + `group_by`: "network" (string) - if supplied, metrics will be grouped by this meta key
+        + networks: "adwords" (string) - list of networks to include in the result, can be array, single value, or comma-separated list
+        + statuses: "all_visible" (string) - use `"all_with_deleted"` to filter to include deleted entities, 
+          or `"all_active"` for only active entities. This is a shorthand to add a specific filter.
+        + filters (array) - a set of filters to limit the results by (AND conditions)
+            
+            + (object) - filter object
+                + path: "meta/campaign_name" (string) - metric name or meta name prefixed with `"meta/"`
+                + value: 5 - a number, string or array, depending on operator 
+                + op (enum)
+                    + "gt" - greater than
+                    + "lt" - less than
+                    + "gte" - greater than or equal
+                    + "lte" - less than or equal
+                    + "in" - exact match to one of the values provided in the filter
+                    + "iin" - case-insensitive match for one of the values provided in the filter
+                    + "match" - case-sensitive string matching
+                    + "nomatch" - case-sensitive string NOT matching
+                    + "imatch" - case-insensitive string matching
+                    + "inomatch" - case-insensitive string NOT matching
+                    
+            
+        + fields: "clicks", "spend", "impressions" (array) - optional list of fields to include in the result. If fields are not requested, all possible fields will be returned in the report.
+        + query (object) - This is used to dynamically include or exclude certain fields in the response. 
+          set to true to include all available metadata, or pick and choose specific keys to show with an object like 
+          
+              ```
+              {"_embedded": 
+                {"adstage:metrics/totals": {"data": true}}}
+              ```
+        + provider: "adstage" (string) - to pull reports from other sources, you can set this to a source name. 
+          The default is "adstage", which relies on data imported into AdStage. For external providers - 
+          currently we support "facebook", which requires `"targets"` to be set to a single Facebook account,
+          "adwords", which requires `"targets"` to be set to a single AdWords account, "gemini", which requires `"targets"`
+          to be set to a single Gemini account (beta access only),
+          and `"google_analytics"`, which requires `"targets"` to be set to a single GA Profile.
+        + targets: "/network/adstage/user/292", "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array)
+            
+            Optional list of AdStage Entity IDs to pull a report for, if not included all data available for 
+            the organization will be used. This can be a list of accounts, account groups, 
+            folders, or campaigns.
+        + dimensions (array) - only available if you use a non-AdStage provider - a list of dimension names
+     
+
+    + Body
+        
+            {
+                "entity_level": "campaigns",
+                "aggregate_by": "day",
+                "date_range": "last_30_days",
+                "fields": ["clicks", "spend", "campaign_name", "remote_campaign_id", "network"]
+            }
+
++ Response 200 (application/json)
+
+    + Attributes
+    
+        + _embedded
+            - `adstage:time_series` (array) - list of report time series rows (if `"aggregate_by"` is not set, see `"adstage:metrics"`)
+                - (object)
+                    - series (array) - datapoints separated by aggregation
+                        - (object) 
+                            - timeframe 
+                                + start
+                                + end
+                            - data (object) - key-value pairs of metric identifiers to floats
+                    - data (object) - totals for the requested timeseries metrics
+                    - meta (object) - key-value pairs of metadata names to strings or objects
+            - `adstage:time_series/totals` (object) - totals row for the result if `"aggregate_by"` set
+                - data (object) - totals for the requested timeseries metrics
+                - series (array) 
+            
+                    - (object) 
+                        - timeframe 
+                            + start
+                            + end
+                        - data (object) - key-value pairs of metric identifiers to floats
+                        
+                - meta (object) - key-value pairs of metadata names to arrays of unique values in the results
+                    
+                     
+            
+        
+    + Body
+
+            {
+              "_embedded": {
+                "adstage:time_series": [
+                  {
+                    "id": "production.1.accounts.bing_ads.2982670.campaigns.53744320",
+                    "data": {
+                      "clicks": 1458,
+                      "spend": 2715.01000976562
+                    },
+                    "series": [
+                      {
+                        "data": {
+                          "clicks": 829,
+                          "spend": 1549.68005371094
+                        },
+                        "timeframe": {
+                          "start": "2016-12-01T00:00:00Z",
+                          "end": "2016-12-31T23:59:59Z"
+                        }
+                      },
+                      {
+                        "data": {
+                          "clicks": 629,
+                          "spend": 1165.32995605469
+                        },
+                        "timeframe": {
+                          "start": "2017-01-01T00:00:00Z",
+                          "end": "2017-01-31T23:59:59Z"
+                        }
+                      }
+                    ],
+                    "timeframe": {
+                      "start": "2016-12-01T00:00:00Z",
+                      "end": "2017-01-31T23:59:59Z"
+                    },
+                    "meta": {
+                      "campaign_name": "Search - US - Nonbrand - Facebook Ads Jacob",
+                      "remote_campaign_id": "53744320",
+                      "entity_id": "/network/bing_ads/campaign/53744320",
+                      "network": "bing_ads",
+                      "currency_code": "USD",
+                      "currency_symbol": "$",
+                      "series_name": "Search - US - Nonbrand - Facebook Ads Jacob"
+                    }
+                  }
+                ],
+                "adstage:time_series/totals": {
+                  "id": "totals",
+                  "data": {
+                    "clicks": 8783,
+                    "spend": 23780.8718175292
+                  },
+                  "series": [
+                    {
+                      "data": {
+                        "clicks": 4025,
+                        "spend": 11414.1101390719
+                      },
+                      "timeframe": {
+                        "start": "2016-12-01T00:00:00Z",
+                        "end": "2016-12-31T23:59:59Z"
+                      }
+                    },
+                    {
+                      "data": {
+                        "clicks": 4758,
+                        "spend": 12366.7616784573
+                      },
+                      "timeframe": {
+                        "start": "2017-01-01T00:00:00Z",
+                        "end": "2017-01-31T23:59:59Z"
+                      }
+                    }
+                  ],
+                  "timeframe": {
+                    "start": "2016-12-01T00:00:00Z",
+                    "end": "2017-01-31T23:59:59Z"
+                  },
+                  "meta": {
+                    "currency_code": "USD",
+                    "currency_symbol": "$",
+                    "series_name": "All"
+                  }
+                }
+              },
+              "counts": {
+                "overall": 73262,
+                "filtered_buckets": 11820,
+                "page": 10,
+                "filtered": 11820,
+                "overall_buckets": 73262
+              },
+              "_links": {
+                "next": {
+                  "href": "https://platform.adstage.io/api/organizations/40/build_report?aggregate_by=month&date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=10&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                },
+                "last": {
+                  "href": "https://platform.adstage.io/api/organizations/40/build_report?aggregate_by=month&date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=11810&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                }
+              }
+            }
+            
+### Metric Descriptors [GET /metric_descriptors]    
+
+Reports can have many different metrics. Use the Metric Descriptors endpoint to get 
+more information on the names and formats of these metrics.
+
++ Request
+
+    + Headers
+        
+        Accept: application/json
+        
++ Response 200
+
+  A list of columns that are available to pull via the reporting endpoint. 
+  
+  + Attributes
+        
+        + (array)
+            + (object)
+                + id: "clicks" (string) - the identifier assigned to the metric in reports
+                + short_name: "Clicks" (string) - a short human readable name for the metric
+                + name: "Clicks" (string) - the full human readable name for the metric
+                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
+                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum, string) - format for the metric (default is integer)
+                + type: "METRIC", "TEXT" (enum, string) - whether the descriptor is for a metric, or metadata 
+                + is_adwords: true (string) - if the metric is valid for the adwords network
+                + is_facebook: true (string) - if the metric is valid for the facebook network
+                + is_linkedin: true (string) - if the metric is valid for the linkedin network
+                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
+                + is_twitter: true (string) - if the metric is valid for the twitter network                
+                + is_account: true (string) - if the metric is valid for the account reporting level
+                + is_campaign: true (string) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
+                + is_keyword: true (string) - if the metric is valid for keyword reporting level
+  
+  + Body
+  
+        [{"id":"clicks","short_name":"Clicks","name":"Clicks","is_default":true,"tooltip":"<b>Clicks</b> show how many times your ads have been clicked.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
+         {"id":"impressions","short_name":"Impr.","name":"Impressions","is_default":true,"tooltip":"<b>Impressions</b> show how many times your ads have been shown.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
+         {"id":"ctr","short_name":"CTR","name":"CTR","is_default":true,"tooltip":"<b>Clickthrough rate</b> shows how often people who saw your ad ended up clicking it.<br><br> CTR is clicks divided by impressions.<br><br> To improve your CTR, check out our <a href=\"http://blog.adstage.io/2013/05/23/5-tips-for-creating-effective-ppc-ads/\" target=\"_blank\">5 tips for creating effective ads</a>.","format":"PERCENTAGE","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null}]
+
+### Network Metric Descriptors [GET /metric_descriptors/{network}]    
+
+Different reporting providers have different metric names. Use this endpoint to get 
+more information on the names and formats of these metrics.
+
++ Parameters
+    
+    + network: facebook (string)
+        
+        which network you want descriptors for. Currently `"facebook"` and `"google_analytics"` are supported.
+
++ Request
+
+    + Headers
+        
+        Accept: application/json
+        
++ Response 200
+
+  A list of columns that are available to pull via the reporting endpoint. 
+  
+  + Attributes
+        
+        + (array)
+            + (object)
+                + id: "clicks" (string) - the identifier assigned to the metric in reports
+                + short_name: "Clicks" (string) - a short human readable name for the metric
+                + name: "Clicks" (string) - the full human readable name for the metric
+                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
+                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum, string) - format for the metric (default is integer)
+                + type: "METRIC", "TEXT" (enum, string) - whether the descriptor is for a metric, or metadata 
+                + is_adwords: true (string) - if the metric is valid for the adwords network
+                + is_facebook: true (string) - if the metric is valid for the facebook network
+                + is_linkedin: true (string) - if the metric is valid for the linkedin network
+                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
+                + is_twitter: true (string) - if the metric is valid for the twitter network                
+                + is_account: true (string) - if the metric is valid for the account reporting level
+                + is_campaign: true (string) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
+                + is_keyword: true (string) - if the metric is valid for keyword reporting level
+  
+  + Body
+  
+        [{"id":"clicks","short_name":"Clicks","name":"Clicks","is_default":true,"tooltip":"<b>Clicks</b> show how many times your ads have been clicked.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
+         {"id":"impressions","short_name":"Impr.","name":"Impressions","is_default":true,"tooltip":"<b>Impressions</b> show how many times your ads have been shown.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
+         {"id":"ctr","short_name":"CTR","name":"CTR","is_default":true,"tooltip":"<b>Clickthrough rate</b> shows how often people who saw your ad ended up clicking it.<br><br> CTR is clicks divided by impressions.<br><br> To improve your CTR, check out our <a href=\"http://blog.adstage.io/2013/05/23/5-tips-for-creating-effective-ppc-ads/\" target=\"_blank\">5 tips for creating effective ads</a>.","format":"PERCENTAGE","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null}]
+
+### Organization Metric Descriptors [GET /organizations/{org_id}/metric_descriptors]    
+
+Some descriptors are specific to an organization. Usually these are custom conversions, created in AdStage and also both Facebook and LinkedIn. Use this endpoint to get 
+more information on the names and formats of these organization specific metrics.
+
++ Parameters
+    
+    + org_id: 40 (string)
+        
+        which organization you want descriptors for. 
+
++ Request
+
+    + Headers
+        
+        Accept: application/json
+        
++ Response 200
+
+  A list of columns that are available to pull via the reporting endpoint. 
+  
+  + Attributes
+        
+        + (array)
+            + (object)
+                + id: "clicks" (string) - the identifier assigned to the metric in reports
+                + short_name: "Clicks" (string) - a short human readable name for the metric
+                + name: "Clicks" (string) - the full human readable name for the metric
+                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
+                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum, string) - format for the metric (default is integer)
+                + type: "METRIC", "TEXT" (enum, string) - whether the descriptor is for a metric, or metadata 
+                + is_adwords: true (string) - if the metric is valid for the adwords network
+                + is_facebook: true (string) - if the metric is valid for the facebook network
+                + is_linkedin: true (string) - if the metric is valid for the linkedin network
+                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
+                + is_twitter: true (string) - if the metric is valid for the twitter network                
+                + is_account: true (string) - if the metric is valid for the account reporting level
+                + is_campaign: true (string) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
+                + is_keyword: true (string) - if the metric is valid for keyword reporting level
+  
+  + Body
+  
+        [{"id":"clicks","short_name":"Clicks","name":"Clicks","is_default":true,"tooltip":"<b>Clicks</b> show how many times your ads have been clicked.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
+         {"id":"impressions","short_name":"Impr.","name":"Impressions","is_default":true,"tooltip":"<b>Impressions</b> show how many times your ads have been shown.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
+         {"id":"ctr","short_name":"CTR","name":"CTR","is_default":true,"tooltip":"<b>Clickthrough rate</b> shows how often people who saw your ad ended up clicking it.<br><br> CTR is clicks divided by impressions.<br><br> To improve your CTR, check out our <a href=\"http://blog.adstage.io/2013/05/23/5-tips-for-creating-effective-ppc-ads/\" target=\"_blank\">5 tips for creating effective ads</a>.","format":"PERCENTAGE","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null}]
+
+
+## Custom Conversions [/organizations/{org_id}/metric_descriptors]
+
+The AdStage custom metric descriptor endpoint will allow data to be uploaded to a custom column 
+for any existing entities stored within AdStage. You can then use these custom conversion columns in the
+reporting endpoints or in the AdStage product. This requires a few steps to get data flowing:
+
+### Step 1. Create a custom metric [POST /organizations/{org_id}/metric_descriptors]
+
+Sets up a metric descriptor to allow data upload. Returns the url to allow upload. You only
+need to do this step once per conversion column you want to created. To get a list of conversion
+columns, see the Build Reports section - "Organization Metric Descriptors".
+
++ Parameters
+
+    + org_id (integer) - the fetch id of the user's organization
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+        
+        + `name`: "Sales Leads: A+" (string, required) - full name of the conversion column
+        + `short_name`: "A+ Leads" (string, required) - a shorter version of name for table column headers
+        + `tooltip`: "Leads scored A+ in Salesforce" (string, required) - a text description of the converion for use in tooltips in AdStage products
+    
+    + Body
+    
+                    {
+                      "name": "Sales Leads: A+",
+                      "short_name": "A+ Leads",
+                      "tooltip": "Leads scored A+ in Salesforce"
+                    }
+
++ Response 201
+
+  Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
+  You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
+  
+  + Attributes
+  
+        + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
+        + `_links` (object)
+            + `adstage:custom_conversion_upload` (object)
+              + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the url for step 3.
+
+  + Body
+  
+            {
+              "id": "custom_conversions:14:conversions",
+              "category": "CUSTOM_CONVERSION",
+              "type": "METRIC",
+              "name": "Sales Leads: A+",
+              "short_name": "A+ Leads",
+              "tooltip": "Doesn't matter",
+              "default_sort_order": "DESC",
+              "format": "DEFAULT",
+              "_links": {
+                "adstage:custom_conversion_upload": {
+                  "href": "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions"
+                }
+              }
+            }
+    
+
+### Step 2. Post data [POST /organizations/{org_id}/metric_descriptors/{descriptor_id}/conversions]
+
+POST data in JSON format to this endpoint with a `"conversions"` key and a `"date_range"` key. 
+
+(See AdStage API Concepts section on Date Ranges and Entity IDs for details on those subjects)
+
+Each conversion has a `"timestamp"` key and `"attribution"` key. You can also provide an optional `"value"` key.
+`"attribution"` is a map of AdStage Entity IDs to weights. By default, 
+you should use a weight of `1`, but if you want to do custom multitouch attribution models you can use partial values or multipliers. If you want
+to roll up values from, for example campaigns, to their account, you must also include both entity ids in the `"attribution"` map.
+`"value"` will by multiplied by the weight to determine the conversion value. These are used to compute Return on Ad Spend.
+
++ Parameters
+
+    + org_id (integer) - the fetch id of the user's organization
+    + descriptor_id (integer) - the fetch id of the metric descriptor
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+        
+        + `conversions` (array, required) - a list of conversions
+            + (object)
+                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - ISO8061 formatted string representing when the conversion happened
+                + `value`: 30.5 (number) - Optional conversion value
+                + `attribution` - a list of key/value pairs where the key is an AdStage id and the value is how to weight the conversion (use 1 unless you want to do multi-touch attribution modeling)
+                    + `/network/adwords/campaign/530303`: 1 (number) - (this id is just an example, use valid ids)
+                    + `/network/adwords/acount/530303`: 1 (number) - (this id is just an example, use valid ids)
+                
+        + `date_range`: "last_30_days" (string, required)
+            
+            an adstage date range string (this_month, last_30_days, 2016-12-12..2016-12-15)
+
+    + Body
+        
+                {
+                  "conversions": [
+                      {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365350": 1}},
+                      {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365350": 0.5}},
+                      {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
+                   ],
+                   "date_range": "2016-11-11..2106-11-17"
+                }
+
++ Response 201
