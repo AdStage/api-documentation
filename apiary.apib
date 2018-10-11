@@ -55,6 +55,32 @@ like `"/network/{network}/{entity}/{remote_id}"` where:
 + the `{remote_id}` variable is the ID provided by the network, these can be obtained from our 
   reporting endpoint as `remote_account_id`, `remote_campaign_id`, `remote_ad_group_id`, `remote_ad_id`, `remote_keyword_id`
    
+### Pagination
+
+Most AdStage API endpoints that return lists or reports have support for pagination. You can specify the number
+of items or rows to return with a `limit` parameter, and you can page through results by adding an `offset`
+parameter to subsequent requests.
+
+For your convenience, the responses from these endpoints also include links to the next and previous
+pages, e.g.
+
+```
+{
+    "_embedded": {
+        "adstage:metrics": [
+            ...
+        ]
+    },
+    "_links": {
+        "next": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=3000&..."
+        },
+        "last": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=1000&..."
+        }
+    }
+}
+```
      
 ## Basics [/]
 
