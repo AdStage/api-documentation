@@ -1,0 +1,53 @@
+### Current User Info [GET /me]
+
++ Request
+    + Headers
+
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
++ Response 200 (application/json)
+
+        {
+            "first_name": "Clark",
+            "last_name": "Gates-George",
+            "email": "clark@adstage.io",
+            "created_at": 1351707901,
+            "id": "/api/users/1",
+            "fetch_id": 1,
+            "has_linked": true,
+            "account_status": {
+                "adwords": "unimportable",
+                "bing_ads": "unimportable",
+                "facebook": "currently_importing",
+                "linkedin": "permanent_authentication_error",
+                "twitter": "currently_importing"
+              },
+              "visible_account_status": {
+                "adwords": "unimportable",
+                "bing_ads": "unimportable",
+                "facebook": "currently_importing",
+                "linkedin": "currently_importing",
+                "twitter": "currently_importing"
+              },
+              "_embedded": {
+                "adstage:organizations": [
+                  {
+                    "id": "/api/organizations/1",
+                    "fetch_id": 40,
+                    "active_accounts_count": 45,
+                    "is_active_customer": true,
+                    "additional_accounts_purchased": 23,
+                    "advertiser_type": "Agency / Consultant",
+                    "advertising_objective": "Unknown",
+                    "billable_accounts_count": 43,
+                    "billing_contact_email": "clark@adstage.io",
+                    "is_billing_error": false,
+                    "blurb": "Connect ad accounts to the AdStage analytics dashboard and compare performance.  View current key performance metrics (CPA, CPM, CTR) at a glance. Measure your advertising ROS with customizable graphs that allow you to easily gauge performance across multiple networks for any historical period. AdStage identifies your top-performing ads and keywords, which helps you determine what wording resonates well with your audience. Use that ad messaging in your sales pitch, blog posts, or website copy. ",
+                    "company_name": "AdStage",
+                    "customer_status": "paying",
+                    "is_former_customer": false
+                 }
+                ]
+            }
+        }

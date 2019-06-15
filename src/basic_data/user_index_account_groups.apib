@@ -1,0 +1,99 @@
+### List Account Groups [GET /users/{user_id}/account_groups]
+
++ Parameters
+
+    + user_id: 40 (string)
+
+        which user you want an account group list for.
+
++ Request
+
+    + Headers
+
+        Accept: application/json
+        Authorization: Bearer de4dxxxxb33f
+
++ Response 200
+
+  A list of account groups.
+
+  + Attributes
+        + _links (object)
+            + next (object)
+                + href (string) - url to get next page of account groups
+
+                    `"https://platform.adstage.io/api/users/40/account_groups?limit=10&offset=10&networks=all"`
+
+        + _embedded (object)
+            + item (array)
+                + (object)
+                    + id: 40 (number) - the identifier assigned to this account group
+                    + name: "Client #1" (string) - the full human readable name for the metric
+                    + is_visible: true (boolean) - whether all the accounts are visible in this group
+                    + account_count: 5 (number) - total number of accounts in the group
+                    + _forms (object) - list of actions available on the account group
+
+  + Body
+
+        {
+            "_embedded": {
+                "item": [
+                    {
+                        "account_count": 1,
+                        "id": 988,
+                        "is_visible": false,
+                        "name": "Client 3 Marketing",
+                        "_embedded": {},
+                        "_forms": {
+                            "adstage:add": {
+                                "fields": {
+                                    "network": "string",
+                                    "network_account_id": "integer"
+                                },
+                                "href": "https://platform.adstage.io/api/users/40/account_groups/988/add",
+                                "method": "POST",
+                                "name": "account_group"
+                            }
+                        },
+                        "_links": {
+                            "adstage:add": {
+                                "form": true,
+                                "href": "https://platform.adstage.io/api/users/40/account_groups/988/add",
+                                "method": "POST",
+                                "name": "account_group"
+                            },
+                            "adstage:list": [
+                                {
+                                    "href": "https://platform.adstage.io/api/users/40/account_groups/988/list_accounts{?limit,offset}",
+                                    "name": "network_accounts",
+                                    "templated": true
+                                }
+                            ],
+                            "self": {
+                                "href": "/api/users/40/account_groups/988"
+                            }
+                        }
+                    }
+                ]
+            },
+            "_links": {
+                "next": {
+                    "href": "https://platform.adstage.io/api/users/40/account_groups?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc"
+                }
+            },
+            "counts": {
+                "overall": 5,
+                "page": 1
+            },
+            "current_page": 1,
+            "id": "https://platform.adstage.io/api/users/40/account_groups?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc",
+            "list_of": "item",
+            "page_options": {
+                "limit": 1,
+                "offset": 0
+            },
+            "page_size": 1,
+            "page_total": 1,
+            "total": 5,
+            "total_pages": 5
+        }

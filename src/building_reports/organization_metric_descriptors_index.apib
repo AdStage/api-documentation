@@ -1,0 +1,47 @@
+### Organization Metric Descriptors [GET /organizations/{org_id}/metric_descriptors]
+
+Some descriptors are specific to an organization. Usually these are custom conversions, created in AdStage and also both Facebook and LinkedIn. Use this endpoint to get
+more information on the names and formats of these organization specific metrics.
+
++ Parameters
+
+    + org_id: 40 (string)
+
+        which organization you want descriptors for.
+
++ Request
+
+    + Headers
+
+        Accept: application/json
+
++ Response 200
+
+  A list of columns that are available to pull via the reporting endpoint.
+
+  + Attributes
+
+        + (array)
+            + (object)
+                + id: "clicks" (string) - the identifier assigned to the metric in reports
+                + short_name: "Clicks" (string) - a short human readable name for the metric
+                + name: "Clicks" (string) - the full human readable name for the metric
+                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
+                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum, string) - format for the metric (default is integer)
+                + type: "METRIC", "TEXT" (enum, string) - whether the descriptor is for a metric, or metadata
+                + is_adwords: true (string) - if the metric is valid for the adwords network
+                + is_facebook: true (string) - if the metric is valid for the facebook network
+                + is_linkedin: true (string) - if the metric is valid for the linkedin network
+                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
+                + is_twitter: true (string) - if the metric is valid for the twitter network
+                + is_account: true (string) - if the metric is valid for the account reporting level
+                + is_campaign: true (string) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
+                + is_keyword: true (string) - if the metric is valid for keyword reporting level
+
+  + Body
+
+        [{"id":"clicks","short_name":"Clicks","name":"Clicks","is_default":true,"tooltip":"<b>Clicks</b> show how many times your ads have been clicked.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
+         {"id":"impressions","short_name":"Impr.","name":"Impressions","is_default":true,"tooltip":"<b>Impressions</b> show how many times your ads have been shown.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
+         {"id":"ctr","short_name":"CTR","name":"CTR","is_default":true,"tooltip":"<b>Clickthrough rate</b> shows how often people who saw your ad ended up clicking it.<br><br> CTR is clicks divided by impressions.<br><br> To improve your CTR, check out our <a href=\"http://blog.adstage.io/2013/05/23/5-tips-for-creating-effective-ppc-ads/\" target=\"_blank\">5 tips for creating effective ads</a>.","format":"PERCENTAGE","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null}]

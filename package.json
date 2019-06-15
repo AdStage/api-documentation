@@ -1,0 +1,7 @@
+{
+  "name": "api-documentation",
+  "version": "1.0.0",
+  "devDependencies": {
+    "hercule": "~4.1.1"
+  }
+}
