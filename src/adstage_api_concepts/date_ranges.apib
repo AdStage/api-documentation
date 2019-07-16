@@ -20,7 +20,7 @@ Relative date ranges must be formatted according to the following chart, where `
 | `last {{TIME_UNIT}}` | A timeslice of 1 `TIME_UNIT` starting at the beginning of the most recent `TIME_UNIT` and ending directly before the start of the next `TIME_UNIT` | `"last month"` == `2019-05-01T00:00:00Z - 2019-05-31T23:59:59Z` |
 | `last {{X}} {{TIME_UNITS}}` | A timeslice of `X` `TIME_UNITS` terminating directly before the start of the most recent `TIME_UNIT` | `"last 2 months"` == `2019-04-01T00:00:00Z - 2019-05-31T23:59:59Z` |
 
-Any date string, both absolute and relative, may append a modifying prefix to shift the date range:
+Any date string, either absolute or relative, may append a modifying prefix to shift the date range:
 
 | Relative Date String | Time Period Returned | Example (if today is `2019-06-15` in UTC) |
 | -------------------- | -------------------- | ------- |

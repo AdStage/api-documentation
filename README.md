@@ -14,6 +14,8 @@ Generate the full `apiary.apib` file from the modules:
 hercule src/root.apib -o apiary.apib
 ```
 
+If you need a Markdown format output for text exitor previews, just use `cp apiary.apib apiary.md`; the `.md` file will be ignored for other developers.
+
 ## API Blueprint Tips and Tricks
 - View a file's output in the [live editor](https://app.apiary.io/adstageapi/editor) for proofreading.
 - Especially when describing JSON, the `apib` parser struggles to understand that underscores are valid. Escape underscores with backticks to allow correct parsing

@@ -3,7 +3,7 @@ HOST: https://platform.adstage.io/api
 
 # AdStage API Concepts
 
-The AdStage API is a cross-network advertising API allowing access to AdWords, Bing Ads, Facebook, LinkedIn, Twitter, Instagram, Gemini, and Google Analytics data from a unified interface.
+The AdStage API is a cross-network advertising API allowing access to Google Ads, Microsoft Ads, Facebook, LinkedIn, Twitter, Instagram, Gemini, and Google Analytics data from a unified interface.
 
 AdStage's JSON APIs broadly allow developers to:
 * Access data about their AdStage users, organizations, and advertising entities
@@ -15,7 +15,7 @@ Though V1 may occasionally be an appropriate choice to access certain legacy fea
 When choosing a particular version, check the documentation in both versions before determining the best option.
 
 Across endpoints and versions, AdStage APIs often refer to several key concepts, documented in this section.
-The subsequent sections group documentation for specific endpoints and use cases.
+The next sections group version-specific documentation for the API endpoints and common workflows.
 
 ## Date Ranges
 
@@ -39,7 +39,7 @@ Relative date ranges must be formatted according to the following chart, where `
 | `last {{TIME_UNIT}}` | A timeslice of 1 `TIME_UNIT` starting at the beginning of the most recent `TIME_UNIT` and ending directly before the start of the next `TIME_UNIT` | `"last month"` == `2019-05-01T00:00:00Z - 2019-05-31T23:59:59Z` |
 | `last {{X}} {{TIME_UNITS}}` | A timeslice of `X` `TIME_UNITS` terminating directly before the start of the most recent `TIME_UNIT` | `"last 2 months"` == `2019-04-01T00:00:00Z - 2019-05-31T23:59:59Z` |
 
-Any date string, both absolute and relative, may append a modifying prefix to shift the date range:
+Any date string, either absolute or relative, may append a modifying prefix to shift the date range:
 
 | Relative Date String | Time Period Returned | Example (if today is `2019-06-15` in UTC) |
 | -------------------- | -------------------- | ------- |
@@ -53,8 +53,7 @@ Any date string, both absolute and relative, may append a modifying prefix to sh
 AdStage has two styles of IDs that refer to a specific advertising entity (for example, a specific campaign or a specific keyword).
 Though other forms of IDs may be found in some response endpoints, the newest version - the `entity_id` - should be strongly preferred, as AdStage may drop maintenance of other ID types in the future.
 
-Often, it can be convenient to generate these ids manually based data already known without looking up the entity in the AdStage API.
-For example, a data analyst may wish to pull a weekly report on a list of the same specific campaigns from the reporting API.
+Often, it can be convenient to generate these ids manually without looking up the entity in the AdStage API.
 To generate the entity id by hand, use the following string template:
 
 `"/network/{network}/{entity_level}/{remote_id}"`, where:
@@ -207,7 +206,8 @@ In a few cases, forms describe a menu of allowable options for such a request an
 However, AdStage typically uses forms merely as more descriptive links by designating suggested values for all of the request's JSON parameters.
 
 _Note that some forms in the API responses may contain URLs for endpoints not documented here.
-These are not maintained as stable for external users, and should not be used; check whether a form's endpoint is documented here before using it in your application.
+These are not maintained as stable for external users and are not supported.
+Check whether a form's endpoint is documented here before using it in your application.
 Most supported HAL forms for API customers are pagination related._
 
 **Modified HAL response from a reporting request**
@@ -460,9 +460,14 @@ The following endpoints allow developers to discover key resources belonging to 
   + Attributes
         + _links (object)
             + next (object)
-                + href (string) - url to get next page of accounts
+                + href (string) - A URL to get the next page of accounts
 
-                    `"https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=10&offset=10"`
+                    `"https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=10&offset=20"`
+
+            + prev (object)
+                + href (string) - A URL to get the previous page of accounts
+
+                    `"https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=10&offset=0"`
 
         + _embedded (object)
             + item (array)
@@ -554,9 +559,14 @@ The following endpoints allow developers to discover key resources belonging to 
   + Attributes
         + _links (object)
             + next (object)
-                + href (string) - url to get next page of account groups
+                + href (string) - A URL to get next page of account groups
 
-                    `"https://platform.adstage.io/api/users/40/account_groups?limit=10&offset=10&networks=all"`
+                    `"https://platform.adstage.io/api/users/40/account_groups?limit=10&offset=20&networks=all"`
+
+            + prev (object)
+                + href (string) - A URL to get previous page of account groups
+
+                    `"https://platform.adstage.io/api/users/40/account_groups?limit=10&offset=0&networks=all"`
 
         + _embedded (object)
             + item (array)
@@ -653,9 +663,14 @@ The following endpoints allow developers to discover key resources belonging to 
   + Attributes
         + _links (object)
             + next (object)
-                + href (string) - url to get next page of folders
+                + href (string) - A URL to get next page of folders
 
-                     `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=10&networks=all"`
+                     `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=20&networks=all"`
+
+            + prev (object)
+                + href (string) - A URL to get previous page of folders
+
+                     `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=0&networks=all"`
 
         + _embedded (object)
             + item (array) - list of folders
@@ -837,9 +852,8 @@ The following endpoints allow developers to discover key resources belonging to 
 
 ## Building Reports [/organizations/{org_id}/build_report]
 
-This endpoint is used to pull your advertising data.
-
 Use this endpoint to pull reports at any level of reporting available within AdStage, or to conveniently pull real-time reports with the same normalization scheme from supported external API providers such as Facebook Direct.
+**The V1 endpoint does not support reporting on calculated metrics; choose the V2 endpoint if that feature is required.**
 
 ### Basic Report [POST /organizations/{org_id}/build_report]
 
@@ -866,7 +880,8 @@ This type of report will return one row per requested entity with metrics aggreg
 
         + `date_range`: "last_30_days" (string, required)
 
-            an adstage date range string (`"this_month"`, `"last_30_days"`, `"2016-12-12..2016-12-15"`)
+            An AdStage date range string.
+            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
 
         + limit: 10 (number) - number of rows to include
         + `sort_by`: "clicks" (string) - metric name/meta name to sort by
@@ -912,7 +927,7 @@ This type of report will return one row per requested entity with metrics aggreg
             The default is "adstage", which relies on data imported into AdStage.
             External providers are also supported:
             "facebook" requires `"targets"` to be set to a single Facebook account,
-            "adwords" requires `"targets"` to be set to a single AdWords account,
+            "adwords" requires `"targets"` to be set to a single Google Ads account,
             "gemini" requires `"targets"` to be set to a single Gemini account (beta access only),
             and `"google_analytics"` requires `"targets"` to be set to a single GA Profile.
 
@@ -924,7 +939,7 @@ This type of report will return one row per requested entity with metrics aggreg
             Only available if you use a non-AdStage provider - a list of dimension names to break a report by.
 
             * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
-            * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
+            * `adwords` provider dimensions change by report, described here: [Google Ads Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
             * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
 
     + Body
@@ -1035,7 +1050,8 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
         + `aggregate_by`: "day", "week", "month" (enum) - the level of detail to include in the time series
         + `date_range`: "last_30_days" (string, required)
 
-            an adstage date range string (`"this_month"`, `"last_30_days"`, `"2016-12-12..2016-12-15"`)
+            An AdStage date range string.
+            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
 
         + limit: 10 (number) - number of rows to include
         + `sort_by`: "clicks" (string) - metric name/meta name to sort by
@@ -1079,7 +1095,7 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
             The default is "adstage", which relies on data imported into AdStage.
             External providers are also supported:
             "facebook" requires `"targets"` to be set to a single Facebook account,
-            "adwords" requires `"targets"` to be set to a single AdWords account,
+            "adwords" requires `"targets"` to be set to a single Google Ads account,
             "gemini" requires `"targets"` to be set to a single Gemini account (beta access only),
             and `"google_analytics"` requires `"targets"` to be set to a single GA Profile.
 
@@ -1091,7 +1107,7 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
             Only available if you use a non-AdStage provider - a list of dimension names to break a report by.
 
             * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
-            * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
+            * `adwords` provider dimensions change by report, described here: [Google Ads Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
             * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
 
     + Body
@@ -1336,7 +1352,8 @@ Alternatively, the V2 endpoint implements an automatic roll up feature.
 
         + `date_range`: `"last_30_days"` (string, required)
 
-            An adstage date range string. See the [Date Ranges](date-ranges) section for details about allowed date range formats.
+            An AdStage date range string.
+            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
 
     + Body
 
@@ -1384,7 +1401,7 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + org_id (integer) - The fetch id of the user's organization
 
 + Request (application/json)
 
@@ -1395,9 +1412,9 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
     + Attributes
 
-        + `name`: "Sales Leads: A+" (string, required) - full name of the conversion column
-        + `short_name`: "A+ Leads" (string, required) - a shorter version of name for table column headers
-        + `tooltip`: "Leads scored A+ in Salesforce" (string, required) - a text description of the converion for use in tooltips in AdStage products
+        + `name`: "Sales Leads: A+" (string, required) - The full name of the conversion column.
+        + `short_name`: "A+ Leads" (string, required) - A shorter version of name for table column headers.
+        + `tooltip`: "Leads scored A+ in Salesforce" (string, required) - A text description of the converion for use in tooltips in AdStage products.
 
     + Body
 
@@ -1414,10 +1431,10 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
   + Attributes
 
-        + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
+        + id: "custom_conversions:14:conversions" (string) - The metric name reports reports will return when providing conversion metrics for this descriptor.
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-              + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the url for step 3.
+              + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor.
 
   + Body
 
@@ -1448,7 +1465,6 @@ By default, we recommend using a weight of `1` for simple attribution, though ot
 You can also provide optional `"value"` key, indicating the currency value of the conversion.
 The product of the weight and `"value"` will then determine the conversion value AdStage records from the upload, as well as any related compute values such as Return on Ad Spend.
 
-
 Note that after posting conversion data to this endpoint, if a subsequent request posts different conversion data with a timestamp on the same *day* of a previously uploaded conversion's timestamp, the data will be overwritten.
 For example, if `2` conversions are posted for `2016-02-03T03:40Z`, and then `1` additional conversion is posted in a new API request for `2016-02-03T04:40Z`, the entity will only display `1` conversion, not `3`.
 When posting data to the endpoint, users are responsible for blending conversion data sources themselves and posting all known conversions within the same request.
@@ -1456,8 +1472,8 @@ Similarly, for users planning on updating conversion data over multiple requests
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
-    + descriptor_id (integer) - the fetch id of the metric descriptor
+    + org_id (integer) - The fetch id of the user's organization
+    + descriptor_id (integer) - The fetch id of the metric descriptor
 
 + Request (application/json)
 
@@ -1468,18 +1484,23 @@ Similarly, for users planning on updating conversion data over multiple requests
 
     + Attributes
 
-        + `conversions` (array, required) - a list of conversions
+        + `conversions` (array, required) - A list of conversions.
             + (object)
-                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - an ISO8061 formatted string representing when the conversion happened
+                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - An ISO8061 formatted string representing when the conversion happened
                 + `value`: 30.5 (number) - Optional conversion value in currency terms
                 + `attribution` - a list of key/value pairs where the key is an AdStage id and the value is how to weight the conversion (use 1 unless you want to do multi-touch attribution modeling)
                     + `/network/adwords/campaign/530303`: 0.25 (number) - (this id is just an example, use valid ids)
                     + `/network/adwords/campaign/530304`: 0.25 (number) - (this id is just an example, use valid ids)
                     + `/network/adwords/campaign/530305`: 0.5 (number) - (this id is just an example, use valid ids)
 
-        + `date_range`: "last_30_days" (string, required) - an adstage date range string (this_month, last_30_days, 2016-12-12..2016-12-15)
+        + `date_range`: "last_30_days" (string, required) - An AdStage date range string (this_month, last_30_days, 2016-12-12..2016-12-15).
 
-        + `aggregate_conversions`: true (boolean, optional) - when true, will automatically roll up conversions into ancestor entities. For example, if attributing a conversion to an ad, this feature would also attribute the conversion to its ad group, campaign, and account. Note that when using this feature, only the lowest level entities for each conversion should be attributed to avoid double counting. This marks an important change compared to the V1 endpoint, which did not automatically roll up conversions and therefore encouraged users to list all entity ancestors in the same conversion. For example, with this endpoint, if an ad and its ad group are both listed in the conversion with attribution weights of `1`, the ad will be attributed 1 conversion, and its ad group will be attributed 2 conversions (1 from the explicit listing, and one from the automatic rollup).
+        + `aggregate_conversions`: true (boolean, optional)
+
+            When true, will automatically roll up conversions into ancestor entities.
+            For example, if attributing a conversion to an ad, this feature would also attribute the conversion to its ad group, campaign, and account.
+
+            **Note that when using this feature, only the lowest level entities for each conversion should be attributed to avoid double counting.**
 
     + Body
 

@@ -19,9 +19,14 @@
   + Attributes
         + _links (object)
             + next (object)
-                + href (string) - url to get next page of accounts
+                + href (string) - A URL to get the next page of accounts
 
-                    `"https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=10&offset=10"`
+                    `"https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=10&offset=20"`
+
+            + prev (object)
+                + href (string) - A URL to get the previous page of accounts
+
+                    `"https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=10&offset=0"`
 
         + _embedded (object)
             + item (array)

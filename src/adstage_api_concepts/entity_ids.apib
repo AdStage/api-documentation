@@ -3,8 +3,7 @@
 AdStage has two styles of IDs that refer to a specific advertising entity (for example, a specific campaign or a specific keyword).
 Though other forms of IDs may be found in some response endpoints, the newest version - the `entity_id` - should be strongly preferred, as AdStage may drop maintenance of other ID types in the future.
 
-Often, it can be convenient to generate these ids manually based data already known without looking up the entity in the AdStage API.
-For example, a data analyst may wish to pull a weekly report on a list of the same specific campaigns from the reporting API.
+Often, it can be convenient to generate these ids manually without looking up the entity in the AdStage API.
 To generate the entity id by hand, use the following string template:
 
 `"/network/{network}/{entity_level}/{remote_id}"`, where:

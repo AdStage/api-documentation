@@ -10,7 +10,7 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + org_id (integer) - The fetch id of the user's organization
 
 + Request (application/json)
 
@@ -21,9 +21,9 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
     + Attributes
 
-        + `name`: "Sales Leads: A+" (string, required) - full name of the conversion column
-        + `short_name`: "A+ Leads" (string, required) - a shorter version of name for table column headers
-        + `tooltip`: "Leads scored A+ in Salesforce" (string, required) - a text description of the converion for use in tooltips in AdStage products
+        + `name`: "Sales Leads: A+" (string, required) - The full name of the conversion column.
+        + `short_name`: "A+ Leads" (string, required) - A shorter version of name for table column headers.
+        + `tooltip`: "Leads scored A+ in Salesforce" (string, required) - A text description of the converion for use in tooltips in AdStage products.
 
     + Body
 
@@ -40,10 +40,10 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
   + Attributes
 
-        + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
+        + id: "custom_conversions:14:conversions" (string) - The metric name reports reports will return when providing conversion metrics for this descriptor.
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-              + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the url for step 3.
+              + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor.
 
   + Body
 

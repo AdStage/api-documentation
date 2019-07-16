@@ -25,7 +25,8 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
         + `aggregate_by`: "day", "week", "month" (enum) - the level of detail to include in the time series
         + `date_range`: "last_30_days" (string, required)
 
-            an adstage date range string (`"this_month"`, `"last_30_days"`, `"2016-12-12..2016-12-15"`)
+            An AdStage date range string.
+            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
 
         + limit: 10 (number) - number of rows to include
         + `sort_by`: "clicks" (string) - metric name/meta name to sort by
@@ -69,7 +70,7 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
             The default is "adstage", which relies on data imported into AdStage.
             External providers are also supported:
             "facebook" requires `"targets"` to be set to a single Facebook account,
-            "adwords" requires `"targets"` to be set to a single AdWords account,
+            "adwords" requires `"targets"` to be set to a single Google Ads account,
             "gemini" requires `"targets"` to be set to a single Gemini account (beta access only),
             and `"google_analytics"` requires `"targets"` to be set to a single GA Profile.
 
@@ -81,7 +82,7 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
             Only available if you use a non-AdStage provider - a list of dimension names to break a report by.
 
             * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
-            * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
+            * `adwords` provider dimensions change by report, described here: [Google Ads Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
             * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
 
     + Body
