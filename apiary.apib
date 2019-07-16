@@ -1,116 +1,355 @@
 FORMAT: 1A
 HOST: https://platform.adstage.io/api
 
-# AdStage API
+# AdStage API Concepts
 
-The AdStage API is a cross-network advertising API allowing access to AdWords,
-Bing Ads, Facebook, LinkedIn, Twitter, Instagram, Gemini, and Google Analytics data from a unified
-interface.
+The AdStage API is a cross-network advertising API allowing access to AdWords, Bing Ads, Facebook, LinkedIn, Twitter, Instagram, Gemini, and Google Analytics data from a unified interface.
 
-## Authentication
+AdStage's JSON APIs broadly allow developers to:
+* Access data about their AdStage users, organizations, and advertising entities
+* Upload custom data for use within the AdStage platform
+* Pull customizable reports on advertising data in a single, normalized format
 
-To get started using the AdStage API you will need an API token.
-You can obtain one by contacting our support team.
+AdStage provides two API versions: V1, which is a fully stable and fully released API version, and V2, which is a fully stable version with release in progress.
+Though V1 may occasionally be an appropriate choice to access certain legacy features not yet available in V2, in most cases V2 should be preferred due to its generally expanded feature set, shorter maintenance cycles, and faster performance.
+When choosing a particular version, check the documentation in both versions before determining the best option.
 
-### OAuth 2 Applications
-If you are a developer that would like to create applications for multiple AdStage users, our API has OAuth 2 support, but we don't currently have a self-service way to create new OAuth2 applications.
-Contact us and we can get you started with a `client_id` and `client_secret`.
+Across endpoints and versions, AdStage APIs often refer to several key concepts, documented in this section.
+The subsequent sections group documentation for specific endpoints and use cases.
 
-## Status
+## Date Ranges
 
-Keep up to date with any problems the AdStage API might be experiencing on our [status page](http://status.adstage.io/).
+The AdStage endpoints use date range strings to represent time periods and implement a unified date range format throughout the platform.
+Date range strings can be written in two possible styles: either an absolute range such as `"2016-12-25..2016-12-31"`, or a relative range, such as `"last_30_days"` or `"this_month"`.
 
-## AdStage API Concepts
+Absolute date ranges must be formatted as `yyyy-mm-dd..yyyy-mm-dd` and refer to data for all calendar days between the two dates provided (inclusive).
 
-### Date Ranges
-
-The AdStage endpoint uses date range strings to represent time periods.
-These can be strings that describe either a hardcoded absolute range such as `"2016-12-25..2016-12-31"`, or a relative date range, such as `"last_30_days"` or `"this_month"`.
-
-Absolute date ranges should be formatted as `yyyy-mm-dd..yyyy-mm-dd` and will return data for all calendar days between the two dates provided (inclusive).
-
-Relative date ranges must be from the following chart, where `X` is an integer, and `TIME_UNIT` is one of `day`, `week`, `month`, `quarter`, or `year`:
+Relative date ranges must be formatted according to the following chart, where `X` is an integer, and `TIME_UNIT` is one of `day`, `week`, `month`, `quarter`, or `year`:
 
 | Relative Date String | Time Period Returned | Example (if today is `2019-06-15` in UTC) |
 | -------------------- | -------------------- | ------- |
-| `today` | A 24 hour timeslice starting at the most recent midnight | `"today"` > `2019-06-15T00:00:00Z - 2019-06-15T23:59:59Z` |
-| `yesterday` | A 24 hour timeslice ending directly before the most recent midnight | `"yesterday"` > `2019-06-14T00:00:00Z - 2019-06-14T23:59:59Z` |
-| `{{TIME_UNIT}} to date` | A timeslice from the beginning of the most recent `TIME_UNIT` ending at the most recent midnight | `"month to date"` > `2019-06-01T00:00:00Z - 2019-06-14T23:59:59Z` |
-| `{{X}} {{TIME_UNITS}} to date` | A timeslice from the beginning of the `X`th most recent `TIME_UNIT` ending at the most recent midnight | `"2 months to date"` > `2019-05-01T00:00:00Z - 2019-06-14T23:59:59Z` |
-| `{{TIME_UNIT}} to now` | A timeslice from the beginning of the most recent `TIME_UNIT` ending at the upcoming midnight | `"quarter to now"` > `2019-04-01T00:00:00Z - 2019-06-15T23:59:59Z` |
-| `{{X}} {{TIME_UNITS}} to now` | A timeslice from the beginning of the `X`th most recent `TIME_UNIT` ending at the upcoming midnight | `"2 quarters to now"` > `2019-01-01T00:00:00Z - 2019-06-15T23:59:59Z` |
-| `this {{TIME_UNIT}}` | A timeslice of 1 `TIME_UNIT` starting at the beginning of the most recent `TIME_UNIT` and ending directly before the start of the next `TIME UNIT` | `"this month"` > `2019-06-01T00:00:00Z - 2019-06-30T23:59:59Z` |
-| `this {{X}} {{TIME_UNITS}}` | A timeslice of `X` `TIME_UNITS` terminating at the end of the current `TIME_UNIT` | `"this 2 months"` > `2019-05-01T00:00:00Z - 2019-06-30T23:59:59Z` |
-| `last {{TIME_UNIT}}` | A timeslice of 1 `TIME_UNIT` starting at the beginning of the most recent `TIME_UNIT` and ending directly before the start of the next `TIME_UNIT` | `"last month"` > `2019-05-01T00:00:00Z - 2019-05-31T23:59:59Z` |
-| `last {{X}} {{TIME_UNITS}}` | A timeslice of `X` `TIME_UNITS` terminating directly before the start of the most recent `TIME_UNIT` | `"last 2 months"` > `2019-04-01T00:00:00Z - 2019-05-31T23:59:59Z` |
+| `today` | A 24 hour timeslice starting at the most recent midnight | `"today"` == `2019-06-15T00:00:00Z - 2019-06-15T23:59:59Z` |
+| `yesterday` | A 24 hour timeslice ending directly before the most recent midnight | `"yesterday"` == `2019-06-14T00:00:00Z - 2019-06-14T23:59:59Z` |
+| `{{TIME_UNIT}} to date` | A timeslice from the beginning of the most recent `TIME_UNIT` ending at the most recent midnight | `"month to date"` == `2019-06-01T00:00:00Z - 2019-06-14T23:59:59Z` |
+| `{{X}} {{TIME_UNITS}} to date` | A timeslice from the beginning of the `X`th most recent `TIME_UNIT` ending at the most recent midnight | `"2 months to date"` == `2019-05-01T00:00:00Z - 2019-06-14T23:59:59Z` |
+| `{{TIME_UNIT}} to now` | A timeslice from the beginning of the most recent `TIME_UNIT` ending at the upcoming midnight | `"quarter to now"` == `2019-04-01T00:00:00Z - 2019-06-15T23:59:59Z` |
+| `{{X}} {{TIME_UNITS}} to now` | A timeslice from the beginning of the `X`th most recent `TIME_UNIT` ending at the upcoming midnight | `"2 quarters to now"` == `2019-01-01T00:00:00Z - 2019-06-15T23:59:59Z` |
+| `this {{TIME_UNIT}}` | A timeslice of 1 `TIME_UNIT` starting at the beginning of the most recent `TIME_UNIT` and ending directly before the start of the next `TIME UNIT` | `"this month"` == `2019-06-01T00:00:00Z - 2019-06-30T23:59:59Z` |
+| `this {{X}} {{TIME_UNITS}}` | A timeslice of `X` `TIME_UNITS` terminating at the end of the current `TIME_UNIT` | `"this 2 months"` == `2019-05-01T00:00:00Z - 2019-06-30T23:59:59Z` |
+| `last {{TIME_UNIT}}` | A timeslice of 1 `TIME_UNIT` starting at the beginning of the most recent `TIME_UNIT` and ending directly before the start of the next `TIME_UNIT` | `"last month"` == `2019-05-01T00:00:00Z - 2019-05-31T23:59:59Z` |
+| `last {{X}} {{TIME_UNITS}}` | A timeslice of `X` `TIME_UNITS` terminating directly before the start of the most recent `TIME_UNIT` | `"last 2 months"` == `2019-04-01T00:00:00Z - 2019-05-31T23:59:59Z` |
 
 Any date string, both absolute and relative, may append a modifying prefix to shift the date range:
 
 | Relative Date String | Time Period Returned | Example (if today is `2019-06-15` in UTC) |
 | -------------------- | -------------------- | ------- |
-| `previous_period {{ABSOLUTE_DATE_RANGE}}` | A timeslice the size of `ABSOLUTE_DATE_RANGE`, ending directly before the start of `ABSOLUTE_DATE_RANGE` | `"previous_period 2019-06-10..2019-06-14"` > `2019-06-05T00:00:00Z - 2019-06-09T23:59:59Z` |
-| `previous_period {{RELATIVE_DATE_RANGE}}` | A timeslice the size of `RELATIVE_DATE_RANGE`, ending directly before the start of `RELATIVE_DATE_RANGE`. The size is based off of the `TIME_UNIT` of the `RELATIVE_DATE_RANGE`, so the previous period may have a different number of days if the `TIME_UNIT` varies in number of days. | `"previous_period this month"` > `2019-05-01T00:00:00Z - 2019-05-31T23:59:59Z` (note this returns a 31 day slice, while `this month` returns a 30 day slice) |
-| `previous_{{TIME_UNIT}} {{ABSOLUTE_DATE_RANGE}}` | A timeslice the size of `ABSOLUTE_DATE_RANGE` but shifted back one `TIME_UNIT`. The end of `ABSOLUTE_DATE_RANGE` can be truncated if the `TIME_UNIT` varies in number of days.  | `"previous_month 2019-05-11..2019-05-31"` > `2019-04-11T00:00:00Z - 2019-04-30T23:59:59Z (note this returns a 20 day timeslice, while the original date range covered 21 days)` |
-| `previous_{{TIME_UNIT}} {{DATE_RANGE}}` | A timeslice the size of `DATE_RANGE` but shifted back one `TIME_UNIT`. The end of `DATE_RANGE` can be truncated if the `TIME_UNIT` varies in number of days.  | `"previous_month 2019-05-11..2019-05-31"` > `2019-04-11T00:00:00Z - 2019-04-30T23:59:59Z (note this returns a 20 day timeslice, while the original date range covered 21 days)` |
+| `previous_period {{ABSOLUTE_DATE_RANGE}}` | A timeslice the size of `ABSOLUTE_DATE_RANGE`, ending directly before the start of `ABSOLUTE_DATE_RANGE` | `"previous_period 2019-06-10..2019-06-14"` == `2019-06-05T00:00:00Z - 2019-06-09T23:59:59Z` |
+| `previous_period {{RELATIVE_DATE_RANGE}}` | A timeslice the size of `RELATIVE_DATE_RANGE`, ending directly before the start of `RELATIVE_DATE_RANGE`. The size is based off of the `TIME_UNIT` of the `RELATIVE_DATE_RANGE`, so the previous period may have a different number of days if the `TIME_UNIT` varies in number of days. | `"previous_period this month"` == `2019-05-01T00:00:00Z - 2019-05-31T23:59:59Z` (note this returns a 31 day slice, while `this month` returns a 30 day slice) |
+| `previous_{{TIME_UNIT}} {{ABSOLUTE_DATE_RANGE}}` | A timeslice the size of `ABSOLUTE_DATE_RANGE` but shifted back one `TIME_UNIT`. The end of `ABSOLUTE_DATE_RANGE` can be truncated if the `TIME_UNIT` varies in number of days.  | `"previous_month 2019-05-11..2019-05-31"` == `2019-04-11T00:00:00Z - 2019-04-30T23:59:59Z` (note this returns a 20 day timeslice, while the original date range covered 21 days) |
+| `previous_{{TIME_UNIT}} {{DATE_RANGE}}` | A timeslice the size of `DATE_RANGE` but shifted back one `TIME_UNIT`. The end of `DATE_RANGE` can be truncated if the `TIME_UNIT` varies in number of days.  | `"previous_month 2019-05-11..2019-05-31"` == `2019-04-11T00:00:00Z - 2019-04-30T23:59:59Z` (note this returns a 20 day timeslice, while the original date range covered 21 days) |
 
-### Entity IDs
+## Entity IDs
 
-AdStage has two styles of IDs available for external use. The newer versions are called `entity_id`s in our API.
-When you pull a report from the Build Report endpoint, each row, where available, will include an `entity_id` in the `meta` section of that row.
+AdStage has two styles of IDs that refer to a specific advertising entity (for example, a specific campaign or a specific keyword).
+Though other forms of IDs may be found in some response endpoints, the newest version - the `entity_id` - should be strongly preferred, as AdStage may drop maintenance of other ID types in the future.
 
-To generate these ids manually, the format of the string is `"/network/{network}/{entity}/{remote_id}"`, where:
+Often, it can be convenient to generate these ids manually based data already known without looking up the entity in the AdStage API.
+For example, a data analyst may wish to pull a weekly report on a list of the same specific campaigns from the reporting API.
+To generate the entity id by hand, use the following string template:
 
-+ the `{network}` variable can be one of:
+`"/network/{network}/{entity_level}/{remote_id}"`, where:
+
++ the `{network}` variable must be be one of:
   + `adwords`
   + `bing_ads`
   + `twitter`
   + `linkedin`
   + `facebook`
-  + `adstage` (with special entities: `account_group`, `user`, `organization` and `folder`)
-+ the `{entity}` variable can be one of:
+  + `adstage` (with entities managed on the AdStage platform: `account_group`, `user`, `organization` and `folder`)
++ the `{entity_level}` variable must be one of:
   + `account`
   + `campaign`
   + `ad_group`
   + `ad`
-  + `keyword`
-  + `criterion` (adwords keywords)
-+ the `{remote_id}` variable is the ID provided by the network, these can be obtained from our
-  reporting endpoint as `remote_account_id`, `remote_campaign_id`, `remote_ad_group_id`, `remote_ad_id`, `remote_keyword_id`
+  + `keyword` (including all Microsoft Ads keywords)
+  + `criterion` (including all Google Ads keywords)
++ the `{remote_id}` variable must be the entity's ID on the advertising network; these can be obtained from our reporting endpoint with the `remote_account_id`, `remote_campaign_id`, `remote_ad_group_id`, `remote_ad_id`, or `remote_keyword_id` (which includes `criterion` ids) meta fields
 
-### Pagination
+## HAL JSON Resources
 
-Most AdStage API endpoints that return lists or reports have support for pagination.
-You can specify the number of items or rows to return with a `limit` parameter, and you can page through results by adding an `offset` parameter to subsequent requests.
+The AdStage API models the data it returns as discrete resources, each of which can have rich relationships to other resources.
+Relationships among API resources is modeled in JSON responses with the [Hypertext Application Language (HAL) standard](https://en.wikipedia.org/wiki/Hypertext_Application_Language).
+For example, an endpoint returning comprehensive data about a user may also return links to other related resources, such as the user's organization, in the JSON response.
+Though a full overview of HAL is beyond the scope of this documentation, this section explains the basic principles needed to successfully interact with the rich data in most AdStage HAL responses.
+HAL attempts to make JSON navigable by organizing JSON content and providing links to related content similar to how HTML organizes web content.
+Just as a web page allows human users to view content and follow links to related pages, HAL allows automated systems to access JSON content and discover links to related JSON endpoints.
 
-For your convenience, the responses from these endpoints also include links to the next and previous pages, e.g.
+AdStage's HAL JSON responses are divided into four distinct sections: the main response (inside the top level JSON object), `_embedded`, `_links`, and `_forms`.
+
+The main response contains information about the requested resource.
+The `_embedded` object contains resources related to the requested resource.
+The `_links` object contains URLs that define API requests for related resources or URLs for next and previous pages of the current resource.
+Note that both the main request and also any embedded resources may include links specific to that resource.
+The `_forms` object can optionally be provided with a link to describe various options that can be used to change or enhance the request, often with recommended submission values.
+
+## Embedded Resources
+
+When issuing a request to a HAL endpoint, the requested resource will typically appear inside the top-level JSON response body.
+However, the response body may also contain `_embedded` objects containing information about resources related to the parent resource.
+For example, when requesting information about a user in example below, the main JSON body returns data about that user, and the `_embedded` key returns information about the user's organization.
+
+Note that any particular resource returned in the `_embedded` object may have additional HAL resources, links, and forms of its own.
+
+**Modified HAL response from a request to a user data endpoint**
 
 ```
 {
-    "_embedded": {
-        "adstage:metrics": [
-            ...
-        ]
+  // The main response contains data about the user resource,
+  // which was the item requested from the endpoint
+  "admin": false,
+  "avatar_url": "https://www.gravatar.com/avatar/123456",
+  "created_at": 1522185933,
+  "customer_status": "trialing",
+  "default_organization_role": "OWNER",
+  "email": "polarbear@adstage.io",
+  "fetch_id": 1,
+  "id": "/api/users/1",
+  ...,
+
+  // The embedded section of the response returns data about the user's organization
+  // because API consumers frequently wish to use data from both resources at once
+  "_embedded": {
+    "adstage:organization": {
+      "active_accounts_count": 9,
+      "is_active_customer": true,
+      "id": "/api/organizations/1",
+      "user_count": 1,
+      ...,
+
+      // The embedded resource has HAL resources of its own,
+      // such as links to additional resources related to the *organization*.
+      "_links": {
+        "profile": [
+          {
+            "name": "organization",
+            "href": "http://platform.adstage.io/api/docs/profile/organization"
+          }
+        ],
+        ...
+      },
+      ...
     },
-    "_links": {
-        "next": {
-            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=3000&..."
-        },
-        "last": {
-            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=1000&..."
-        }
-    }
+    ...
+  },
+  ...
 }
 ```
 
-## Basic Data [/]
+## Links
 
-### Current User Info [GET /me]
+HAL resources may contain links to other related resources in the `_links` object.
+Applications can follow the URLs in links to access these resources.
+
+_Note that some links in the API responses may contain URLs for endpoints not documented here.
+These are not maintained as stable for external users and are not supported.
+Please check whether a link's endpoint is documented here before using it in your application.
+Most supported HAL links for API customers are pagination related._
+
+**Modified HAL response from a request to a user data endpoint**
+
+```
+{
+  // The main response contains data about the user resource,
+  // which was the item requested from the endpoint
+  "admin": false,
+  "avatar_url": "https://www.gravatar.com/avatar/123456",
+  "created_at": 1522185933,
+  "customer_status": "trialing",
+  "default_organization_role": "OWNER",
+  "email": "polarbear@adstage.io",
+  "fetch_id": 1,
+  "id": "/api/users/1",
+  ...,
+
+  // The _links section of the response returns links related to the given user,
+  // such as a full description of the user's organization
+  // and lists of the user's accounts
+  "_links": {
+    "adstage:organization": {
+      "href": "http://platform.adstage.io/api/organizations/1"
+    }
+
+    // Occasionally links may include templates for URL parameters that can refine the request
+    "adstage:list": [
+      {
+          "templated": true,
+          "name": "adwords_accounts",
+          "href": "http://platform.adstage.io/api/users/1/list_network_accounts/adwords{?limit,offset,sort_by,order,term}"
+      },
+      {
+          "templated": true,
+          "name": "bing_ads_accounts",
+          "href": "http://platform.adstage.io/api/users/1/list_network_accounts/bing_ads{?limit,offset,sort_by,order,term}"
+      },
+      ...
+    ],
+    ...
+  },
+  ...
+```
+
+## Forms
+
+Though forms are not officially part of the HAL standard, AdStage uses a common forms implementation in some responses.
+In these responses, HAL links may also provide a related form that describes options for submitting richer data to an endpoint.
+In particular, forms allow HAL to describe how to complete a non-GET request requiring complex or lengthy parameters in a JSON body.
+In a few cases, forms describe a menu of allowable options for such a request and then expect the client application to determine which values to actually send from those options.
+However, AdStage typically uses forms merely as more descriptive links by designating suggested values for all of the request's JSON parameters.
+
+_Note that some forms in the API responses may contain URLs for endpoints not documented here.
+These are not maintained as stable for external users, and should not be used; check whether a form's endpoint is documented here before using it in your application.
+Most supported HAL forms for API customers are pagination related._
+
+**Modified HAL response from a reporting request**
+
+```
+{
+  // The main report resource
+  "summary": { ... },
+  "type": "rows",
+  "time": {
+    "end": "2019-06-26T23:59:59Z",
+    "start": "2019-06-26T00:00:00Z"
+  },
+  ...,
+
+  // A link gives "fallback" information about the next page resource,
+  // but the form should be used instead since the link shows "form": true
+  "_links": {
+    "results": [],
+    "next_page": {
+      "href": "https://platform.adstage.io/api/organizations/1/report",
+      "method": "POST",
+      "form": true
+    }
+  }
+
+  // The form includes information needed to make a request to the URL
+  // using a rich JSON body instead of just URL parameters
+  "_forms": {
+    "next_page": {
+      "href": "https://platform.adstage.io/api/organizations/1/report",
+
+      // Note that the the HTTP method for a form always uses a JSON body
+      "method": "POST",
+
+      // Each field shows a JSON key, a JSON Schema V4 type, and a suggested value
+      "fields": {
+
+        // For example, this item asks users to include `"date_range": "yesterday"`
+        // in the JSON body for the request
+        "date_range": {
+          "type": "string",
+          "value": "yesterday"
+        },
+        "fields": {
+          "type": "array",
+          "value": [
+            "spend"
+          ]
+        },
+        ...,
+        "page_token": {
+          "type": "string",
+          "value": "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0"
+        }
+      }
+    }
+  }
+}
+```
+
+## Pagination
+
+Most AdStage API endpoints that return lists or reports have support for pagination via HAL JSON links or forms.
+You can specify the number of items or rows to return with a `limit` parameter, and you can page through results by adding an `offset` parameter to subsequent requests.
+For your convenience, the responses from these endpoints also include links to the next and previous pages; some endpoints may also provide links to first and last pages.
+
+**Limit/offset pagination example:**
+```
+{
+  // The data for this page
+  "_embedded": { ... },
+
+  // Links to related pages
+  "_links": {
+    "next": {
+      "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=3000&..."
+    },
+    "prev": {
+      "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=1000&..."
+    }
+  }
+}
+```
+
+Some newer endpoints may return a page token in the response link or form.
+When a providing the page token as a parameter in a subsequent HTTP request, AdStage will locate the proper page of data with the page token without the need to manually manage limit and offsets.
+AdStage generated tokens will always encode the proper limit and offset for the designated page, and may attempt to encode a reference to a cached page for faster performance.
+If a request provides both a limit and/or offset as well as a page token, AdStage will attempt to locate the page based on the page token.
+
+**Token pagination example:**
+```
+{
+  // The data for this page_page
+  "_embedded": { ... },
+
+  // Links to related pages
+  "_links": {
+    "next_page": {
+      "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0&..."
+    },
+    "prev_page": {
+      "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0&..."
+    }
+  }
+}
+```
+
+## Authentication
+
+AdStage uses HTTP header bearer tokens for API authentication.
+Contact the AdStage Customer Success team at `support@adstage.io` or your organization's account manager to receive an authentication token.
+
+### OAuth 2 Applications
+If would like to create a application for multiple AdStage users, the AdStage API can serve as an OAuth 2 provider.
+However, there is currently no self-service method to register new OAuth2 applications.
+Contact the AdStage Customer Success team at `support@adstage.io` to have a `client_id` and `client_secret` provisioned for your application.
+
+## Status
+
+Keep up to date with any problems the AdStage API might be experiencing on our [status page](http://status.adstage.io/).
+
+# Group AdStage API V1
+
+This version of the AdStage API can be considered stable and fully released.
+
+## Discovering Basic Organization Data [/]
+
+The following endpoints allow developers to discover key resources belonging to the developer's organization and API user.
+
+### Current User [GET /me{?type}]
 
 + Request
     + Headers
 
             Authorization: Bearer de4dxxxxb33f
             Accept: application/json
+
+    + Attributes
+
+        + type (string, optional) - When `lightweight`, provides a substantially more compact response by omitting several HAL resources; recommended for most use cases
+
 
 + Response 200 (application/json)
 
@@ -120,7 +359,7 @@ For your convenience, the responses from these endpoints also include links to t
             "email": "clark@adstage.io",
             "created_at": 1351707901,
             "id": "/api/users/1",
-            "fetch_id": 1,
+            "fetch_id": 40,
             "has_linked": true,
             "account_status": {
                 "adwords": "unimportable",
@@ -158,11 +397,12 @@ For your convenience, the responses from these endpoints also include links to t
             }
         }
 
-### Organization Info [GET /organizations/{org_id}]
+### Organization [GET /organizations/{org_id}]
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + org_id: 1 (number)
+        The fetch_id for the organization to be reported.
 
 + Request
     + Headers
@@ -175,12 +415,10 @@ For your convenience, the responses from these endpoints also include links to t
     + Attributes
 
         + id: /api/organizations/1 (string)
-
-            The path to the organization in the AdStage API
+            The path to the organization in the AdStage API.
 
         + fetch_id: 40 (number)
-
-            The fetch id of the organization
+            The fetch id for the organization being reported.
 
     + Body
 
@@ -201,13 +439,12 @@ For your convenience, the responses from these endpoints also include links to t
               "fetch_id": 40
             }
 
-### List Accounts [GET /users/{user_id}/list_network_accounts/all]
+### Accounts [GET /users/{user_id}/list_network_accounts/all]
 
 + Parameters
 
-    + user_id: 40 (string)
-
-        which user you want an account list for.
+    + user_id: 40 (number)
+        The id for the user that owns the accounts to be listed.
 
 + Request
 
@@ -296,13 +533,12 @@ For your convenience, the responses from these endpoints also include links to t
             "total_pages": 5
         }
 
-### List Account Groups [GET /users/{user_id}/account_groups]
+### Account Groups [GET /users/{user_id}/account_groups]
 
 + Parameters
 
-    + user_id: 40 (string)
-
-        which user you want an account group list for.
+    + user_id: 40 (number)
+        The id for the user that owns the account groups to be listed.
 
 + Request
 
@@ -396,13 +632,12 @@ For your convenience, the responses from these endpoints also include links to t
             "total_pages": 5
         }
 
-### List Folders [GET /users/{user_id}/list_folders]
+### Folders [GET /users/{user_id}/list_folders]
 
 + Parameters
 
-    + user_id: 40 (string)
-
-        which user you want an account group list for.
+    + user_id: 40 (number)
+        The id for the user that owns the folders to be listed.
 
 + Request
 
@@ -525,7 +760,8 @@ For your convenience, the responses from these endpoints also include links to t
 
 + Parameters
 
-    + user_id (integer) - the fetch ID of the user
+    + user_id: 40 (number)
+        The id for the user that owns the accounts to be check the sync status.
 
 + Request
     + Headers
@@ -601,18 +837,18 @@ For your convenience, the responses from these endpoints also include links to t
 
 ## Building Reports [/organizations/{org_id}/build_report]
 
-This endpoint is used to pull your advertising data. To use this you will need your token and your organization's fetch id.
+This endpoint is used to pull your advertising data.
 
-Use this endpoint to pull reports at any level of reporting available within AdStage.
+Use this endpoint to pull reports at any level of reporting available within AdStage, or to conveniently pull real-time reports with the same normalization scheme from supported external API providers such as Facebook Direct.
 
 ### Basic Report [POST /organizations/{org_id}/build_report]
 
-This type of report will return one row per requested entity with metrics aggregated across the requested timeframe,
-to pull data broken down by day, see the Time Series Report.
+This type of report will return one row per requested entity with metrics aggregated across the requested timeframe.
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + org_id (number)
+        The fetch id for the organization owning the entities that will be reported on.
 
 + Request (application/json)
 
@@ -665,31 +901,31 @@ to pull data broken down by day, see the Time Series Report.
                     + "inomatch" - case-insensitive string NOT matching
 
 
-        + fields: "clicks", "spend", "impressions" (array) - optional list of fields to include in the result. If fields are not requested, all possible fields will be returned in the report.
-        + query (object) - This is used to dynamically include or exclude certain fields in the response. 
-          set to true to include all available metadata, or pick and choose specific keys to show with an object like 
+        + fields: "clicks", "spend", "impressions" (array) - optional list of metrics or meta fields to include in the result (see instructions on listing metrics descriptors to obtain an up-to-date list from the API). If fields are not requested, a selection of the most commonly requested fields will be returned in the report.
+        + query (object) - Dynamically includes or excludes fields in the response. Set to true to include all available metadata, or pick and choose specific keys to show with an object. For example:
+            ```
+            {"_embedded
+              {"adstage:metrics/totals": {"data": true}}}
+            ```
+        + provider: "adstage" (string)
+            To pull reports from other sources, you can set this to a source name.
+            The default is "adstage", which relies on data imported into AdStage.
+            External providers are also supported:
+            "facebook" requires `"targets"` to be set to a single Facebook account,
+            "adwords" requires `"targets"` to be set to a single AdWords account,
+            "gemini" requires `"targets"` to be set to a single Gemini account (beta access only),
+            and `"google_analytics"` requires `"targets"` to be set to a single GA Profile.
 
-              ```
-              {"_embedded
-                {"adstage:metrics/totals": {"data": true}}}
-              ```
-        + provider: "adstage" (string) - to pull reports from other sources, you can set this to a source name. 
-          The default is "adstage", which relies on data imported into AdStage. For external providers - 
-          currently we support "facebook", which requires `"targets"` to be set to a single Facebook account,
-          "adwords", which requires `"targets"` to be set to a single AdWords account, "gemini", which requires `"targets"`
-          to be set to a single Gemini account (beta access only),
-          and `"google_analytics"`, which requires `"targets"` to be set to a single GA Profile.
         + targets: "/network/adstage/user/292", "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array)
+            Optional list of AdStage Entity IDs to pull a report for; if omitted, all data available for the organization will be used.
+            This can be a list of accounts, account groups, folders, or campaigns.
 
-            Optional list of AdStage Entity IDs to pull a report for, if not included all data available for
-            the organization will be used. This can be a list of accounts, account groups,
-            folders, or campaigns.
-        + dimensions (array) - only available if you use a non-AdStage provider - a list of
-          dimension names to break a report by.
+        + dimensions (array)
+            Only available if you use a non-AdStage provider - a list of dimension names to break a report by.
 
-          * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
-          * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
-          * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
+            * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
+            * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
+            * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
 
     + Body
 
@@ -774,14 +1010,13 @@ to pull data broken down by day, see the Time Series Report.
 
 ### Time Series Report [POST /organizations/{org_id}/build_report]
 
-This type of report will return one row per requested entity with metrics broken into a series of 
-day, week, or month datapoints. The request is the same as a standard report but using the special 
-`"aggregate_by"` option to change the format of the returned data.
-
+This type of report will return one row per requested entity with metrics broken into a series of day, week, or month datapoints.
+The request is the same as a standard report but using the `"aggregate_by"` option to change the format of the returned data.
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + org_id (number)
+        The fetch id for the organization owning the entities that will be reported on.
 
 + Request (application/json)
 
@@ -834,30 +1069,30 @@ day, week, or month datapoints. The request is the same as a standard report but
 
 
         + fields: "clicks", "spend", "impressions" (array) - optional list of fields to include in the result. If fields are not requested, all possible fields will be returned in the report.
-        + query (object) - This is used to dynamically include or exclude certain fields in the response. 
-          set to true to include all available metadata, or pick and choose specific keys to show with an object like 
+        + query (object) - Dynamically includes or excludes fields in the response. Set to true to include all available metadata, or pick and choose specific keys to show with an object. For example:
+            ```
+            {"_embedded
+              {"adstage:time_series/totals": {"data": true}}}
+            ```
+        + provider: "adstage" (string)
+            To pull reports from other sources, you can set this to a source name.
+            The default is "adstage", which relies on data imported into AdStage.
+            External providers are also supported:
+            "facebook" requires `"targets"` to be set to a single Facebook account,
+            "adwords" requires `"targets"` to be set to a single AdWords account,
+            "gemini" requires `"targets"` to be set to a single Gemini account (beta access only),
+            and `"google_analytics"` requires `"targets"` to be set to a single GA Profile.
 
-              ```
-              {"_embedded":
-                {"adstage:metrics/totals": {"data": true}}}
-              ```
-        + provider: "adstage" (string) - to pull reports from other sources, you can set this to a source name.
-          The default is "adstage", which relies on data imported into AdStage. For external providers -
-          currently we support "facebook", which requires `"targets"` to be set to a single Facebook account,
-          "adwords", which requires `"targets"` to be set to a single AdWords account, "gemini", which requires `"targets"`
-          to be set to a single Gemini account (beta access only),
-          and `"google_analytics"`, which requires `"targets"` to be set to a single GA Profile.
         + targets: "/network/adstage/user/292", "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array)
+            Optional list of AdStage Entity IDs to pull a report for; if omitted, all data available for the organization will be used.
+            This can be a list of accounts, account groups, folders, or campaigns.
 
-            Optional list of AdStage Entity IDs to pull a report for, if not included all data available for
-            the organization will be used. This can be a list of accounts, account groups,
-            folders, or campaigns.
-        + dimensions (array) - only available if you use a non-AdStage provider - a list of
-          dimension names to break a report by.
+        + dimensions (array)
+            Only available if you use a non-AdStage provider - a list of dimension names to break a report by.
 
-          * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
-          * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
-          * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
+            * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
+            * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
+            * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
 
     + Body
 
@@ -1002,144 +1237,6 @@ day, week, or month datapoints. The request is the same as a standard report but
               }
             }
 
-### Metric Descriptors [GET /metric_descriptors]
-
-Reports can have many different metrics. Use the Metric Descriptors endpoint to get
-more information on the names and formats of these metrics.
-
-+ Request
-
-    + Headers
-
-        Accept: application/json
-
-+ Response 200
-
-  A list of columns that are available to pull via the reporting endpoint.
-
-  + Attributes
-
-        + (array)
-            + (object)
-                + id: "clicks" (string) - the identifier assigned to the metric in reports
-                + short_name: "Clicks" (string) - a short human readable name for the metric
-                + name: "Clicks" (string) - the full human readable name for the metric
-                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
-                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum, string) - format for the metric (default is integer)
-                + type: "METRIC", "TEXT" (enum, string) - whether the descriptor is for a metric, or metadata
-                + is_adwords: true (string) - if the metric is valid for the adwords network
-                + is_facebook: true (string) - if the metric is valid for the facebook network
-                + is_linkedin: true (string) - if the metric is valid for the linkedin network
-                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
-                + is_twitter: true (string) - if the metric is valid for the twitter network
-                + is_account: true (string) - if the metric is valid for the account reporting level
-                + is_campaign: true (string) - if the metric is valid for the campaign reporting level
-                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
-                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
-                + is_keyword: true (string) - if the metric is valid for keyword reporting level
-
-  + Body
-
-        [{"id":"clicks","short_name":"Clicks","name":"Clicks","is_default":true,"tooltip":"<b>Clicks</b> show how many times your ads have been clicked.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
-         {"id":"impressions","short_name":"Impr.","name":"Impressions","is_default":true,"tooltip":"<b>Impressions</b> show how many times your ads have been shown.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
-         {"id":"ctr","short_name":"CTR","name":"CTR","is_default":true,"tooltip":"<b>Clickthrough rate</b> shows how often people who saw your ad ended up clicking it.<br><br> CTR is clicks divided by impressions.<br><br> To improve your CTR, check out our <a href=\"http://blog.adstage.io/2013/05/23/5-tips-for-creating-effective-ppc-ads/\" target=\"_blank\">5 tips for creating effective ads</a>.","format":"PERCENTAGE","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null}]
-
-### Network Metric Descriptors [GET /metric_descriptors/{network}]
-
-Different reporting providers have different metric names. Use this endpoint to get
-more information on the names and formats of these metrics.
-
-+ Parameters
-
-    + network: facebook (string)
-
-        which network you want descriptors for. Currently `"facebook"` and `"google_analytics"` are supported.
-
-+ Request
-
-    + Headers
-
-        Accept: application/json
-
-+ Response 200
-
-  A list of columns that are available to pull via the reporting endpoint.
-
-  + Attributes
-
-        + (array)
-            + (object)
-                + id: "clicks" (string) - the identifier assigned to the metric in reports
-                + short_name: "Clicks" (string) - a short human readable name for the metric
-                + name: "Clicks" (string) - the full human readable name for the metric
-                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
-                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum, string) - format for the metric (default is integer)
-                + type: "METRIC", "TEXT" (enum, string) - whether the descriptor is for a metric, or metadata 
-                + is_adwords: true (string) - if the metric is valid for the adwords network
-                + is_facebook: true (string) - if the metric is valid for the facebook network
-                + is_linkedin: true (string) - if the metric is valid for the linkedin network
-                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
-                + is_twitter: true (string) - if the metric is valid for the twitter network
-                + is_account: true (string) - if the metric is valid for the account reporting level
-                + is_campaign: true (string) - if the metric is valid for the campaign reporting level
-                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
-                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
-                + is_keyword: true (string) - if the metric is valid for keyword reporting level
-
-  + Body
-
-        [{"id":"clicks","short_name":"Clicks","name":"Clicks","is_default":true,"tooltip":"<b>Clicks</b> show how many times your ads have been clicked.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
-         {"id":"impressions","short_name":"Impr.","name":"Impressions","is_default":true,"tooltip":"<b>Impressions</b> show how many times your ads have been shown.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
-         {"id":"ctr","short_name":"CTR","name":"CTR","is_default":true,"tooltip":"<b>Clickthrough rate</b> shows how often people who saw your ad ended up clicking it.<br><br> CTR is clicks divided by impressions.<br><br> To improve your CTR, check out our <a href=\"http://blog.adstage.io/2013/05/23/5-tips-for-creating-effective-ppc-ads/\" target=\"_blank\">5 tips for creating effective ads</a>.","format":"PERCENTAGE","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null}]
-
-### Organization Metric Descriptors [GET /organizations/{org_id}/metric_descriptors]
-
-Some descriptors are specific to an organization. Usually these are custom conversions, created in AdStage and also both Facebook and LinkedIn. Use this endpoint to get
-more information on the names and formats of these organization specific metrics.
-
-+ Parameters
-
-    + org_id: 40 (string)
-
-        which organization you want descriptors for.
-
-+ Request
-
-    + Headers
-
-        Accept: application/json
-
-+ Response 200
-
-  A list of columns that are available to pull via the reporting endpoint.
-
-  + Attributes
-
-        + (array)
-            + (object)
-                + id: "clicks" (string) - the identifier assigned to the metric in reports
-                + short_name: "Clicks" (string) - a short human readable name for the metric
-                + name: "Clicks" (string) - the full human readable name for the metric
-                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
-                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum, string) - format for the metric (default is integer)
-                + type: "METRIC", "TEXT" (enum, string) - whether the descriptor is for a metric, or metadata
-                + is_adwords: true (string) - if the metric is valid for the adwords network
-                + is_facebook: true (string) - if the metric is valid for the facebook network
-                + is_linkedin: true (string) - if the metric is valid for the linkedin network
-                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
-                + is_twitter: true (string) - if the metric is valid for the twitter network
-                + is_account: true (string) - if the metric is valid for the account reporting level
-                + is_campaign: true (string) - if the metric is valid for the campaign reporting level
-                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
-                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
-                + is_keyword: true (string) - if the metric is valid for keyword reporting level
-
-  + Body
-
-        [{"id":"clicks","short_name":"Clicks","name":"Clicks","is_default":true,"tooltip":"<b>Clicks</b> show how many times your ads have been clicked.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
-         {"id":"impressions","short_name":"Impr.","name":"Impressions","is_default":true,"tooltip":"<b>Impressions</b> show how many times your ads have been shown.","format":"DEFAULT","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null},
-         {"id":"ctr","short_name":"CTR","name":"CTR","is_default":true,"tooltip":"<b>Clickthrough rate</b> shows how often people who saw your ad ended up clicking it.<br><br> CTR is clicks divided by impressions.<br><br> To improve your CTR, check out our <a href=\"http://blog.adstage.io/2013/05/23/5-tips-for-creating-effective-ppc-ads/\" target=\"_blank\">5 tips for creating effective ads</a>.","format":"PERCENTAGE","type":"METRIC","category":"PERFORMANCE","default_sort_order":"DESC","is_adwords":true,"is_bing_ads":true,"is_facebook":true,"is_linkedin":true,"is_twitter":true,"is_account":true,"is_campaign":true,"is_ad_group":true,"is_ad":true,"is_keyword":true,"is_post":null,"is_company_status_update":null}]
-
 ## Custom Conversions [/organizations/{org_id}/metric_descriptors]
 
 The AdStage custom metric descriptor endpoint will allow data to be uploaded to a custom column for any existing entities stored within AdStage.
@@ -1147,6 +1244,139 @@ You can then use these custom conversion columns in the reporting endpoints or i
 This requires a few steps to get data flowing:
 
 ### Step 1. Create a custom metric descriptor [POST /organizations/{org_id}/metric_descriptors]
+
+Creates a custom metric descriptor to allow data upload and returns the url which will accept metric data for the new descriptor.
+This step only needs to be performed once per conversion column - the metric descriptor can be reused across multiple data uploads.
+To get a list of existing conversion columns, see the [Discovering Metrics](discovering-metrics) section.
+
++ Parameters
+
+    + org_id (number) - the fetch id of the user's organization
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+
+        + `name`: "Sales Leads: A+" (string, required) - full name of the conversion column
+        + `short_name`: "A+ Leads" (string, required) - a shorter version of name for table column headers
+        + `tooltip`: "Leads scored A+ in Salesforce" (string, required) - a text description of the converion for use in tooltips in AdStage products
+
+    + Body
+
+                    {
+                      "name": "Sales Leads: A+",
+                      "short_name": "A+ Leads",
+                      "tooltip": "Leads scored A+ in Salesforce"
+                    }
+
++ Response 201
+
+  Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
+  You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
+
+  + Attributes
+
+        + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
+        + `_links` (object)
+            + `adstage:custom_conversion_upload` (object)
+              + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the url for step 3.
+
+  + Body
+
+            {
+              "id": "custom_conversions:14:conversions",
+              "category": "CUSTOM_CONVERSION",
+              "type": "METRIC",
+              "name": "Sales Leads: A+",
+              "short_name": "A+ Leads",
+              "tooltip": "Doesn't matter",
+              "default_sort_order": "DESC",
+              "format": "DEFAULT",
+              "_links": {
+                "adstage:custom_conversion_upload": {
+                  "href": "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions"
+                }
+              }
+            }
+
+### Step 2. Post metrics data for the custom metric descriptor [POST /organizations/{org_id}/metric_descriptors/{descriptor_id}/conversions]
+
+Uploads conversion data to associate it with a custom metric descriptor.
+
+This endpoint does not support automatic "roll up" of conversions to their parent entities.
+To roll up values, for example from campaigns to their accounts, include both the campaign ids and the account ids in the `"attribution"` map.
+Alternatively, the V2 endpoint implements an automatic roll up feature.
+
++ Parameters
+
+    + org_id (integer) - the fetch id of the user's organization
+    + descriptor_id (integer) - the fetch id of the metric descriptor
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+
+        + `conversions` (array, required) - a list of conversions
+            + (object)
+                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - ISO8061 formatted string representing when the conversion occurred.
+                + `value`: 30.5 (number) - An optional conversion value, expressed in the currency type for the converting account. Used to compute Return on Ad Spend.
+                + `attribution` - A list of key/value pairs where the key is an [AdStage Entity ID](entity-ids) and the value is a multiplier of how much to weigh the conversion. Use 1 unless you want to do multi-touch attribution modeling.
+                    + `/network/adwords/campaign/530303`: 1 (number) - (this id is just an example; use valid ids)
+                    + `/network/adwords/acount/530303`: 1 (number) - (this id is just an example; use valid ids)
+
+        + `date_range`: `"last_30_days"` (string, required)
+
+            An adstage date range string. See the [Date Ranges](date-ranges) section for details about allowed date range formats.
+
+    + Body
+
+                {
+                  "conversions": [
+                      {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365350": 1}},
+                      {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365350": 0.5}},
+                      {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
+                   ],
+                   "date_range": "2016-11-11..2016-11-17"
+                }
+
++ Response 201
+
+# Group AdStage API V2
+
+This version of the AdStage API can be considered stable, with full release to external customers in progress.
+Additional endpoints within V2 may be developed and/or released, and internal customer V2 endpoints may be documented and released to external customers in the future.
+
+## Custom Conversions [/v2/organizations/{org_id}/metric_descriptors]
+
+The AdStage API allows users to create and associate metrics data with Custom Conversions.
+For example, a user might maintain a spreadsheet attributing Sales Qualified Leads to a mixture of ads.
+With this data regularly uploaded via the API, these metrics can be blended into results from the reporting APIs and can be accessed in the AdStage product.
+
+There are two steps required to set up a new Custom Conversion in the API:
+
+### Step 1. Create a custom metric descriptor [POST /organizations/{org_id}/metric_descriptors]
+
+**Note that this endpoint is identical to the V1 endpoint.
+Its documentation has been copied here for convenience in explaing the custom conversion upload flow.
+AdStage may choose to release a V2 namespaced endpoint with a different feature set and shape in the future.**
 
 Sets up a metric descriptor to allow data upload. Returns the url to allow upload.
 You only need to do this step once per conversion column you want to created.
@@ -1207,18 +1437,22 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
               }
             }
 
-### Step 2. Post metrics data for the custom metric descriptor [POST /organizations/{org_id}/metric_descriptors/{descriptor_id}/conversions]
+### Step 2. Post metrics data for the custom metric descriptor [POST /v2/organizations/{org_id}/custom_metric_descriptors/{descriptor_id}/conversions]
 
-POST data in JSON format to this endpoint with a `"conversions"` key and a `"date_range"` key.
+POST data in JSON format to this endpoint with a `"conversions"` key, a `"date_range"` key, and a `"aggregate_conversions"` key.
 
 (See AdStage API Concepts section on Date Ranges and Entity IDs for details on those subjects)
 
-Each conversion has a `"timestamp"` key and `"attribution"` key. You can also provide an optional `"value"` key.
-`"attribution"` is a map of AdStage Entity IDs to weights. By default,
-you should use a weight of `1`, but if you want to do custom multitouch attribution models you can use partial values or multipliers.
-If you want to roll up values from, for example campaigns, to their account, you must also include both entity ids in the `"attribution"` map.
-`"value"` will by multiplied by the weight to determine the conversion value.
-These are used to compute Return on Ad Spend.
+Each conversion requires a `"timestamp"` key indicating the time of the conversion event and `"attribution"` key, which is a map of AdStage Entity IDs to weights for the conversion.
+By default, we recommend using a weight of `1` for simple attribution, though other weighting schemes using different multipliers are allowed for custom multitouch attribution models.
+You can also provide optional `"value"` key, indicating the currency value of the conversion.
+The product of the weight and `"value"` will then determine the conversion value AdStage records from the upload, as well as any related compute values such as Return on Ad Spend.
+
+
+Note that after posting conversion data to this endpoint, if a subsequent request posts different conversion data with a timestamp on the same *day* of a previously uploaded conversion's timestamp, the data will be overwritten.
+For example, if `2` conversions are posted for `2016-02-03T03:40Z`, and then `1` additional conversion is posted in a new API request for `2016-02-03T04:40Z`, the entity will only display `1` conversion, not `3`.
+When posting data to the endpoint, users are responsible for blending conversion data sources themselves and posting all known conversions within the same request.
+Similarly, for users planning on updating conversion data over multiple requests, it is prudent to maintain a cache of previously known conversions so that the cumulative updated values can be sent in a single request, overwriting the previously updated values.
 
 + Parameters
 
@@ -1236,22 +1470,23 @@ These are used to compute Return on Ad Spend.
 
         + `conversions` (array, required) - a list of conversions
             + (object)
-                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - ISO8061 formatted string representing when the conversion happened
-                + `value`: 30.5 (number) - Optional conversion value
+                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - an ISO8061 formatted string representing when the conversion happened
+                + `value`: 30.5 (number) - Optional conversion value in currency terms
                 + `attribution` - a list of key/value pairs where the key is an AdStage id and the value is how to weight the conversion (use 1 unless you want to do multi-touch attribution modeling)
-                    + `/network/adwords/campaign/530303`: 1 (number) - (this id is just an example, use valid ids)
-                    + `/network/adwords/acount/530303`: 1 (number) - (this id is just an example, use valid ids)
+                    + `/network/adwords/campaign/530303`: 0.25 (number) - (this id is just an example, use valid ids)
+                    + `/network/adwords/campaign/530304`: 0.25 (number) - (this id is just an example, use valid ids)
+                    + `/network/adwords/campaign/530305`: 0.5 (number) - (this id is just an example, use valid ids)
 
-        + `date_range`: "last_30_days" (string, required)
+        + `date_range`: "last_30_days" (string, required) - an adstage date range string (this_month, last_30_days, 2016-12-12..2016-12-15)
 
-            an adstage date range string (this_month, last_30_days, 2016-12-12..2016-12-15)
+        + `aggregate_conversions`: true (boolean, optional) - when true, will automatically roll up conversions into ancestor entities. For example, if attributing a conversion to an ad, this feature would also attribute the conversion to its ad group, campaign, and account. Note that when using this feature, only the lowest level entities for each conversion should be attributed to avoid double counting. This marks an important change compared to the V1 endpoint, which did not automatically roll up conversions and therefore encouraged users to list all entity ancestors in the same conversion. For example, with this endpoint, if an ad and its ad group are both listed in the conversion with attribution weights of `1`, the ad will be attributed 1 conversion, and its ad group will be attributed 2 conversions (1 from the explicit listing, and one from the automatic rollup).
 
     + Body
 
                 {
                   "conversions": [
-                      {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365350": 1}},
-                      {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365350": 0.5}},
+                      {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365351": 1}},
+                      {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365351": 0.5}},
                       {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
                       {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
                       {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
@@ -1262,7 +1497,1160 @@ These are used to compute Return on Ad Spend.
                       {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
                       {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
                    ],
-                   "date_range": "2016-11-11..2016-11-17"
+                   "date_range": "2016-11-11..2016-11-17",
+                   "aggregate_conversions": true
                 }
 
 + Response 201
+
+## Building Reports [/v2/organizations/{org_id}/report]
+
+Use this endpoint to pull reports at any level of reporting available within AdStage.
+The V2 version of the reporting endpoint implements a full rewrite of the V1 version, providing new capabilities such as access to calculated metrics, and a much lighter weight, substantially streamlined response shape.
+
+While this endpoint is preferred for most reporting use cases, it does not currently support reporting from external API providers, such as Facebook Direct in the Build Report V1 implementation.
+Though support for data from external API providers may be introduced in the future or in a subsequent version, it is important to fully evaluate your intended development use case before selecting the V2 endpoint, the V1 endpoint, or a combination of both.
+
+After receiving a request through the V2 reporting endpoint, AdStage will dynamically generate responses of different shapes based on the user's request.
+The two main report shapes are `row` reports, which return single, metric values for each entity aggregated over the specified date range, and `series` reports, which return a time series of data points over the specified date range.
+For example, AdStage uses `row` reports to return data used for displaying a pie chart of last month's spend on several campaigns, but uses a `series` report to return data used to display a line chart comparing the same campaigns' day-by-day spend.
+
+**Because this endpoint returns results with a dynamic shape, the endpoint is split into two documentation sections.
+The sections share a request schema, but document different schemas for the response shape.**
+
+### Rows Report [POST /v2/organizations/{org_id}/report]
+
+This type of report will return one row of metric data per requested entity with metrics aggregated across the requested timeframe.
+
+Note however that the `results` and `summary` sections of the endpoint are independent - for example, it is possible to request `row` formatted results and a `series` formatted summary.
+The [Time Series Report](time-series-report) section describes the response shapes of any components using that format.
+
+Providing the optional `aggregate_by` key will also change the response by adding a single bulk array time series data for all metrics.
+This is shaped differently than time series data in a `series` formatted request, which splits out timeseries data into one array per metric, giving just that metric's datapoints.
+
++ Parameters
+
+    + org_id (integer) - the fetch id of the user's organization
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer de4dxxxxb33f
+
+    + Attributes
+
+        + version: "2" (string, required)
+
+            The APIs version number; currently only accepts `"2"`.
+
+            Note that in the future, AdStage may release other minor or patch versions within the `/v2` URL namespace according to semantic versioning.
+
+        + date_range: "last 30 days" (string, required)
+
+            An AdStage date range string indicating the period to report data for.
+
+            See the [list of allowed relative or absolute date strings](date-ranges) in API Concepts.
+
+        + output_format: "row", "series" (enum[string], required)
+
+            Determines whether a report will aggregate metrics within the given date range (a `row` report), or whether the results will be given as a time series (a `series` report).
+
+            Both formats will provide the aggregated metrics values across the full time period for each entity.
+            If this is the only level of granularity you need, use a `row` format without setting an `aggregate_by` key to boost performance.
+
+            A `row` report can optionally set the `aggregate_by` key.
+            When `aggregate_by` is set for the `row` report, the report will additionally provide a time series breakdown of the metrics expressed **in a single array, containing all metric values in a single object** for each timeslice.
+
+            A `series` report must set the `aggregate_by` key.
+            When `aggregate_by` is set for the `series` report, the reported time series will be expressed **in many arrays of data points - one per metric**.
+
+            Because the different ways of expressing time series reports are subtle, consider investigating both versions when prototyping an application to better understand which is the better fit for you.
+
+            **Note that `series` reports require the `aggregate_by` key to be set to a non-null value, while `row` reports typically omit it.**
+
+        + `aggregate_by`: "day", "week", "month"  (enum[string])
+
+            Gives the size of each timeslice in the report's series; required only for `series` formatted requests.
+            See the `output_format` key for more information about how using this key will change the response shape.
+
+        + sources: (object, required) - The list of sources from which to report data; currently only "metrics" is implemented, though additional sources for blended reports may be implemented in the future.
+
+            + metrics (object, required) - Indicates that the report should use AdStage's internal Metrics service to lookup the requested data. The Metrics service provides access to all ad network data that AdStage imports into its data warehouse. It does not provide access to real-time data stored on ad networks' own servers (consider the V1 Report API for accessing normalized real-time data).
+
+                + targets: "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array[string]) - An optional list of AdStage Entity IDs to pull a report for, if not included all data available for the organization will be used. This can be a list of account groups, accounts, folders, campaigns, ad groups, ads, or keywords, so long as they are a coarser grouping than the `"entity_level"` specifies (e.g. if a campaign is given in this array and `"entity_level"` is set to `"ad_group"`, AdStage will report on all of the ad groups in the given campaign).
+
+                + networks: "adwords", "bing_ads", "facebook", "linkedin", "twitter" (array[string], required) - The list of networks to report data for; must contain at least one network.
+
+                + `entity_level`: "accounts", "campaigns", `"ad_groups"`, "ads", "keywords" (enum, required) - The entity level for which the report should return data.
+
+        + fields: "clicks", "spend", "impressions" (array, required)
+
+            A non-empty list of metrics or meta fields to include in the result.
+
+            See [instructions on discovering fields](discovering-metrics) for a comprehensive list of allowed options.
+
+        + filters (array) - A set of filters to limit the results by using AND conditions.
+            + (object) - A filter object. Results are only returned if filter computes to true.
+                + path: "meta/campaign_name" (string) - Any metric name; or, any meta name prefixed with "meta/". The current value for the metric field defined in the "path" key will be compared against the value given in the "value" key.
+
+                + value: "Performance Campaigns" - A comparison number, string, or array to filter the results with, that works with the designated operator.
+
+                + op: (enum) - The operator to compare the metric value to the "value" key's value.
+                    + "gt" - greater than
+                    + "lt" - less than
+                    + "gte" - greater than or equal
+                    + "lte" - less than or equal
+                    + "in" - exact match to one of the values provided in the filter
+                    + "iin" - case-insensitive match for one of the values provided in the filter
+                    + "match" - case-sensitive string matching
+                    + "nomatch" - case-sensitive string NOT matching
+                    + "imatch" - case-insensitive string matching
+                    + "inomatch" - case-insensitive string NOT matching
+
+        + `summarize_on`: (array) - Designates the types of summaries that the report will provide, aggregating metrics across entities. When provided, the `summary_format` and `summary_fields` keys must also be provided.
+
+            + "page"
+
+                Aggregates metrics for all results on the resulting report's page, **ignoring results from previous or subsequent pages**.
+
+            + "filtered"
+
+                Aggregates metrics for all results obeying any given filters, **even if the result is not included on the current page**.
+
+        + `summary_fields`: "clicks", "spend", (array)
+
+            The list of fields to provide summaries for.
+            Note that any field requested in `summary_fields` must also be requested under the `fields` key.
+            When provided, the `summary_format` and `summarize_on` keys must also be provided.
+
+        + `summary_format`: "row", "series" (enum)
+
+            Determines whether a report's summary will aggregate metrics within the given date range (a `row` summary), or whether the results will be given as a time series (a `series` summary).
+
+            Both formats will provide the aggregated metrics values across the full time period for each entity.
+            If this is the only level of granularity you need, use a `row` summary without setting an `aggregate_by` key to boost performance.
+
+            A `row` summary can optionally set the `aggregate_by` key.
+            When `aggregate_by` is set for the `row` format summary, the summary will additionally provide a time series breakdown of the metrics expressed **in a single array, containing all metric values in a single object** for each timeslice.
+
+            A `series` summary must set the `aggregate_by` key.
+            When `aggregate_by` is set for the `series` format summary, the summarized time series will be expressed **in many arrays of data points - one per metric**.
+
+            Because the different ways of expressing time series summaries are subtle, consider investigating both versions when prototyping an application to better understand which is the better fit for you.
+
+            **Note that `series` summaries require the `aggregate_by` key to be set to a non-null value, while `row` summaries typically omit it.**
+
+        + sort_by: "clicks" (string, required)
+
+            The name of the metric or meta field to sort the results by.
+            If no particular sorting is desired, consider an arbitary metric such as `spend`.
+
+        + order: "asc", "desc" (enum)
+
+            The direction to sort the results.
+            If this key is omitted, the sort will default to descending order.
+
+        + group_by: "network" (string)
+
+            The meta field to group the results by.
+            The metrics for each grouping will all be aggregated in the report results.
+
+            Meta text fields such as campaign names will also be grouped (text will be aggregated in an array); however, the report will truncate to only the first 100 text results per group if there are over 100 entities in the group.
+
+        + ignore_precision: false (boolean)
+
+            Determines whether metrics should be rounded to their AdStage determined precision.
+            Enabling this will disable automatic rounding.
+
+        + limit: 5 (number)
+
+            The number of rows to include (similar to SQL's `LIMIT`).
+            Ignored if a page token is provided in the same request.
+
+        + offset: 10 (number)
+
+            The number of rows to skip before beginning the report (similar to SQL's `OFFSET`).
+            Ignored if a page token is provided in the same request.
+
+        + statuses: (enum) - Filters results based on the status codes of the reported entities
+
+            + `all_visible` - includes only `Active`, `Paused`, and `Completed` entities (default option when the key is omitted)
+            + `all_active` - includes only `Active` entities
+            + `all_inactive` - includes only `Paused` and `Completed` entities
+            + `all_with_deleted` - includes `Active`, `Paused`, `Completed`, `Archived`, and `Deleted` entities
+
+        + page_token: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
+
+            A Base64 encoded string describing a specific page to lookup.
+            When provided, limit and offset keys will be ignored in favor of the page token.
+
+    + Body
+
+            {
+              "version": "2",
+              "date_range": "last 2 months",
+              "output_format": "row",
+              "aggregate_by": "month",
+              "sources": {
+                "metrics": {
+                  "targets": ["/network/adstage/folder/1"],
+                  "networks": ["facebook", "adwords", "linkedin"],
+                  "entity_level": "campaigns"
+                }
+              },
+              "summarize_on": ["page", "filtered"],
+              "summary_fields": ["spend", "calculated_metric:123"],
+              "summary_format": "row",
+              "fields": ["spend", "clicks", "calculated_metric:123"],
+              "filters": [
+                {
+                  "op": "gt",
+                  "path": "clicks",
+                  "value": 5
+                }
+              ],
+              "sort_by": "spend",
+              "order": "asc",
+              "group_by": "network",
+              "ignore_precision": false,
+              "limit": 1,
+              "offset": 1,
+              "statuses": "all_visible"
+            }
+
++ Response 200 (application/json)
+
+    + Attributes
+
+        + summary: (object, required) - Shows metrics aggregated across _entities_ (see the `summary_format` request key for different options on aggrgation). Value is explicit `null` if no `summary_format` was given in the request.
+            + filtered (object, optional) - Shows metrics aggregated across entities on all pages for the report, subject to the constraint of given filters. Is omitted if `filtered` was not requested in the `summary_format` array.
+                + calculated (object, required) - An empty object, reserved for future use.
+                
+                + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
+                
+                + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 1000`.
+                
+                + series (array, required) - Gives a single list of objects that describe all metric values for each timeslice. Omitted unless `aggregate_by` is set in the request. Note that meta values are not given in the series because they are consistent across all timeslices.
+                    + (object)
+                        + calculated (object, required) - An empty object, reserved for future use.
+                
+                        + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 250`.
+                
+                        + time (object, required) - Gives an object describing the span of the particular timeslice in the series data.
+                            + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
+                
+                            + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
+            
+            + page: (object, optional) - Shows metrics aggrgated across all entities on the current report response page. Is omitted if `page` was not requested in the `summary_format` array. Currently omits a series even if `aggregate_by` is provided, though this may be added at a later time.
+                + calculated (object, required) - Gives key-value pairs of calculated metric fields and their values, such as `"calculated_metric:123": 1000`.
+
+                + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
+
+                + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 50`.
+            
+            + type: (enum, required) - Gives the format of the summary.
+                + `"summary_row"` - Indicates the summary section is formatted as a `row` summary.
+                + `"summary_series"` - Indicates the summary section is formatted as a `series` summary.
+
+            + summaries: "page", "filtered" (array, required) - Gives a list of each provided summary as requested in the `summarize_on` key. Options are `"page"` and `"filtered"`.
+
+        + type: (enum, required) - Gives the type of the report so the response can be parsed based on its dynamic shape.
+            + "rows" - Labels the response as that of a `row` report.
+            + "timeseries" - Labels the response as that of a `series` report.
+
+        + time (object, required) - Encapsulates information about the timespan of the report information.
+            + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data.
+
+            + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data.
+
+            + interval: "month" (string, optional) - The timeslice interval of reported data. Only returned if the request set an `aggregate_by` parameter.
+
+            + timestamps (array[string], optional) - An array of ISO 8601 timestamps indicating the start days of each timeslice for every reported series of data. Only returned if the request was a `series` output format.
+        
+        + `_embedded`: (object)
+            + results (array) - Lists the reported data entity-by-entity (or group-by-group if `group_by` is set)
+                + (object) - The reported data for one entity or grouping.
+                    + calculated (object, required) - Gives key-value pairs of calculated metric fields and their values, such as `"calculated_metric:123": 1000`.
+
+                    + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
+
+                    + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 100`.
+
+                    + series (array, required) - Gives a single list of objects that describe all metric values for each timeslice. Omitted unless `aggregate_by` is set in the request. Note that meta values are not given in the series because they are consistent across all timeslices.
+                        + (object)
+                            + calculated (object, required) - Gives key-value pairs of calculated metric fields and their values, such as `"calculated_metric:123": 1000`.
+
+                            + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 50`.
+
+                            + time (object, required) - Gives an object describing the span of the particular timeslice in the series data.
+                                + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
+
+                                + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
+                    
+                    + `_embedded` (object, required) - An empty object implementing the HAL JSON interface (reserved for future use).
+
+                    + `_forms` (object, required) - An empty object implementing the HAL JSON interface (reserved for future use).
+
+                    + `_links` (object, required) - A list of HAL JSON links to resources related to the reported-on entity. Currently gives a link to the entity itself: for example, a campaign will have a `adstage:network_campaign` link provided, but no links to ancestor entities.
+        + `_forms`: (object) HAL JSON forms for paging through the report.
+            + `next_page` (object, optional) - A HAL JSON form defining the interface and necessary JSON values for fetching the subsequent report page, if it exists.
+
+            + `prev_page` (object, optional) - A HAL JSON form defining the interface and necessary JSON values for fetching the previous report page, if it exists.
+
+        + `_links`: (object) - An automatically generated artifact indicating the presence of forms for paging. Does not contain HTTP body parameters; use `_forms` instead to discover the correct paging HTTP parameters.
+
+    + Body
+
+        {
+          "summary": {
+            "filtered": {
+              "calculated": {},
+              "count": 3,
+              "meta": {
+                "currency_code": "USD",
+                "currency_symbol": "$",
+                "entity_id": null,
+                "id": "production.1.adwords.1.accounts.adwords.123.campaigns,production.1.accounts.facebook.456.campaigns,production.1.linkedin.1.accounts.linkedin.789.campaigns",
+                "network": [
+                  "linkedin",
+                  "adwords",
+                  "facebook"
+                ]
+              },
+              "metrics": {
+                "spend": 50973.39
+              },
+              "series": [
+                {
+                  "calculated": {},
+                  "metrics": {
+                    "spend": 29980.59
+                  },
+                  "time": {
+                    "end": "2019-05-31T23:59:59Z",
+                    "start": "2019-05-01T00:00:00Z"
+                  }
+                },
+                {
+                  "calculated": {},
+                  "metrics": {
+                    "spend": 20992.8
+                  },
+                  "time": {
+                    "end": "2019-06-30T23:59:59Z",
+                    "start": "2019-06-01T00:00:00Z"
+                  }
+                }
+              ]
+            },
+            "page": {
+              "calculated": {
+                "calculated_metric:123": 51591
+              },
+              "meta": {
+                "currency_code": "USD",
+                "currency_symbol": "$"
+              },
+              "metrics": {
+                "spend": 3711.92
+              }
+            },
+            "summaries": [
+              "page",
+              "filtered"
+            ],
+            "type": "summary_row"
+          },
+          "type": "rows",
+          "time": {
+            "end": "2019-06-30T23:59:59Z",
+            "interval": "month",
+            "start": "2019-05-01T00:00:00Z"
+          },
+          "_embedded": {
+            "results": [
+              {
+                "calculated": {
+                  "calculated_metric:123": 51591
+                },
+                "meta": {
+                  "currency_code": "USD",
+                  "currency_symbol": "$",
+                  "entity_id": null,
+                  "id": "production.1.adwords.1.accounts.adwords.8193448926.campaigns,production.1.accounts.facebook.694893930603203.campaigns,production.1.linkedin.1.accounts.linkedin.500678349.campaigns[network=linkedin]",
+                  "network": "linkedin"
+                },
+                "metrics": {
+                  "clicks": 266,
+                  "spend": 3711.92
+                },
+                "series": [
+                  {
+                    "calculated": {
+                      "calculated_metric:123": 35259
+                    },
+                    "metrics": {
+                      "clicks": 178,
+                      "spend": 2443.85
+                    },
+                    "time": {
+                      "end": "2019-05-31T23:59:59Z",
+                      "start": "2019-05-01T00:00:00Z"
+                    }
+                  },
+                  {
+                    "calculated": {
+                      "calculated_metric:123": 16330
+                    },
+                    "metrics": {
+                      "clicks": 88,
+                      "spend": 1268.07
+                    },
+                    "time": {
+                      "end": "2019-06-30T23:59:59Z",
+                      "start": "2019-06-01T00:00:00Z"
+                    }
+                  }
+                ],
+                "_embedded": {},
+                "_forms": {},
+                "_links": {}
+              }
+            ]
+          },
+          "_forms": {
+            "next_page": {
+              "href": "https://platform.adstage.io/api/organizations/1/report",
+              "method": "POST",
+              "fields": {
+                "date_range": {
+                  "type": "string",
+                  "value": "last 2 months"
+                },
+                "fields": {
+                  "type": "array",
+                  "value": [
+                    "spend",
+                    "clicks",
+                    "calculated_metric:123"
+                  ]
+                },
+                "filters": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "op": "gt",
+                      "path": "clicks",
+                      "value": 5
+                    }
+                  ]
+                },
+                "forms": {
+                  "type": "array",
+                  "value": null
+                },
+                "ignore_precision": {
+                  "type": "boolean",
+                  "value": false
+                },
+                "links": {
+                  "type": [
+                    "boolean",
+                    "array"
+                  ],
+                  "value": null
+                },
+                "output_format": {
+                  "type": "string",
+                  "value": "row"
+                },
+                "sort_by": {
+                  "type": "string",
+                  "value": "spend"
+                },
+                "sources": {
+                  "type": "object",
+                  "value": {
+                    "metrics": {
+                      "targets": null,
+                      "networks": [
+                        "facebook",
+                        "adwords",
+                        "linkedin"
+                      ],
+                      "entity_level": "campaigns"
+                    }
+                  }
+                },
+                "version": {
+                  "type": "string",
+                  "value": "2"
+                },
+                "page_token": {
+                  "type": "string",
+                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGECZAABdG0AAAAGb2Zmc2V0"
+                }
+              }
+            },
+            "prev_page": {
+              "href": "https://platform.adstage.io/api/organizations/1/report",
+              "method": "POST",
+              "fields": {
+                "date_range": {
+                  "type": "string",
+                  "value": "last 2 months"
+                },
+                "fields": {
+                  "type": "array",
+                  "value": [
+                    "spend",
+                    "clicks",
+                    "calculated_metric:123"
+                  ]
+                },
+                "filters": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "op": "gt",
+                      "path": "clicks",
+                      "value": 5
+                    }
+                  ]
+                },
+                "forms": {
+                  "type": "array",
+                  "value": null
+                },
+                "ignore_precision": {
+                  "type": "boolean",
+                  "value": false
+                },
+                "links": {
+                  "type": [
+                    "boolean",
+                    "array"
+                  ],
+                  "value": null
+                },
+                "output_format": {
+                  "type": "string",
+                  "value": "row"
+                },
+                "sort_by": {
+                  "type": "string",
+                  "value": "spend"
+                },
+                "sources": {
+                  "type": "object",
+                  "value": {
+                    "metrics": {
+                      "targets": null,
+                      "networks": [
+                        "facebook",
+                        "adwords",
+                        "linkedin"
+                      ],
+                      "entity_level": "campaigns"
+                    }
+                  }
+                },
+                "version": {
+                  "type": "string",
+                  "value": "2"
+                },
+                "page_token": {
+                  "type": "string",
+                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0"
+                }
+              }
+            }
+          },
+          "_links": {
+            "results": [],
+            "next_page": {
+              "href": "https://platform.adstage.io/api/organizations/1/report",
+              "method": "POST",
+              "form": true
+            },
+            "prev_page": {
+              "href": "https://platform.adstage.io/api/organizations/1/report",
+              "method": "POST",
+              "form": true
+            }
+          }
+        }
+
+### Time Series Report [POST /v2/organizations/{org_id}/report]
+
+This type of report will return one row of metric data per requested entity with a time series split out of that entity's metrics data.
+
+Note however that the `results` and `summary` sections of the endpoint are independent - for example, it is possible to request `row` formatted results and a `series` formatted summary.
+The [Rows Report](rows-report) section describes the response shapes of any components using that format.
+
+Be advised that in addition to `series` reports, `row` reports can also provide time series data, though with a different shape.
+In contrast to the `series` formatted request, which splits out timeseries data into several arrays of time series (one series per metric), `row` reports are optionally able to give a single array of objects containing each metric's datapoints.
+
++ Parameters
+
+    + org_id (integer) - the fetch id of the user's organization
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer de4dxxxxb33f
+
+    + Attributes
+
+        + version: "2" (string, required)
+
+            The APIs version number; currently only accepts `"2"`.
+
+            Note that in the future, AdStage may release other minor or patch versions within the `/v2` URL namespace according to semantic versioning.
+
+        + date_range: "last 30 days" (string, required)
+
+            An AdStage date range string indicating the period to report data for.
+
+            See the [list of allowed relative or absolute date strings](date-ranges) in API Concepts.
+
+        + output_format: "row", "series" (enum[string], required)
+
+            Determines whether a report will aggregate metrics within the given date range (a `row` report), or whether the results will be given as a time series (a `series` report).
+
+            Both formats will provide the aggregated metrics values across the full time period for each entity.
+            If this is the only level of granularity you need, use a `row` format without setting an `aggregate_by` key to boost performance.
+
+            A `row` report can optionally set the `aggregate_by` key.
+            When `aggregate_by` is set for the `row` report, the report will additionally provide a time series breakdown of the metrics expressed **in a single array, containing all metric values in a single object** for each timeslice.
+
+            A `series` report must set the `aggregate_by` key.
+            When `aggregate_by` is set for the `series` report, the reported time series will be expressed **in many arrays of data points - one per metric**.
+
+            Because the different ways of expressing time series reports are subtle, consider investigating both versions when prototyping an application to better understand which is the better fit for you.
+
+            **Note that `series` reports require the `aggregate_by` key to be set to a non-null value, while `row` reports typically omit it.**
+
+        + `aggregate_by`: "day", "week", "month"  (enum[string])
+
+            Gives the size of each timeslice in the report's series; required only for `series` formatted requests.
+            See the `output_format` key for more information about how using this key will change the response shape.
+
+        + sources: (object, required) - The list of sources from which to report data; currently only "metrics" is implemented, though additional sources for blended reports may be implemented in the future.
+
+            + metrics (object, required) - Indicates that the report should use AdStage's internal Metrics service to lookup the requested data. The Metrics service provides access to all ad network data that AdStage imports into its data warehouse. It does not provide access to real-time data stored on ad networks' own servers (consider the V1 Report API for accessing normalized real-time data).
+
+                + targets: "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array[string]) - An optional list of AdStage Entity IDs to pull a report for, if not included all data available for the organization will be used. This can be a list of account groups, accounts, folders, campaigns, ad groups, ads, or keywords, so long as they are a coarser grouping than the `"entity_level"` specifies (e.g. if a campaign is given in this array and `"entity_level"` is set to `"ad_group"`, AdStage will report on all of the ad groups in the given campaign).
+
+                + networks: "adwords", "bing_ads", "facebook", "linkedin", "twitter" (array[string], required) - The list of networks to report data for; must contain at least one network.
+
+                + `entity_level`: "accounts", "campaigns", `"ad_groups"`, "ads", "keywords" (enum, required) - The entity level for which the report should return data.
+
+        + fields: "clicks", "spend", "impressions" (array, required)
+
+            A non-empty list of metrics or meta fields to include in the result.
+
+            See [instructions on discovering fields](discovering-metrics) for a comprehensive list of allowed options.
+
+        + filters (array) - A set of filters to limit the results by using AND conditions.
+            + (object) - A filter object. Results are only returned if filter computes to true.
+                + path: "meta/campaign_name" (string) - Any metric name; or, any meta name prefixed with "meta/". The current value for the metric field defined in the "path" key will be compared against the value given in the "value" key.
+
+                + value: "Performance Campaigns" - A comparison number, string, or array to filter the results with, that works with the designated operator.
+
+                + op: (enum) - The operator to compare the metric value to the "value" key's value.
+                    + "gt" - greater than
+                    + "lt" - less than
+                    + "gte" - greater than or equal
+                    + "lte" - less than or equal
+                    + "in" - exact match to one of the values provided in the filter
+                    + "iin" - case-insensitive match for one of the values provided in the filter
+                    + "match" - case-sensitive string matching
+                    + "nomatch" - case-sensitive string NOT matching
+                    + "imatch" - case-insensitive string matching
+                    + "inomatch" - case-insensitive string NOT matching
+
+        + `summarize_on`: (array) - Designates the types of summaries that the report will provide, aggregating metrics across entities. When provided, the `summary_format` and `summary_fields` keys must also be provided.
+
+            + "page"
+
+                Aggregates metrics for all results on the resulting report's page, **ignoring results from previous or subsequent pages**.
+
+            + "filtered"
+
+                Aggregates metrics for all results obeying any given filters, **even if the result is not included on the current page**.
+
+        + `summary_fields`: "clicks", "spend", (array)
+
+            The list of fields to provide summaries for.
+            Note that any field requested in `summary_fields` must also be requested under the `fields` key.
+            When provided, the `summary_format` and `summarize_on` keys must also be provided.
+
+        + `summary_format`: "row", "series" (enum)
+
+            Determines whether a report's summary will aggregate metrics within the given date range (a `row` summary), or whether the results will be given as a time series (a `series` summary).
+
+            Both formats will provide the aggregated metrics values across the full time period for each entity.
+            If this is the only level of granularity you need, use a `row` summary without setting an `aggregate_by` key to boost performance.
+
+            A `row` summary can optionally set the `aggregate_by` key.
+            When `aggregate_by` is set for the `row` format summary, the summary will additionally provide a time series breakdown of the metrics expressed **in a single array, containing all metric values in a single object** for each timeslice.
+
+            A `series` summary must set the `aggregate_by` key.
+            When `aggregate_by` is set for the `series` format summary, the summarized time series will be expressed **in many arrays of data points - one per metric**.
+
+            Because the different ways of expressing time series summaries are subtle, consider investigating both versions when prototyping an application to better understand which is the better fit for you.
+
+            **Note that `series` summaries require the `aggregate_by` key to be set to a non-null value, while `row` summaries typically omit it.**
+
+        + sort_by: "clicks" (string, required)
+
+            The name of the metric or meta field to sort the results by.
+            If no particular sorting is desired, consider an arbitary metric such as `spend`.
+
+        + order: "asc", "desc" (enum)
+
+            The direction to sort the results.
+            If this key is omitted, the sort will default to descending order.
+
+        + group_by: "network" (string)
+
+            The meta field to group the results by.
+            The metrics for each grouping will all be aggregated in the report results.
+
+            Meta text fields such as campaign names will also be grouped (text will be aggregated in an array); however, the report will truncate to only the first 100 text results per group if there are over 100 entities in the group.
+
+        + ignore_precision: false (boolean)
+
+            Determines whether metrics should be rounded to their AdStage determined precision.
+            Enabling this will disable automatic rounding.
+
+        + limit: 5 (number)
+
+            The number of rows to include (similar to SQL's `LIMIT`).
+            Ignored if a page token is provided in the same request.
+
+        + offset: 10 (number)
+
+            The number of rows to skip before beginning the report (similar to SQL's `OFFSET`).
+            Ignored if a page token is provided in the same request.
+
+        + statuses: (enum) - Filters results based on the status codes of the reported entities
+
+            + `all_visible` - includes only `Active`, `Paused`, and `Completed` entities (default option when the key is omitted)
+            + `all_active` - includes only `Active` entities
+            + `all_inactive` - includes only `Paused` and `Completed` entities
+            + `all_with_deleted` - includes `Active`, `Paused`, `Completed`, `Archived`, and `Deleted` entities
+
+        + page_token: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
+
+            A Base64 encoded string describing a specific page to lookup.
+            When provided, limit and offset keys will be ignored in favor of the page token.
+
+    + Body
+
+            {
+              "version": "2",
+              "date_range": "last 2 months",
+              "output_format": "series",
+              "aggregate_by": "month",
+              "sources": {
+                "metrics": {
+                  "targets": ["/network/adstage/folder/1"],
+                  "networks": ["facebook", "adwords", "linkedin"],
+                  "entity_level": "campaigns"
+                }
+              },
+              "summarize_on": ["page", "filtered"],
+              "summary_fields": ["spend", "calculated_metric:123"],
+              "summary_format": "series",
+              "fields": ["spend", "clicks", "calculated_metric:123"],
+              "filters": [
+                {
+                  "op": "gt",
+                  "path": "clicks",
+                  "value": 5
+                }
+              ],
+              "sort_by": "spend",
+              "order": "asc",
+              "group_by": "network",
+              "ignore_precision": false,
+              "limit": 1,
+              "offset": 1,
+              "statuses": "all_visible"
+            }
+
++ Response 200 (application/json)
+
+    + Attributes
+
+        + summary: (object, required) - Shows metrics aggregated across _entities_ (see the `summary_format` request key for different options on aggrgation). Value is explicit `null` if no `summary_format` was given in the request.
+            + filtered (object, optional) - Shows metrics aggregated across entities on all pages for the report, subject to the constraint of given filters. Is omitted if `filtered` was not requested in the `summary_format` array.
+                + calculated (object, required) - An empty object, reserved for future use.
+                
+                + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
+                
+                + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 2000`.
+                
+                + series (object, required) - Gives a time series array of metric values for each timeslice. A separate array is provided for every metric field. Note that meta values are not given in the series because they are consistent across all timeslices.
+                    + calculated (object, required) - An empty object, reserved for future use.
+            
+                    + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": [500, 1500]`.
+            
+                    + time (object, required) - Gives an object describing the span of the particular timeslice in the series data.
+                        + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
+            
+                        + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
+            
+            + page: (object, optional) - Shows metrics aggrgated across all entities on the current report response page. Is omitted if `page` was not requested in the `summary_format` array. Currently omits a series even if `aggregate_by` is provided, though this may be added at a later time.
+                + calculated (object, required) - Gives key-value pairs of calculated metric fields and their values, such as `"calculated_metric:123": 200`.
+
+                + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
+
+                + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 700`.
+
+                + series (object, required) - Gives a time series array of metric values for each timeslice. A separate array is provided for every metric field. Note that meta values are not given in the series because they are consistent across all timeslices.
+                    + calculated (object, required) - Gives key-value pairs of calculated metric fields and their time series values, such as `"calculated_metric:123": [50, 150]`.
+            
+                    + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": [200, 500]`.
+            
+                    + time (object, required) - Gives an object describing the span of the particular timeslice in the series data.
+                        + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
+            
+                        + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
+            
+            + type: (enum, required) - Gives the format of the summary.
+                + `"summary_row"` - Indicates the summary section is formatted as a `row` summary.
+                + `"summary_series"` - Indicates the summary section is formatted as a `series` summary.
+
+            + summaries: "page", "filtered" (array, required) - Gives a list of each provided summary as requested in the `summarize_on` key. Options are `"page"` and `"filtered"`.
+
+        + type: (enum, required) - Gives the type of the report so the response can be parsed based on its dynamic shape.
+            + "rows" - Labels the response as that of a `row` report.
+            + "timeseries" - Labels the response as that of a `series` report.
+
+        + time (object, required) - Encapsulates information about the timespan of the report information.
+            + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data.
+
+            + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data.
+
+            + interval: "month" (string, optional) - The timeslice interval of reported data. Only returned if the request set an `aggregate_by` parameter.
+
+            + timestamps (array[string], optional) - An array of ISO 8601 timestamps indicating the start days of each timeslice for every reported series of data. Only returned if the request was a `series` output format.
+        
+        + `_embedded`: (object)
+            + results (array) - Lists the reported data entity-by-entity (or group-by-group if `group_by` is set)
+                + (object) - The reported data for one entity or grouping.
+                    + calculated (object, required) - Gives key-value pairs of calculated metric fields and their values, such as `"calculated_metric:123": 1000`.
+
+                    + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
+
+                    + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 100`.
+
+                    + series (object, required) - Gives a time series array of metric values for each timeslice. A separate array is provided for every metric field. Note that meta values are not given in the series because they are consistent across all timeslices.
+                        + calculated (object, required) - Gives key-value pairs of calculated metric fields and their time series values, such as `"calculated_metric:123": [50, 150]`.
+
+                        + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": [200, 500]`.
+
+                        + time (object, required) - Gives an object describing the span of the particular timeslice in the series data.
+                            + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
+
+                            + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
+
+                    + `_embedded` (object, required) - An empty object implementing the HAL JSON interface (reserved for future use).
+
+                    + `_forms` (object, required) - An empty object implementing the HAL JSON interface (reserved for future use).
+
+                    + `_links` (object, required) - A list of HAL JSON links to resources related to the reported-on entity. Currently gives a link to the entity itself: for example, a campaign will have a `adstage:network_campaign` link provided, but no links to ancestor entities.
+        + `_forms`: (object) HAL JSON forms for paging through the report.
+            + `next_page` (object, optional) - A HAL JSON form defining the interface and necessary JSON values for fetching the subsequent report page, if it exists.
+
+            + `prev_page` (object, optional) - A HAL JSON form defining the interface and necessary JSON values for fetching the previous report page, if it exists.
+
+        + `_links`: (object) - An automatically generated artifact indicating the presence of forms for paging. Does not contain HTTP body parameters; use `_forms` instead to discover the correct paging HTTP parameters.
+
+    + Body
+
+        {
+          "summary": {
+            "filtered": {
+              "calculated": {},
+              "count": 3,
+              "meta": {
+                "currency_code": "USD",
+                "currency_symbol": "$",
+                "entity_id": null,
+                "network": [
+                  "linkedin",
+                  "adwords",
+                  "facebook"
+                ]
+              },
+              "metrics": {
+                "spend": 50973.39
+              },
+              "series": {
+                "calculated": {},
+                "metrics": {
+                  "spend": [
+                    29980.59,
+                    20992.8
+                  ]
+                }
+              }
+            },
+            "page": {
+              "calculated": {
+                "calculated_metric:123": 51591
+              },
+              "meta": {
+                "currency_code": "USD",
+                "currency_symbol": "$"
+              },
+              "metrics": {
+                "spend": 3711.92
+              },
+              "series": {
+                "calculated": {
+                  "calculated_metric:123": [
+                    35259,
+                    16330
+                  ]
+                },
+                "metrics": {
+                  "spend": [
+                    2443.85,
+                    1268.07
+                  ]
+                }
+              }
+            },
+            "summaries": [
+              "page",
+              "filtered"
+            ],
+            "type": "summary_series"
+          },
+          "type": "timeseries",
+          "time": {
+            "end": "2019-06-30T23:59:59Z",
+            "interval": "month",
+            "start": "2019-05-01T00:00:00Z",
+            "timestamps": [
+              "2019-05-01T00:00:00Z",
+              "2019-06-01T00:00:00Z"
+            ]
+          },
+          "_embedded": {
+            "results": [
+              {
+                "summary": {
+                  "calculated": {
+                    "calculated_metric:123": 51591
+                  },
+                  "meta": {
+                    "currency_code": "USD",
+                    "currency_symbol": "$",
+                    "entity_id": null,
+                    "network": "linkedin"
+                  },
+                  "metrics": {
+                    "clicks": 266,
+                    "spend": 3711.92
+                  }
+                },
+                "series": {
+                  "calculated": {
+                    "calculated_metric:123": [
+                      35259,
+                      16330
+                    ]
+                  },
+                  "metrics": {
+                    "clicks": [
+                      178,
+                      88
+                    ],
+                    "spend": [
+                      2443.85,
+                      1268.07
+                    ]
+                  }
+                },
+                "_embedded": {},
+                "_forms": {},
+                "_links": {}
+              }
+            ]
+          },
+          "_forms": {
+            "next_page": {
+              "href": "https://platform.adstage.io/api/organizations/1/report",
+              "method": "POST",
+              "fields": {
+                "date_range": {
+                  "type": "string",
+                  "value": "last 2 months"
+                },
+                "fields": {
+                  "type": "array",
+                  "value": [
+                    "spend",
+                    "clicks",
+                    "calculated_metric:123"
+                  ]
+                },
+                "filters": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "op": "gt",
+                      "path": "clicks",
+                      "value": 5
+                    }
+                  ]
+                },
+                "forms": {
+                  "type": "array",
+                  "value": null
+                },
+                "ignore_precision": {
+                  "type": "boolean",
+                  "value": false
+                },
+                "links": {
+                  "type": [
+                    "boolean",
+                    "array"
+                  ],
+                  "value": null
+                },
+                "output_format": {
+                  "type": "string",
+                  "value": "series"
+                },
+                "sort_by": {
+                  "type": "string",
+                  "value": "spend"
+                },
+                "sources": {
+                  "type": "object",
+                  "value": {
+                    "metrics": {
+                      "targets": [
+                        "/network/adstage/organization/1"
+                      ],
+                      "networks": [
+                        "facebook",
+                        "adwords",
+                        "linkedin"
+                      ],
+                      "entity_level": "campaigns"
+                    }
+                  }
+                },
+                "version": {
+                  "type": "string",
+                  "value": "2"
+                },
+                "page_token": {
+                  "type": "string",
+                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGECZAABdG0AAAAGb2Zmc2V0"
+                }
+              }
+            },
+            "prev_page": {
+              "href": "https://platform.adstage.io/api/organizations/1/report",
+              "method": "POST",
+              "fields": {
+                "date_range": {
+                  "type": "string",
+                  "value": "last 2 months"
+                },
+                "fields": {
+                  "type": "array",
+                  "value": [
+                    "spend",
+                    "clicks",
+                    "calculated_metric:123"
+                  ]
+                },
+                "filters": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "op": "gt",
+                      "path": "clicks",
+                      "value": 5
+                    }
+                  ]
+                },
+                "forms": {
+                  "type": "array",
+                  "value": null
+                },
+                "ignore_precision": {
+                  "type": "boolean",
+                  "value": false
+                },
+                "links": {
+                  "type": [
+                    "boolean",
+                    "array"
+                  ],
+                  "value": null
+                },
+                "output_format": {
+                  "type": "string",
+                  "value": "series"
+                },
+                "sort_by": {
+                  "type": "string",
+                  "value": "spend"
+                },
+                "sources": {
+                  "type": "object",
+                  "value": {
+                    "metrics": {
+                      "targets": [
+                        "/network/adstage/organization/1"
+                      ],
+                      "networks": [
+                        "facebook",
+                        "adwords",
+                        "linkedin"
+                      ],
+                      "entity_level": "campaigns"
+                    }
+                  }
+                },
+                "version": {
+                  "type": "string",
+                  "value": "2"
+                },
+                "page_token": {
+                  "type": "string",
+                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0"
+                }
+              }
+            }
+          },
+          "_links": {
+            "results": [],
+            "next_page": {
+              "href": "https://platform.adstage.io/api/organizations/1/report",
+              "method": "POST",
+              "form": true
+            },
+            "prev_page": {
+              "href": "https://platform.adstage.io/api/organizations/1/report",
+              "method": "POST",
+              "form": true
+            }
+          }
+        }

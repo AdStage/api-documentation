@@ -1,0 +1,65 @@
+### Step 2. Post metrics data for the custom metric descriptor [POST /v2/organizations/{org_id}/custom_metric_descriptors/{descriptor_id}/conversions]
+
+POST data in JSON format to this endpoint with a `"conversions"` key, a `"date_range"` key, and a `"aggregate_conversions"` key.
+
+(See AdStage API Concepts section on Date Ranges and Entity IDs for details on those subjects)
+
+Each conversion requires a `"timestamp"` key indicating the time of the conversion event and `"attribution"` key, which is a map of AdStage Entity IDs to weights for the conversion.
+By default, we recommend using a weight of `1` for simple attribution, though other weighting schemes using different multipliers are allowed for custom multitouch attribution models.
+You can also provide optional `"value"` key, indicating the currency value of the conversion.
+The product of the weight and `"value"` will then determine the conversion value AdStage records from the upload, as well as any related compute values such as Return on Ad Spend.
+
+
+Note that after posting conversion data to this endpoint, if a subsequent request posts different conversion data with a timestamp on the same *day* of a previously uploaded conversion's timestamp, the data will be overwritten.
+For example, if `2` conversions are posted for `2016-02-03T03:40Z`, and then `1` additional conversion is posted in a new API request for `2016-02-03T04:40Z`, the entity will only display `1` conversion, not `3`.
+When posting data to the endpoint, users are responsible for blending conversion data sources themselves and posting all known conversions within the same request.
+Similarly, for users planning on updating conversion data over multiple requests, it is prudent to maintain a cache of previously known conversions so that the cumulative updated values can be sent in a single request, overwriting the previously updated values.
+
++ Parameters
+
+    + org_id (integer) - the fetch id of the user's organization
+    + descriptor_id (integer) - the fetch id of the metric descriptor
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+
+        + `conversions` (array, required) - a list of conversions
+            + (object)
+                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - an ISO8061 formatted string representing when the conversion happened
+                + `value`: 30.5 (number) - Optional conversion value in currency terms
+                + `attribution` - a list of key/value pairs where the key is an AdStage id and the value is how to weight the conversion (use 1 unless you want to do multi-touch attribution modeling)
+                    + `/network/adwords/campaign/530303`: 0.25 (number) - (this id is just an example, use valid ids)
+                    + `/network/adwords/campaign/530304`: 0.25 (number) - (this id is just an example, use valid ids)
+                    + `/network/adwords/campaign/530305`: 0.5 (number) - (this id is just an example, use valid ids)
+
+        + `date_range`: "last_30_days" (string, required) - an adstage date range string (this_month, last_30_days, 2016-12-12..2016-12-15)
+
+        + `aggregate_conversions`: true (boolean, optional) - when true, will automatically roll up conversions into ancestor entities. For example, if attributing a conversion to an ad, this feature would also attribute the conversion to its ad group, campaign, and account. Note that when using this feature, only the lowest level entities for each conversion should be attributed to avoid double counting. This marks an important change compared to the V1 endpoint, which did not automatically roll up conversions and therefore encouraged users to list all entity ancestors in the same conversion. For example, with this endpoint, if an ad and its ad group are both listed in the conversion with attribution weights of `1`, the ad will be attributed 1 conversion, and its ad group will be attributed 2 conversions (1 from the explicit listing, and one from the automatic rollup).
+
+    + Body
+
+                {
+                  "conversions": [
+                      {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365351": 1}},
+                      {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365351": 0.5}},
+                      {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                      {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
+                   ],
+                   "date_range": "2016-11-11..2016-11-17",
+                   "aggregate_conversions": true
+                }
+
++ Response 201

@@ -1,7 +1,16 @@
 ### Organization Metric Descriptors [GET /organizations/{org_id}/metric_descriptors]
 
-Some descriptors are specific to an organization. Usually these are custom conversions, created in AdStage and also both Facebook and LinkedIn. Use this endpoint to get
-more information on the names and formats of these organization specific metrics.
+Some metric descriptors are specific to an organization; this endpoint returns information about the names and formats of these organization-specific metrics.
+These metric descriptors can be:
+* (AdStage) Custom Conversions, describing user-uploaded custom data
+* Network Custom Conversions, describing conversion data imported from supported remote netwokrs (currently Facebook and LinkedIn)
+* Calculated Metrics, describing user-defined combinations of other metrics (not supported in the V1 reporting endpoint)
+
+Additionally, AdStage will automatically derive several metrics that are listed in this endpoint based on both AdStage and Network Custom Conversions:
+* Conversion Value
+* Cost per Conversion
+* Conversion Rate
+* Return on Ad Spend (ROAS)
 
 + Parameters
 

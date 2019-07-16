@@ -1,11 +1,11 @@
 ### Basic Report [POST /organizations/{org_id}/build_report]
 
-This type of report will return one row per requested entity with metrics aggregated across the requested timeframe,
-to pull data broken down by day, see the Time Series Report.
+This type of report will return one row per requested entity with metrics aggregated across the requested timeframe.
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + org_id (number)
+        The fetch id for the organization owning the entities that will be reported on.
 
 + Request (application/json)
 
@@ -58,31 +58,31 @@ to pull data broken down by day, see the Time Series Report.
                     + "inomatch" - case-insensitive string NOT matching
 
 
-        + fields: "clicks", "spend", "impressions" (array) - optional list of fields to include in the result. If fields are not requested, all possible fields will be returned in the report.
-        + query (object) - This is used to dynamically include or exclude certain fields in the response. 
-          set to true to include all available metadata, or pick and choose specific keys to show with an object like 
+        + fields: "clicks", "spend", "impressions" (array) - optional list of metrics or meta fields to include in the result (see instructions on listing metrics descriptors to obtain an up-to-date list from the API). If fields are not requested, a selection of the most commonly requested fields will be returned in the report.
+        + query (object) - Dynamically includes or excludes fields in the response. Set to true to include all available metadata, or pick and choose specific keys to show with an object. For example:
+            ```
+            {"_embedded
+              {"adstage:metrics/totals": {"data": true}}}
+            ```
+        + provider: "adstage" (string)
+            To pull reports from other sources, you can set this to a source name.
+            The default is "adstage", which relies on data imported into AdStage.
+            External providers are also supported:
+            "facebook" requires `"targets"` to be set to a single Facebook account,
+            "adwords" requires `"targets"` to be set to a single AdWords account,
+            "gemini" requires `"targets"` to be set to a single Gemini account (beta access only),
+            and `"google_analytics"` requires `"targets"` to be set to a single GA Profile.
 
-              ```
-              {"_embedded
-                {"adstage:metrics/totals": {"data": true}}}
-              ```
-        + provider: "adstage" (string) - to pull reports from other sources, you can set this to a source name. 
-          The default is "adstage", which relies on data imported into AdStage. For external providers - 
-          currently we support "facebook", which requires `"targets"` to be set to a single Facebook account,
-          "adwords", which requires `"targets"` to be set to a single AdWords account, "gemini", which requires `"targets"`
-          to be set to a single Gemini account (beta access only),
-          and `"google_analytics"`, which requires `"targets"` to be set to a single GA Profile.
         + targets: "/network/adstage/user/292", "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array)
+            Optional list of AdStage Entity IDs to pull a report for; if omitted, all data available for the organization will be used.
+            This can be a list of accounts, account groups, folders, or campaigns.
 
-            Optional list of AdStage Entity IDs to pull a report for, if not included all data available for
-            the organization will be used. This can be a list of accounts, account groups,
-            folders, or campaigns.
-        + dimensions (array) - only available if you use a non-AdStage provider - a list of
-          dimension names to break a report by.
+        + dimensions (array)
+            Only available if you use a non-AdStage provider - a list of dimension names to break a report by.
 
-          * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
-          * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
-          * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
+            * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
+            * `adwords` provider dimensions change by report, described here: [AdWords Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
+            * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
 
     + Body
 

@@ -1,15 +1,10 @@
 ### Step 2. Post metrics data for the custom metric descriptor [POST /organizations/{org_id}/metric_descriptors/{descriptor_id}/conversions]
 
-POST data in JSON format to this endpoint with a `"conversions"` key and a `"date_range"` key.
+Uploads conversion data to associate it with a custom metric descriptor.
 
-(See AdStage API Concepts section on Date Ranges and Entity IDs for details on those subjects)
-
-Each conversion has a `"timestamp"` key and `"attribution"` key. You can also provide an optional `"value"` key.
-`"attribution"` is a map of AdStage Entity IDs to weights. By default,
-you should use a weight of `1`, but if you want to do custom multitouch attribution models you can use partial values or multipliers.
-If you want to roll up values from, for example campaigns, to their account, you must also include both entity ids in the `"attribution"` map.
-`"value"` will by multiplied by the weight to determine the conversion value.
-These are used to compute Return on Ad Spend.
+This endpoint does not support automatic "roll up" of conversions to their parent entities.
+To roll up values, for example from campaigns to their accounts, include both the campaign ids and the account ids in the `"attribution"` map.
+Alternatively, the V2 endpoint implements an automatic roll up feature.
 
 + Parameters
 
@@ -27,15 +22,15 @@ These are used to compute Return on Ad Spend.
 
         + `conversions` (array, required) - a list of conversions
             + (object)
-                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - ISO8061 formatted string representing when the conversion happened
-                + `value`: 30.5 (number) - Optional conversion value
-                + `attribution` - a list of key/value pairs where the key is an AdStage id and the value is how to weight the conversion (use 1 unless you want to do multi-touch attribution modeling)
-                    + `/network/adwords/campaign/530303`: 1 (number) - (this id is just an example, use valid ids)
-                    + `/network/adwords/acount/530303`: 1 (number) - (this id is just an example, use valid ids)
+                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - ISO8061 formatted string representing when the conversion occurred.
+                + `value`: 30.5 (number) - An optional conversion value, expressed in the currency type for the converting account. Used to compute Return on Ad Spend.
+                + `attribution` - A list of key/value pairs where the key is an [AdStage Entity ID](entity-ids) and the value is a multiplier of how much to weigh the conversion. Use 1 unless you want to do multi-touch attribution modeling.
+                    + `/network/adwords/campaign/530303`: 1 (number) - (this id is just an example; use valid ids)
+                    + `/network/adwords/acount/530303`: 1 (number) - (this id is just an example; use valid ids)
 
-        + `date_range`: "last_30_days" (string, required)
+        + `date_range`: `"last_30_days"` (string, required)
 
-            an adstage date range string (this_month, last_30_days, 2016-12-12..2016-12-15)
+            An adstage date range string. See the [Date Ranges](date-ranges) section for details about allowed date range formats.
 
     + Body
 

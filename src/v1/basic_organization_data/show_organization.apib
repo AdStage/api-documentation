@@ -1,8 +1,9 @@
-### Organization Info [GET /organizations/{org_id}]
+### Organization [GET /organizations/{org_id}]
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + org_id: 1 (number)
+        The fetch_id for the organization to be reported.
 
 + Request
     + Headers
@@ -15,12 +16,10 @@
     + Attributes
 
         + id: /api/organizations/1 (string)
-
-            The path to the organization in the AdStage API
+            The path to the organization in the AdStage API.
 
         + fetch_id: 40 (number)
-
-            The fetch id of the organization
+            The fetch id for the organization being reported.
 
     + Body
 

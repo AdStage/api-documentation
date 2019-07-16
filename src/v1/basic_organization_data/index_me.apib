@@ -1,10 +1,15 @@
-### Current User Info [GET /me]
+### Current User [GET /me{?type}]
 
 + Request
     + Headers
 
             Authorization: Bearer de4dxxxxb33f
             Accept: application/json
+
+    + Attributes
+
+        + type (string, optional) - When `lightweight`, provides a substantially more compact response by omitting several HAL resources; recommended for most use cases
+
 
 + Response 200 (application/json)
 
@@ -14,7 +19,7 @@
             "email": "clark@adstage.io",
             "created_at": 1351707901,
             "id": "/api/users/1",
-            "fetch_id": 1,
+            "fetch_id": 40,
             "has_linked": true,
             "account_status": {
                 "adwords": "unimportable",

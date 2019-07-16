@@ -1,0 +1,30 @@
+## Date Ranges
+
+The AdStage endpoints use date range strings to represent time periods and implement a unified date range format throughout the platform.
+Date range strings can be written in two possible styles: either an absolute range such as `"2016-12-25..2016-12-31"`, or a relative range, such as `"last_30_days"` or `"this_month"`.
+
+Absolute date ranges must be formatted as `yyyy-mm-dd..yyyy-mm-dd` and refer to data for all calendar days between the two dates provided (inclusive).
+
+Relative date ranges must be formatted according to the following chart, where `X` is an integer, and `TIME_UNIT` is one of `day`, `week`, `month`, `quarter`, or `year`:
+
+| Relative Date String | Time Period Returned | Example (if today is `2019-06-15` in UTC) |
+| -------------------- | -------------------- | ------- |
+| `today` | A 24 hour timeslice starting at the most recent midnight | `"today"` == `2019-06-15T00:00:00Z - 2019-06-15T23:59:59Z` |
+| `yesterday` | A 24 hour timeslice ending directly before the most recent midnight | `"yesterday"` == `2019-06-14T00:00:00Z - 2019-06-14T23:59:59Z` |
+| `{{TIME_UNIT}} to date` | A timeslice from the beginning of the most recent `TIME_UNIT` ending at the most recent midnight | `"month to date"` == `2019-06-01T00:00:00Z - 2019-06-14T23:59:59Z` |
+| `{{X}} {{TIME_UNITS}} to date` | A timeslice from the beginning of the `X`th most recent `TIME_UNIT` ending at the most recent midnight | `"2 months to date"` == `2019-05-01T00:00:00Z - 2019-06-14T23:59:59Z` |
+| `{{TIME_UNIT}} to now` | A timeslice from the beginning of the most recent `TIME_UNIT` ending at the upcoming midnight | `"quarter to now"` == `2019-04-01T00:00:00Z - 2019-06-15T23:59:59Z` |
+| `{{X}} {{TIME_UNITS}} to now` | A timeslice from the beginning of the `X`th most recent `TIME_UNIT` ending at the upcoming midnight | `"2 quarters to now"` == `2019-01-01T00:00:00Z - 2019-06-15T23:59:59Z` |
+| `this {{TIME_UNIT}}` | A timeslice of 1 `TIME_UNIT` starting at the beginning of the most recent `TIME_UNIT` and ending directly before the start of the next `TIME UNIT` | `"this month"` == `2019-06-01T00:00:00Z - 2019-06-30T23:59:59Z` |
+| `this {{X}} {{TIME_UNITS}}` | A timeslice of `X` `TIME_UNITS` terminating at the end of the current `TIME_UNIT` | `"this 2 months"` == `2019-05-01T00:00:00Z - 2019-06-30T23:59:59Z` |
+| `last {{TIME_UNIT}}` | A timeslice of 1 `TIME_UNIT` starting at the beginning of the most recent `TIME_UNIT` and ending directly before the start of the next `TIME_UNIT` | `"last month"` == `2019-05-01T00:00:00Z - 2019-05-31T23:59:59Z` |
+| `last {{X}} {{TIME_UNITS}}` | A timeslice of `X` `TIME_UNITS` terminating directly before the start of the most recent `TIME_UNIT` | `"last 2 months"` == `2019-04-01T00:00:00Z - 2019-05-31T23:59:59Z` |
+
+Any date string, both absolute and relative, may append a modifying prefix to shift the date range:
+
+| Relative Date String | Time Period Returned | Example (if today is `2019-06-15` in UTC) |
+| -------------------- | -------------------- | ------- |
+| `previous_period {{ABSOLUTE_DATE_RANGE}}` | A timeslice the size of `ABSOLUTE_DATE_RANGE`, ending directly before the start of `ABSOLUTE_DATE_RANGE` | `"previous_period 2019-06-10..2019-06-14"` == `2019-06-05T00:00:00Z - 2019-06-09T23:59:59Z` |
+| `previous_period {{RELATIVE_DATE_RANGE}}` | A timeslice the size of `RELATIVE_DATE_RANGE`, ending directly before the start of `RELATIVE_DATE_RANGE`. The size is based off of the `TIME_UNIT` of the `RELATIVE_DATE_RANGE`, so the previous period may have a different number of days if the `TIME_UNIT` varies in number of days. | `"previous_period this month"` == `2019-05-01T00:00:00Z - 2019-05-31T23:59:59Z` (note this returns a 31 day slice, while `this month` returns a 30 day slice) |
+| `previous_{{TIME_UNIT}} {{ABSOLUTE_DATE_RANGE}}` | A timeslice the size of `ABSOLUTE_DATE_RANGE` but shifted back one `TIME_UNIT`. The end of `ABSOLUTE_DATE_RANGE` can be truncated if the `TIME_UNIT` varies in number of days.  | `"previous_month 2019-05-11..2019-05-31"` == `2019-04-11T00:00:00Z - 2019-04-30T23:59:59Z` (note this returns a 20 day timeslice, while the original date range covered 21 days) |
+| `previous_{{TIME_UNIT}} {{DATE_RANGE}}` | A timeslice the size of `DATE_RANGE` but shifted back one `TIME_UNIT`. The end of `DATE_RANGE` can be truncated if the `TIME_UNIT` varies in number of days.  | `"previous_month 2019-05-11..2019-05-31"` == `2019-04-11T00:00:00Z - 2019-04-30T23:59:59Z` (note this returns a 20 day timeslice, while the original date range covered 21 days) |

@@ -1,12 +1,12 @@
 ### Step 1. Create a custom metric descriptor [POST /organizations/{org_id}/metric_descriptors]
 
-Sets up a metric descriptor to allow data upload. Returns the url to allow upload.
-You only need to do this step once per conversion column you want to created.
-To get a list of conversion columns, see the Build Reports section - "Organization Metric Descriptors".
+Creates a custom metric descriptor to allow data upload and returns the url which will accept metric data for the new descriptor.
+This step only needs to be performed once per conversion column - the metric descriptor can be reused across multiple data uploads.
+To get a list of existing conversion columns, see the [Discovering Metrics](discovering-metrics) section.
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + org_id (number) - the fetch id of the user's organization
 
 + Request (application/json)
 
