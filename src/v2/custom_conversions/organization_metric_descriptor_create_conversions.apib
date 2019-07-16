@@ -16,8 +16,8 @@ Similarly, for users planning on updating conversion data over multiple requests
 
 + Parameters
 
-    + org_id (integer) - The fetch id of the user's organization
-    + descriptor_id (integer) - The fetch id of the metric descriptor
+    + `org_id` (integer) - The fetch id of the user's organization
+    + `descriptor_id` (integer) - The fetch id of the metric descriptor
 
 + Request (application/json)
 
@@ -48,22 +48,22 @@ Similarly, for users planning on updating conversion data over multiple requests
 
     + Body
 
-                {
-                  "conversions": [
-                      {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365351": 1}},
-                      {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365351": 0.5}},
-                      {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
-                   ],
-                   "date_range": "2016-11-11..2016-11-17",
-                   "aggregate_conversions": true
-                }
+            {
+                "conversions": [
+                    {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365351": 1}},
+                    {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365351": 0.5}},
+                    {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
+                ],
+                "date_range": "2016-11-11..2016-11-17",
+                "aggregate_conversions": true
+            }
 
 + Response 201

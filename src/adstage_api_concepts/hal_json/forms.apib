@@ -15,57 +15,59 @@ Most supported HAL forms for API customers are pagination related._
 
 ```
 {
-  // The main report resource
-  "summary": { ... },
-  "type": "rows",
-  "time": {
-    "end": "2019-06-26T23:59:59Z",
-    "start": "2019-06-26T00:00:00Z"
-  },
-  ...,
+    // The main report resource
+    "summary": { ... },
+    "type": "rows",
+    "time": {
+        "end": "2019-06-26T23:59:59Z",
+        "start": "2019-06-26T00:00:00Z"
+    },
+    ...,
 
-  // A link gives "fallback" information about the next page resource,
-  // but the form should be used instead since the link shows "form": true
-  "_links": {
-    "results": [],
-    "next_page": {
-      "href": "https://platform.adstage.io/api/organizations/1/report",
-      "method": "POST",
-      "form": true
-    }
-  }
-
-  // The form includes information needed to make a request to the URL
-  // using a rich JSON body instead of just URL parameters
-  "_forms": {
-    "next_page": {
-      "href": "https://platform.adstage.io/api/organizations/1/report",
-
-      // Note that the the HTTP method for a form always uses a JSON body
-      "method": "POST",
-
-      // Each field shows a JSON key, a JSON Schema V4 type, and a suggested value
-      "fields": {
-
-        // For example, this item asks users to include `"date_range": "yesterday"`
-        // in the JSON body for the request
-        "date_range": {
-          "type": "string",
-          "value": "yesterday"
-        },
-        "fields": {
-          "type": "array",
-          "value": [
-            "spend"
-          ]
-        },
-        ...,
-        "page_token": {
-          "type": "string",
-          "value": "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0"
+    // A link gives "fallback" information about the next page resource,
+    // but the form should be used instead since the link shows "form": true
+    "_links": {
+        "results": [],
+        "next_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/report",
+            "method": "POST",
+            "form": true
         }
-      }
     }
-  }
+
+    // The form includes information needed to make a request to the URL
+    // using a rich JSON body instead of just URL parameters
+    "_forms": {
+        "next_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/report",
+
+            // Note that the the HTTP method for a form always uses a JSON body
+            "method": "POST",
+
+            // Each field shows a JSON key, a JSON Schema V4 type, and a suggested value
+            "fields": {
+
+                // For example, this item asks users to include `"date_range": "yesterday"`
+                // in the JSON body for the request
+                "date_range": {
+                "type": "string",
+                "value": "yesterday"
+                },
+                "fields": {
+                "type": "array",
+                "value": [
+                    "spend"
+                ]
+                },
+                ...,
+                "page_token": {
+                    "type": "string",
+                    "value": "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0"
+                }
+            }
+        }
+        ...
+    }
+    ...
 }
 ```

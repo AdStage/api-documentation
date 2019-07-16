@@ -58,21 +58,21 @@ To generate the entity id by hand, use the following string template:
 
 `"/network/{network}/{entity_level}/{remote_id}"`, where:
 
-+ the `{network}` variable must be be one of:
-  + `adwords`
-  + `bing_ads`
-  + `twitter`
-  + `linkedin`
-  + `facebook`
-  + `adstage` (with entities managed on the AdStage platform: `account_group`, `user`, `organization` and `folder`)
-+ the `{entity_level}` variable must be one of:
-  + `account`
-  + `campaign`
-  + `ad_group`
-  + `ad`
-  + `keyword` (including all Microsoft Ads keywords)
-  + `criterion` (including all Google Ads keywords)
-+ the `{remote_id}` variable must be the entity's ID on the advertising network; these can be obtained from our reporting endpoint with the `remote_account_id`, `remote_campaign_id`, `remote_ad_group_id`, `remote_ad_id`, or `remote_keyword_id` (which includes `criterion` ids) meta fields
++ The `{network}` variable must be be one of:
+    + `adwords`
+    + `bing_ads`
+    + `twitter`
+    + `linkedin`
+    + `facebook`
+    + `adstage` (with entities managed on the AdStage platform: `account_group`, `user`, `organization` and `folder`)
++ The `{entity_level}` variable must be one of:
+    + `account`
+    + `campaign`
+    + `ad_group`
+    + `ad`
+    + `keyword` (including all Microsoft Ads keywords)
+    + `criterion` (including all Google Ads keywords)
++ The `{remote_id}` variable must be the entity's ID on the advertising network; these can be obtained from our reporting endpoint with the `remote_account_id`, `remote_campaign_id`, `remote_ad_group_id`, `remote_ad_id`, or `remote_keyword_id` (which includes `criterion` ids) meta fields
 
 ## HAL JSON Resources
 
@@ -103,44 +103,44 @@ Note that any particular resource returned in the `_embedded` object may have ad
 
 ```
 {
-  // The main response contains data about the user resource,
-  // which was the item requested from the endpoint
-  "admin": false,
-  "avatar_url": "https://www.gravatar.com/avatar/123456",
-  "created_at": 1522185933,
-  "customer_status": "trialing",
-  "default_organization_role": "OWNER",
-  "email": "polarbear@adstage.io",
-  "fetch_id": 1,
-  "id": "/api/users/1",
-  ...,
+    // The main response contains data about the user resource,
+    // which was the item requested from the endpoint
+    "admin": false,
+    "avatar_url": "https://www.gravatar.com/avatar/123456",
+    "created_at": 1522185933,
+    "customer_status": "trialing",
+    "default_organization_role": "OWNER",
+    "email": "polarbear@adstage.io",
+    "fetch_id": 1,
+    "id": "/api/users/1",
+    ...,
 
-  // The embedded section of the response returns data about the user's organization
-  // because API consumers frequently wish to use data from both resources at once
-  "_embedded": {
-    "adstage:organization": {
-      "active_accounts_count": 9,
-      "is_active_customer": true,
-      "id": "/api/organizations/1",
-      "user_count": 1,
-      ...,
+    // The embedded section of the response returns data about the user's organization
+    // because API consumers frequently wish to use data from both resources at once
+    "_embedded": {
+        "adstage:organization": {
+            "active_accounts_count": 9,
+            "is_active_customer": true,
+            "id": "/api/organizations/1",
+            "user_count": 1,
+            ...,
 
-      // The embedded resource has HAL resources of its own,
-      // such as links to additional resources related to the *organization*.
-      "_links": {
-        "profile": [
-          {
-            "name": "organization",
-            "href": "http://platform.adstage.io/api/docs/profile/organization"
-          }
-        ],
+            // The embedded resource has HAL resources of its own,
+            // such as links to additional resources related to the *organization*.
+            "_links": {
+                "profile": [
+                    {
+                        "name": "organization",
+                        "href": "http://platform.adstage.io/api/docs/profile/organization"
+                    }
+                ],
+                ...
+            },
+            ...
+        },
         ...
-      },
-      ...
     },
     ...
-  },
-  ...
 }
 ```
 
@@ -158,43 +158,44 @@ Most supported HAL links for API customers are pagination related._
 
 ```
 {
-  // The main response contains data about the user resource,
-  // which was the item requested from the endpoint
-  "admin": false,
-  "avatar_url": "https://www.gravatar.com/avatar/123456",
-  "created_at": 1522185933,
-  "customer_status": "trialing",
-  "default_organization_role": "OWNER",
-  "email": "polarbear@adstage.io",
-  "fetch_id": 1,
-  "id": "/api/users/1",
-  ...,
+    // The main response contains data about the user resource,
+    // which was the item requested from the endpoint
+    "admin": false,
+    "avatar_url": "https://www.gravatar.com/avatar/123456",
+    "created_at": 1522185933,
+    "customer_status": "trialing",
+    "default_organization_role": "OWNER",
+    "email": "polarbear@adstage.io",
+    "fetch_id": 1,
+    "id": "/api/users/1",
+    ...,
 
-  // The _links section of the response returns links related to the given user,
-  // such as a full description of the user's organization
-  // and lists of the user's accounts
-  "_links": {
-    "adstage:organization": {
-      "href": "http://platform.adstage.io/api/organizations/1"
-    }
+    // The _links section of the response returns links related to the given user,
+    // such as a full description of the user's organization
+    // and lists of the user's accounts
+    "_links": {
+        "adstage:organization": {
+            "href": "http://platform.adstage.io/api/organizations/1"
+        }
 
-    // Occasionally links may include templates for URL parameters that can refine the request
-    "adstage:list": [
-      {
-          "templated": true,
-          "name": "adwords_accounts",
-          "href": "http://platform.adstage.io/api/users/1/list_network_accounts/adwords{?limit,offset,sort_by,order,term}"
-      },
-      {
-          "templated": true,
-          "name": "bing_ads_accounts",
-          "href": "http://platform.adstage.io/api/users/1/list_network_accounts/bing_ads{?limit,offset,sort_by,order,term}"
-      },
-      ...
-    ],
+        // Occasionally links may include templates for URL parameters that can refine the request
+        "adstage:list": [
+            {
+                "templated": true,
+                "name": "adwords_accounts",
+                "href": "http://platform.adstage.io/api/users/1/list_network_accounts/adwords{?limit,offset,sort_by,order,term}"
+            },
+            {
+                "templated": true,
+                "name": "bing_ads_accounts",
+                "href": "http://platform.adstage.io/api/users/1/list_network_accounts/bing_ads{?limit,offset,sort_by,order,term}"
+            },
+            ...
+        ],
+        ...
+    },
     ...
-  },
-  ...
+}
 ```
 
 ## Forms
@@ -214,58 +215,60 @@ Most supported HAL forms for API customers are pagination related._
 
 ```
 {
-  // The main report resource
-  "summary": { ... },
-  "type": "rows",
-  "time": {
-    "end": "2019-06-26T23:59:59Z",
-    "start": "2019-06-26T00:00:00Z"
-  },
-  ...,
+    // The main report resource
+    "summary": { ... },
+    "type": "rows",
+    "time": {
+        "end": "2019-06-26T23:59:59Z",
+        "start": "2019-06-26T00:00:00Z"
+    },
+    ...,
 
-  // A link gives "fallback" information about the next page resource,
-  // but the form should be used instead since the link shows "form": true
-  "_links": {
-    "results": [],
-    "next_page": {
-      "href": "https://platform.adstage.io/api/organizations/1/report",
-      "method": "POST",
-      "form": true
-    }
-  }
-
-  // The form includes information needed to make a request to the URL
-  // using a rich JSON body instead of just URL parameters
-  "_forms": {
-    "next_page": {
-      "href": "https://platform.adstage.io/api/organizations/1/report",
-
-      // Note that the the HTTP method for a form always uses a JSON body
-      "method": "POST",
-
-      // Each field shows a JSON key, a JSON Schema V4 type, and a suggested value
-      "fields": {
-
-        // For example, this item asks users to include `"date_range": "yesterday"`
-        // in the JSON body for the request
-        "date_range": {
-          "type": "string",
-          "value": "yesterday"
-        },
-        "fields": {
-          "type": "array",
-          "value": [
-            "spend"
-          ]
-        },
-        ...,
-        "page_token": {
-          "type": "string",
-          "value": "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0"
+    // A link gives "fallback" information about the next page resource,
+    // but the form should be used instead since the link shows "form": true
+    "_links": {
+        "results": [],
+        "next_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/report",
+            "method": "POST",
+            "form": true
         }
-      }
     }
-  }
+
+    // The form includes information needed to make a request to the URL
+    // using a rich JSON body instead of just URL parameters
+    "_forms": {
+        "next_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/report",
+
+            // Note that the the HTTP method for a form always uses a JSON body
+            "method": "POST",
+
+            // Each field shows a JSON key, a JSON Schema V4 type, and a suggested value
+            "fields": {
+
+                // For example, this item asks users to include `"date_range": "yesterday"`
+                // in the JSON body for the request
+                "date_range": {
+                "type": "string",
+                "value": "yesterday"
+                },
+                "fields": {
+                "type": "array",
+                "value": [
+                    "spend"
+                ]
+                },
+                ...,
+                "page_token": {
+                    "type": "string",
+                    "value": "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0"
+                }
+            }
+        }
+        ...
+    }
+    ...
 }
 ```
 
@@ -278,18 +281,18 @@ For your convenience, the responses from these endpoints also include links to t
 **Limit/offset pagination example:**
 ```
 {
-  // The data for this page
-  "_embedded": { ... },
+    // The data for this page
+    "_embedded": { ... },
 
-  // Links to related pages
-  "_links": {
-    "next": {
-      "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=3000&..."
-    },
-    "prev": {
-      "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=1000&..."
+    // Links to related pages
+    "_links": {
+        "next": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=3000&..."
+        },
+        "prev": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=1000&..."
+        },
     }
-  }
 }
 ```
 
@@ -301,18 +304,18 @@ If a request provides both a limit and/or offset as well as a page token, AdStag
 **Token pagination example:**
 ```
 {
-  // The data for this page_page
-  "_embedded": { ... },
+    // The data for this page_page
+    "_embedded": { ... },
 
-  // Links to related pages
-  "_links": {
-    "next_page": {
-      "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0&..."
-    },
-    "prev_page": {
-      "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0&..."
+    // Links to related pages
+    "_links": {
+        "next_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0&..."
+        },
+        "prev_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0&..."
+        }
     }
-  }
 }
 ```
 
@@ -353,49 +356,49 @@ The following endpoints allow developers to discover key resources belonging to 
 
 + Response 200 (application/json)
 
-        {
-            "first_name": "Clark",
-            "last_name": "Gates-George",
-            "email": "clark@adstage.io",
-            "created_at": 1351707901,
-            "id": "/api/users/1",
-            "fetch_id": 40,
-            "has_linked": true,
-            "account_status": {
-                "adwords": "unimportable",
-                "bing_ads": "unimportable",
-                "facebook": "currently_importing",
-                "linkedin": "permanent_authentication_error",
-                "twitter": "currently_importing"
-              },
-              "visible_account_status": {
-                "adwords": "unimportable",
-                "bing_ads": "unimportable",
-                "facebook": "currently_importing",
-                "linkedin": "currently_importing",
-                "twitter": "currently_importing"
-              },
-              "_embedded": {
-                "adstage:organizations": [
-                  {
-                    "id": "/api/organizations/1",
-                    "fetch_id": 40,
-                    "active_accounts_count": 45,
-                    "is_active_customer": true,
-                    "additional_accounts_purchased": 23,
-                    "advertiser_type": "Agency / Consultant",
-                    "advertising_objective": "Unknown",
-                    "billable_accounts_count": 43,
-                    "billing_contact_email": "clark@adstage.io",
-                    "is_billing_error": false,
-                    "blurb": "Connect ad accounts to the AdStage analytics dashboard and compare performance.  View current key performance metrics (CPA, CPM, CTR) at a glance. Measure your advertising ROS with customizable graphs that allow you to easily gauge performance across multiple networks for any historical period. AdStage identifies your top-performing ads and keywords, which helps you determine what wording resonates well with your audience. Use that ad messaging in your sales pitch, blog posts, or website copy. ",
-                    "company_name": "AdStage",
-                    "customer_status": "paying",
-                    "is_former_customer": false
-                 }
-                ]
+            {
+                "first_name": "Clark",
+                "last_name": "Gates-George",
+                "email": "clark@adstage.io",
+                "created_at": 1351707901,
+                "id": "/api/users/1",
+                "fetch_id": 40,
+                "has_linked": true,
+                "account_status": {
+                    "adwords": "unimportable",
+                    "bing_ads": "unimportable",
+                    "facebook": "currently_importing",
+                    "linkedin": "permanent_authentication_error",
+                    "twitter": "currently_importing"
+                },
+                "visible_account_status": {
+                    "adwords": "unimportable",
+                    "bing_ads": "unimportable",
+                    "facebook": "currently_importing",
+                    "linkedin": "currently_importing",
+                    "twitter": "currently_importing"
+                },
+                "_embedded": {
+                    "adstage:organizations": [
+                        {
+                            "id": "/api/organizations/1",
+                            "fetch_id": 40,
+                            "active_accounts_count": 45,
+                            "is_active_customer": true,
+                            "additional_accounts_purchased": 23,
+                            "advertiser_type": "Agency / Consultant",
+                            "advertising_objective": "Unknown",
+                            "billable_accounts_count": 43,
+                            "billing_contact_email": "clark@adstage.io",
+                            "is_billing_error": false,
+                            "blurb": "Connect ad accounts to the AdStage analytics dashboard and compare performance.  View current key performance metrics (CPA, CPM, CTR) at a glance. Measure your advertising ROS with customizable graphs that allow you to easily gauge performance across multiple networks for any historical period. AdStage identifies your top-performing ads and keywords, which helps you determine what wording resonates well with your audience. Use that ad messaging in your sales pitch, blog posts, or website copy. ",
+                            "company_name": "AdStage",
+                            "customer_status": "paying",
+                            "is_former_customer": false
+                        }
+                    ]
+                }
             }
-        }
 
 ### Organization [GET /organizations/{org_id}]
 
@@ -423,42 +426,42 @@ The following endpoints allow developers to discover key resources belonging to 
     + Body
 
             {
-              "active_accounts_count": 45,
-              "is_active_customer": true,
-              "additional_accounts_purchased": 23,
-              "advertiser_type": "Agency / Consultant",
-              "advertising_objective": "Unknown",
-              "billable_accounts_count": 43,
-              "billing_contact_email": "clark@adstage.io",
-              "is_billing_error": false,
-              "blurb": "Connect ad accounts to the AdStage analytics dashboard and compare performance.",
-              "company_name": "AdStage",
-              "company_url": "http://www.adstage.io",
-              "cumulative_monthly_spend": 12654,
-              "customer_status": "paying",
-              "fetch_id": 40
+                "active_accounts_count": 45,
+                "is_active_customer": true,
+                "additional_accounts_purchased": 23,
+                "advertiser_type": "Agency / Consultant",
+                "advertising_objective": "Unknown",
+                "billable_accounts_count": 43,
+                "billing_contact_email": "clark@adstage.io",
+                "is_billing_error": false,
+                "blurb": "Connect ad accounts to the AdStage analytics dashboard and compare performance.",
+                "company_name": "AdStage",
+                "company_url": "http://www.adstage.io",
+                "cumulative_monthly_spend": 12654,
+                "customer_status": "paying",
+                "fetch_id": 40
             }
 
 ### Accounts [GET /users/{user_id}/list_network_accounts/all]
 
 + Parameters
 
-    + user_id: 40 (number)
+    + `user_id`: 40 (number)
         The id for the user that owns the accounts to be listed.
 
 + Request
 
     + Headers
 
-        Accept: application/json
-        Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+            Authorization: Bearer de4dxxxxb33f
 
 + Response 200
 
-  A list of accounts.
+    A list of accounts.
 
-  + Attributes
-        + _links (object)
+    + Attributes
+        + `_links` (object)
             + next (object)
                 + href (string) - A URL to get the next page of accounts
 
@@ -469,7 +472,7 @@ The following endpoints allow developers to discover key resources belonging to 
 
                     `"https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=10&offset=0"`
 
-        + _embedded (object)
+        + `_embedded` (object)
             + item (array)
                 + (object)
                     + remote_id: "12345" (string) - the identifier assigned to this account by the ad network
@@ -477,66 +480,66 @@ The following endpoints allow developers to discover key resources belonging to 
                     + name: "AdWords Account #1" (string) - the human readable name for the account
                     + is_visible: true (boolean) - whether or not this account is visible
 
-  + Body
+    + Body
 
-        {
-            "_embedded": {
-                "item": [
-                    {
-                        "remote_id": "12345",
-                        "network": "adwords",
-                        "network_name": "AdWords",
-                        "name": "AdWords Account #1",
-                        "is_visible": true,
-                        "currency_code": "USD",
-                        "status": "ACTIVE",
-                        "_embedded": {},
-                        "_forms": {
-                            "adstage:unlink": {
-                                "href": "https://platform.adstage.io/api/organizations/40/unlink_network_account",
-                                "method": "PUT",
-                                "fields": {
-                                    "network": {
-                                        "type": "hidden",
-                                        "value": "adwords"
-                                    },
-                                    "network_account_id": {
-                                        "type": "hidden",
-                                        "value": "12345"
+            {
+                "_embedded": {
+                    "item": [
+                        {
+                            "remote_id": "12345",
+                            "network": "adwords",
+                            "network_name": "AdWords",
+                            "name": "AdWords Account #1",
+                            "is_visible": true,
+                            "currency_code": "USD",
+                            "status": "ACTIVE",
+                            "_embedded": {},
+                            "_forms": {
+                                "adstage:unlink": {
+                                    "href": "https://platform.adstage.io/api/organizations/40/unlink_network_account",
+                                    "method": "PUT",
+                                    "fields": {
+                                        "network": {
+                                            "type": "hidden",
+                                            "value": "adwords"
+                                        },
+                                        "network_account_id": {
+                                            "type": "hidden",
+                                            "value": "12345"
+                                        }
                                     }
                                 }
-                            }
-                        },
-                        "_links": {
-                            "self": {
-                                "href": "https://platform.adstage.io/api/network/adwords/accounts/12345",
-                                "title": "AdWords Account #1"
+                            },
+                            "_links": {
+                                "self": {
+                                    "href": "https://platform.adstage.io/api/network/adwords/accounts/12345",
+                                    "title": "AdWords Account #1"
+                                }
                             }
                         }
+                    ]
+                },
+                "_links": {
+                    "next": {
+                        "href": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc"
                     }
-                ]
-            },
-            "_links": {
-                "next": {
-                    "href": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc"
-                }
-            },
-            "counts": {
-                "overall": 5,
-                "page": 1
-            },
-            "current_page": 1,
-            "id": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc",
-            "list_of": "item",
-            "page_options": {
-                "limit": 1,
-                "offset": 0
-            },
-            "page_size": 1,
-            "page_total": 1,
-            "total": 5,
-            "total_pages": 5
-        }
+                },
+                "counts": {
+                    "overall": 5,
+                    "page": 1
+                },
+                "current_page": 1,
+                "id": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc",
+                "list_of": "item",
+                "page_options": {
+                    "limit": 1,
+                    "offset": 0
+                },
+                "page_size": 1,
+                "page_total": 1,
+                "total": 5,
+                "total_pages": 5
+            }
 
 ### Account Groups [GET /users/{user_id}/account_groups]
 
@@ -549,14 +552,14 @@ The following endpoints allow developers to discover key resources belonging to 
 
     + Headers
 
-        Accept: application/json
-        Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+            Authorization: Bearer de4dxxxxb33f
 
 + Response 200
 
-  A list of account groups.
+    A list of account groups.
 
-  + Attributes
+    + Attributes
         + _links (object)
             + next (object)
                 + href (string) - A URL to get next page of account groups
@@ -577,70 +580,70 @@ The following endpoints allow developers to discover key resources belonging to 
                     + account_count: 5 (number) - total number of accounts in the group
                     + _forms (object) - list of actions available on the account group
 
-  + Body
+    + Body
 
-        {
-            "_embedded": {
-                "item": [
-                    {
-                        "account_count": 1,
-                        "id": 988,
-                        "is_visible": false,
-                        "name": "Client 3 Marketing",
-                        "_embedded": {},
-                        "_forms": {
-                            "adstage:add": {
-                                "fields": {
-                                    "network": "string",
-                                    "network_account_id": "integer"
-                                },
-                                "href": "https://platform.adstage.io/api/users/40/account_groups/988/add",
-                                "method": "POST",
-                                "name": "account_group"
-                            }
-                        },
-                        "_links": {
-                            "adstage:add": {
-                                "form": true,
-                                "href": "https://platform.adstage.io/api/users/40/account_groups/988/add",
-                                "method": "POST",
-                                "name": "account_group"
-                            },
-                            "adstage:list": [
-                                {
-                                    "href": "https://platform.adstage.io/api/users/40/account_groups/988/list_accounts{?limit,offset}",
-                                    "name": "network_accounts",
-                                    "templated": true
+            {
+                "_embedded": {
+                    "item": [
+                        {
+                            "account_count": 1,
+                            "id": 988,
+                            "is_visible": false,
+                            "name": "Client 3 Marketing",
+                            "_embedded": {},
+                            "_forms": {
+                                "adstage:add": {
+                                    "fields": {
+                                        "network": "string",
+                                        "network_account_id": "integer"
+                                    },
+                                    "href": "https://platform.adstage.io/api/users/40/account_groups/988/add",
+                                    "method": "POST",
+                                    "name": "account_group"
                                 }
-                            ],
-                            "self": {
-                                "href": "/api/users/40/account_groups/988"
+                            },
+                            "_links": {
+                                "adstage:add": {
+                                    "form": true,
+                                    "href": "https://platform.adstage.io/api/users/40/account_groups/988/add",
+                                    "method": "POST",
+                                    "name": "account_group"
+                                },
+                                "adstage:list": [
+                                    {
+                                        "href": "https://platform.adstage.io/api/users/40/account_groups/988/list_accounts{?limit,offset}",
+                                        "name": "network_accounts",
+                                        "templated": true
+                                    }
+                                ],
+                                "self": {
+                                    "href": "/api/users/40/account_groups/988"
+                                }
                             }
                         }
+                    ]
+                },
+                "_links": {
+                    "next": {
+                        "href": "https://platform.adstage.io/api/users/40/account_groups?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc"
                     }
-                ]
-            },
-            "_links": {
-                "next": {
-                    "href": "https://platform.adstage.io/api/users/40/account_groups?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc"
-                }
-            },
-            "counts": {
-                "overall": 5,
-                "page": 1
-            },
-            "current_page": 1,
-            "id": "https://platform.adstage.io/api/users/40/account_groups?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc",
-            "list_of": "item",
-            "page_options": {
-                "limit": 1,
-                "offset": 0
-            },
-            "page_size": 1,
-            "page_total": 1,
-            "total": 5,
-            "total_pages": 5
-        }
+                },
+                "counts": {
+                    "overall": 5,
+                    "page": 1
+                },
+                "current_page": 1,
+                "id": "https://platform.adstage.io/api/users/40/account_groups?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc",
+                "list_of": "item",
+                "page_options": {
+                    "limit": 1,
+                    "offset": 0
+                },
+                "page_size": 1,
+                "page_total": 1,
+                "total": 5,
+                "total_pages": 5
+            }
 
 ### Folders [GET /users/{user_id}/list_folders]
 
@@ -653,24 +656,24 @@ The following endpoints allow developers to discover key resources belonging to 
 
     + Headers
 
-        Accept: application/json
-        Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+            Authorization: Bearer de4dxxxxb33f
 
 + Response 200
 
-  A list of folders.
+    A list of folders.
 
-  + Attributes
+    + Attributes
         + _links (object)
             + next (object)
                 + href (string) - A URL to get next page of folders
 
-                     `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=20&networks=all"`
+                    `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=20&networks=all"`
 
             + prev (object)
                 + href (string) - A URL to get previous page of folders
 
-                     `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=0&networks=all"`
+                    `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=0&networks=all"`
 
         + _embedded (object)
             + item (array) - list of folders
@@ -683,99 +686,99 @@ The following endpoints allow developers to discover key resources belonging to 
                     + _links (object) - list of actions and related entities to the folder
                         + `adstage:network_campaign` - HAL links to adstage campaigns
 
-  + Body
+    + Body
 
-        {
-            "_embedded": {
-                "item": [
-                    {
-                        "daily_budget_value": 0.0,
-                        "fetch_id": "168",
-                        "id": "/api/folders/168",
-                        "lifetime_budget_value": 0.0,
-                        "monthly_budget_value": 0.0,
-                        "name": "040414 Updated",
-                        "network_counts": {
-                            "bing_ads": 1,
-                            "totals": 1
-                        },
-                        "_forms": {
-                            "adstage:link": {
-                                "fields": {
-                                    "folder_id": {
-                                        "title": "Choose a folder",
-                                        "type": "adstage:folder",
-                                        "validators": [
-                                            "required"
-                                        ],
-                                        "value": "/api/folders/168"
+            {
+                "_embedded": {
+                    "item": [
+                        {
+                            "daily_budget_value": 0.0,
+                            "fetch_id": "168",
+                            "id": "/api/folders/168",
+                            "lifetime_budget_value": 0.0,
+                            "monthly_budget_value": 0.0,
+                            "name": "040414 Updated",
+                            "network_counts": {
+                                "bing_ads": 1,
+                                "totals": 1
+                            },
+                            "_forms": {
+                                "adstage:link": {
+                                    "fields": {
+                                        "folder_id": {
+                                            "title": "Choose a folder",
+                                            "type": "adstage:folder",
+                                            "validators": [
+                                                "required"
+                                            ],
+                                            "value": "/api/folders/168"
+                                        },
+                                        "network_campaign_ids": {
+                                            "title": "Choose one or more campaigns",
+                                            "type": "adstage:folder",
+                                            "validators": [
+                                                "required"
+                                            ],
+                                            "value": []
+                                        }
                                     },
-                                    "network_campaign_ids": {
-                                        "title": "Choose one or more campaigns",
-                                        "type": "adstage:folder",
-                                        "validators": [
-                                            "required"
-                                        ],
-                                        "value": []
-                                    }
-                                },
-                                "href": "https://platform.adstage.io/api/folders/168/add",
-                                "method": "POST",
-                                "title": "Link Campaigns to Folder"
-                            }
-                        },
-                        "_links": {
-                            "adstage:network_campaign": [
-                                {
-                                    "data-fetch_id": 6745,
-                                    "data-id": "/api/network/bing_ads/campaigns/6745",
-                                    "data-navgroup": "search",
-                                    "data-network": "bing_ads",
-                                    "data-network_name": "Bing",
-                                    "href": "https://platform.adstage.io/api/network/bing_ads/accounts/506/campaigns/6745",
-                                    "name": "/api/network/bing_ads/campaigns/6745",
-                                    "network_account_id": "/api/network/bing_ads/accounts/506",
-                                    "network_account_name": "AdStage, Inc.",
-                                    "title": "AdStage: 040414"
+                                    "href": "https://platform.adstage.io/api/folders/168/add",
+                                    "method": "POST",
+                                    "title": "Link Campaigns to Folder"
                                 }
-                            ],
-                            "self": {
-                                "data-fetch_id": "168",
-                                "href": "https://platform.adstage.io/api/folders/168",
-                                "name": "168",
-                                "title": "040414 Updated"
+                            },
+                            "_links": {
+                                "adstage:network_campaign": [
+                                    {
+                                        "data-fetch_id": 6745,
+                                        "data-id": "/api/network/bing_ads/campaigns/6745",
+                                        "data-navgroup": "search",
+                                        "data-network": "bing_ads",
+                                        "data-network_name": "Bing",
+                                        "href": "https://platform.adstage.io/api/network/bing_ads/accounts/506/campaigns/6745",
+                                        "name": "/api/network/bing_ads/campaigns/6745",
+                                        "network_account_id": "/api/network/bing_ads/accounts/506",
+                                        "network_account_name": "AdStage, Inc.",
+                                        "title": "AdStage: 040414"
+                                    }
+                                ],
+                                "self": {
+                                    "data-fetch_id": "168",
+                                    "href": "https://platform.adstage.io/api/folders/168",
+                                    "name": "168",
+                                    "title": "040414 Updated"
+                                }
                             }
                         }
-                    }
-                ]
-            },
-            "_links": {
-                "next": {
-                    "href": "https://platform.adstage.io/api/users/40/list_folders?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc"
+                    ]
                 },
-                "self": {
-                    "href": "https://platform.adstage.io/api/users/40/list_folders?limit=1&access_token=57a082a0de5d9eba2d6580a3b1a7ba1876c23d0a46177f327a4289a3b272b670"
-                }
-            },
-            "counts": {},
-            "current_page": 1,
-            "id": "https://platform.adstage.io/api/users/40/list_folders?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc",
-            "list_of": "item",
-            "page_options": {
-                "limit": 1,
-                "offset": 0
-            },
-            "page_size": 1,
-            "page_total": 1,
-            "total": 2309,
-            "total_pages": 2309
-        }
+                "_links": {
+                    "next": {
+                        "href": "https://platform.adstage.io/api/users/40/list_folders?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc"
+                    },
+                    "self": {
+                        "href": "https://platform.adstage.io/api/users/40/list_folders?limit=1&access_token=57a082a0de5d9eba2d6580a3b1a7ba1876c23d0a46177f327a4289a3b272b670"
+                    }
+                },
+                "counts": {},
+                "current_page": 1,
+                "id": "https://platform.adstage.io/api/users/40/list_folders?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc",
+                "list_of": "item",
+                "page_options": {
+                    "limit": 1,
+                    "offset": 0
+                },
+                "page_size": 1,
+                "page_total": 1,
+                "total": 2309,
+                "total_pages": 2309
+            }
 
 ### Import Status [GET /users/{user_id}/sync_information]
 
 + Parameters
 
-    + user_id: 40 (number)
+    + `user_id`: 40 (number)
         The id for the user that owns the accounts to be check the sync status.
 
 + Request
@@ -793,62 +796,482 @@ The following endpoints allow developers to discover key resources belonging to 
             + (object)
                 + name: "Account #1" (string) - the name of the account
                 + network: "adwords" (string) - the network of the account
-                + import_status (object) - details about the import status of the account
+                + `import_status` (object) - details about the import status of the account
                     + code: "good" (string)
                         status code for the account import
                         * `good`: the most recent import has completed
                         * `currently_importing`: an import is currently running
                         * `permanent_authentication_error`: the account needs to be relinked due to an expired token or other authentication issue
-                    + is_importing: false (boolean) - whether or not an import is currently running for the account
-                    + last_import_started: (string) - start timestamp of the most recent import
-                    + last_import_finished: (string)
+                    + `is_importing`: false (boolean) - whether or not an import is currently running for the account
+                    + `last_import_started`: "2018-01-01T08:30:00Z" (string) - start timestamp of the most recent import
+                    + `last_import_finished`: "2018-01-01T11:11:00Z" (string)
                         if the most recent import has completed, this timestamp represents the 
                         end timestamp of the most recent import; if an import is currently
                         running, this timestamp represents the end timestamp of the previous
                         completed import
-                 
+
     + Body
-    
-        {
-            "accounts": [
-                {
-                    "name": "Account #1",
-                    "network": "adwords",
-                    "import_status": {
-                        "code": "good",
-                        "is_importing": false,
-                        "last_import_started": "2018-01-01T08:30:00Z",
-                        "last_import_finished": "2018-01-01T11:11:00Z",
-                        "last_import_failed": null,
-                        "importable": true
+
+            {
+                "accounts": [
+                    {
+                        "name": "Account #1",
+                        "network": "adwords",
+                        "import_status": {
+                            "code": "good",
+                            "is_importing": false,
+                            "last_import_started": "2018-01-01T08:30:00Z",
+                            "last_import_finished": "2018-01-01T11:11:00Z",
+                            "last_import_failed": null,
+                            "importable": true
+                        }
+                    },
+                    {
+                        "name": "Account #2",
+                        "network": "facebook",
+                        "import_status": {
+                            "code": "currently_importing",
+                            "is_importing": true,
+                            "last_import_started": "2018-01-01T12:00:00Z",
+                            "last_import_finished": "2018-01-01T11:45:00Z",
+                            "last_import_failed": null,
+                            "importable": true
+                        }
+                    },
+                    {
+                        "name": "Account #3",
+                        "network": "linkedin",
+                        "import_status": {
+                            "code": "permanent_authentication_error",
+                            "is_importing": false,
+                            "last_import_started": "2018-01-01T03:15:00Z",
+                            "last_import_finished": "2018-01-01T03:20:00Z",
+                            "last_import_failed": null,
+                            "importable": false
+                        }
                     }
-                },
+                ]
+            }
+
+## Discovering Metrics [/metric_descriptors]
+
+Developers will often need to discover various data fields to request and interpret their desired advertising data.
+The following endpoints and documentation comprise comprehensive list of permitted options for advertising data fields.
+
+Broadly, AdStage separates these fields into two categories: metrics and meta fields.
+A field is stored as a metric if an advertising network allows AdStage to request the data as a daily timeseries (for example, `"clicks"`).
+Metric fields are discoverable through the Metric Descriptor resource, which provides information about how to interpret and present the field (for example, by maintaining a list of networks supporting that metric).
+In contrast, a field is stored as metadata if an advertising network only allows AdStage to request a single value for the data (for example, `"title"`).
+Meta fields do not have associated rich descriptor resources at this time.
+
+### Meta Fields
+
+Metadata fields are typically strings, such as an ad's `title`, though in some cases, a meta field can be of another type, such as `budget_float` - the most recent budget for the entity cast to a float.
+In these cases, the casted data type is appended to the string: `budget_float` will return a float.
+
+Because meta fields are so rarely changed, AdStage does not currently provide an API endpoint to list all meta fields on-demand.
+Instead, a comprehensive list of metadata fields is provided below for convenience.
+In the future, AdStage may replace this with an API endpoint for meta field discovery.
+
+#### Entity Names
+
+Gives the displayable names of each entity (e.g. an ad) or parent entity (e.g. the campaign owning the ad).
+Often useful for filtering reports based on substrings of a name when ads are created with stable naming conventions.
+
+| UI Display Name        | API Field Name          |
+| ---------------------- | ----------------------- |
+| Network                | `network`               |
+| Name                   | `name`                  |
+| Account Name           | `account_name`          |
+| Campaign Name          | `campaign_name`         |
+| Ad Group / Ad Set Name | `ad_group_name`         |
+| Ad Name                | `ad_name`               |
+
+#### Currency Information
+
+Gives the metadata needed to interpret currency metrics, such as spend, associated with the entity.
+
+| UI Display Name        | API Field Name          |
+| ---------------------- | ----------------------- |
+| Currency Code          | `currency_code`         |
+| Currency Symbol        | `currency_symbol`       |
+
+#### Short IDs
+
+Gives short form unique identifiers for each entity, matching ids generated by each remote ad network.
+Prefer the more descriptive long form IDs for cases where a human may need to interpret the IDs.
+For example, AdStage internally chooses the `entity_id` field as the main search field in its troubleshooting utilities.
+
+| UI Display Name        | API Field Name          |
+| ---------------------- | ----------------------- |
+| Account ID             | `remote_account_id`     |
+| Campaign ID            | `remote_campaign_id`    |
+| Ad Group ID            | `remote_ad_group_id`    |
+| Ad ID                  | `remote_ad_id`          |
+| Keyword ID             | `remote_keyword_id`     |
+
+#### Account Groups and Folders IDs
+
+Gives short form unique identifiers for entity grouping constructs managed within the AdStage UI.
+Folders represent groups of campaigns, and Account Groups represent groups of accounts.
+The ID of the user who created the folder is used to complete the field.
+Use the `GET /me` endpoint to get the current user ID.
+
+| UI Display Name        | API Field Name                 | Example           |
+| ---------------------- | ------------------------------ | ----------------- |
+| Account Group ID       | `account_group_id`             |                   |
+| Account Group Name     | `account_group_name`           |                   |
+| Folder ID              | `folder_names.{id}`            | `folder_names.40` |
+| Folder Name            | `folder_ids.{id}`              | `folder_ids.40`   |
+
+#### Long IDs
+
+Gives long form unique identifiers for each entity, matching ids generated by each remote network.
+Note that `id`, while still maintained, refers to a legacy identification strategy that AdStage no longer uses, and therefore may be deprecated in the future.
+Prefer the `entity_id` variants instead for uniquely identifying ads in application logic.
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| ID                     | `id`                           |
+| Entity ID              | `entity_id`                    |
+| Account Entity ID      | `account_entity_id`            |
+| Campaign Entity ID     | `campaign_entity_id`           |
+| Ad Group Entity ID     | `ad_group_entity_id`           |
+| Ad Entity ID           | `ad_entity_id`                 |
+| Keyword Entity ID      | `keyword_entity_id`            |
+
+#### Entity Statuses
+
+Gives the latest known status of the entity on the remote network (e.g. `COMPLETED`).
+Note that the status does not necessarily correspond with the serving status.
+For example, an ad marked "ACTIVE" may not be serving if its campaign is marked "INACTIVE".
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| Status                 | `status`                       |
+| Account Status         | `account_status`               |
+| Campaign Status        | `campaign_status`              |
+| Ad Group Status        | `ad_group_status`              |
+| Ad Status              | `ad_status`                    |
+| Keyword Status         | `keyword_status`               |
+
+#### Bid Information
+
+Gives information regarding the bid on an entity.
+Note that `bid_float` and `bid.value` represent the same data as a float and string respectively.
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| Bid                    | `bid_float`                    |
+| Pretty Bid             | `bid.pretty_bid`               |
+| Bid Title"             | `bid.title`                    |
+| Bid Subtitle           | `bid.subtitle`                 |
+| Bid Type               | `bid.type`                     |
+| Bid Value              | `bid.value`                    |
+
+#### Budget Information
+
+Gives information regarding the budget for an entity.
+Note that `budget_float` and `budget.value` represent the same data as a float and string respectively.
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| Budget                 | `budget_float`                 |
+| Pretty Budget          | `budget.pretty_budget`         |
+| Budget Title           | `budget.title`                 |
+| Budget Subtitle        | `budget.subtitle`              |
+| Budget Type            | `budget.type`                  |
+| Budget Value           | `budget.value`                 |
+
+#### Objective Information
+
+Gives information regarding the objective for an entity.
+Note that AdStage stores these related fields formatted as JSON in the `objective` object.
+To request a single, flattened objective field, append a dot and the key name, such as `objective.unit`.
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| Objective              | `objective`                    |
+| Objective Code         | `objective.code`               |
+| Objective Title        | `objective.title`              |
+| Objective Subtitle     | `objective.subtitle`           |
+| Objective Unit         | `objective.unit`               |
+
+#### Entity Types
+
+Gives information about the type or subtype for an entity as designated by the remote network.
+For example, a LinkedIn campaign may have the `campaign_type` of `SSU`, a LinkedIn API designated campaign type.
+Note that the `type` field is an exception and refers to an AdStage generated entity category, such as `network_ad`, rather than a remote network designated category.
+See [Entity IDs](entity-ids) for more information.
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| Type                   | `type`                         |
+| Campaign Type          | `campaign_type`                |
+| Ad Type                | `ad_type`                      |
+| Match Type             | `keyword_match_type`           |
+
+#### Keyword/Criterion Information
+
+Gives information describing a keyword or criterion.
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| Keyword Text           | `keyword_text`                 |
+| Quality Score          | `quality_score_float`          |
+
+#### Ad Information
+
+Gives information describing an ad.
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| Ad Title               | `title`                        |
+| Ad Headline            | `ad_headline`                  |
+| Ad Description         | `description`                  |
+| Update                 | `update`                       |
+| Post Text              | `post_text`                    |
+
+#### URL Information
+
+Gives information about various URLs associated with an ad.
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| Destination URL        | `destination_url`              |
+| Final URL              | `final_url`                    |
+| Final Mobile URL       | `final_mobile_url`             |
+| Image                  | `image_url`                    |
+| SU Image               | `submitted_image_url`          |
+| Tracking Template      | `tracking_url_template`        |
+
+#### UTM Tracking Information
+
+Gives information about the UTM parameters associated with the entity.
+Note that AdStage stores these parameters formatted as JSON in `tracking_params`.
+To request a single, flattened parameter, append a dot and the key name, such as `tracking_params.utm_term`.
+
+| UI Display Name        | API Field Name                 |
+| ---------------------- | ------------------------------ |
+| URL Tracking Params    | `tracking_params`              |
+| UTM Medium             | `tracking_params.utm_medium`   |
+| UTM Source             | `tracking_params.utm_source`   |
+| UTM Campaign           | `tracking_params.utm_campaign` |
+| UTM Content            | `tracking_params.utm_content`  |
+| UTM Term               | `tracking_params.utm_term`     |
+
+### Metric Descriptors [GET]
+
+This endpoint provides information on the names and formats of cross-network (`adstage` provider) metrics available in AdStage's reporting endpoints.
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
++ Response 200
+
+    A list of columns that are available to pull via the reporting endpoint.
+
+    + Attributes
+
+        + descriptors (array)
+            + (object)
+                + id: "clicks" (string) - the identifier assigned to the metric in reports
+                + short_name: "Clicks" (string) - a short human readable name for the metric
+                + name: "Clicks" (string) - the full human readable name for the metric
+                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
+                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum[string]) - format for the metric (default is `INTEGER`)
+                + type: "METRIC", "TEXT" (enum[string]) - whether the descriptor is for a metric or metadata
+                + `is_adwords`: true (string) - if the metric is valid for the adwords network
+                + `is_facebook`: true (string) - if the metric is valid for the facebook network
+                + `is_linkedin`: true (string) - if the metric is valid for the linkedin network
+                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
+                + `is_twitter`: true (string) - if the metric is valid for the twitter network
+                + `is_account`: true (string) - if the metric is valid for the account reporting level
+                + `is_campaign`: true (string) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
+                + `is_keyword`: true (string) - if the metric is valid for keyword reporting level
+
+    + Body
+
+            [
                 {
-                    "name": "Account #2",
-                    "network": "facebook",
-                    "import_status": {
-                        "code": "currently_importing",
-                        "is_importing": true,
-                        "last_import_started": "2018-01-01T12:00:00Z",
-                        "last_import_finished": "2018-01-01T11:45:00Z",
-                        "last_import_failed": null,
-                        "importable": true
-                    }
-                },
-                {
-                    "name": "Account #3",
-                    "network": "linkedin",
-                    "import_status": {
-                        "code": "permanent_authentication_error",
-                        "is_importing": false,
-                        "last_import_started": "2018-01-01T03:15:00Z",
-                        "last_import_finished": "2018-01-01T03:20:00Z",
-                        "last_import_failed": null,
-                        "importable": false
-                    }
+                    "id": "clicks",
+                    "short_name": "Clicks",
+                    "name": "Clicks",
+                    "is_default": true,
+                    "tooltip": "<b>Clicks</b> show how many times your ads have been clicked.",
+                    "format": "DEFAULT",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": true,
+                    "is_bing_ads": true,
+                    "is_facebook": true,
+                    "is_linkedin": true,
+                    "is_twitter": true,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": true,
+                    "is_post": null,
+                    "is_company_status_update": null
+                }, {
+                    "id": "impressions",
+                    "short_name": "Impr.",
+                    "name": "Impressions",
+                    "is_default": true,
+                    "tooltip": "<b>Impressions</b> show how many times your ads have been shown.",
+                    "format": "DEFAULT",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": true,
+                    "is_bing_ads": true,
+                    "is_facebook": true,
+                    "is_linkedin": true,
+                    "is_twitter": true,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": true,
+                    "is_post": null,
+                    "is_company_status_update": null
+                }, {
+                    "id": "ctr",
+                    "short_name": "CTR",
+                    "name": "CTR",
+                    "is_default": true,
+                    "tooltip": "<b>Clickthrough rate</b> shows how often people who saw your ad ended up clicking it.<br><br> CTR is clicks divided by impressions.<br><br> To improve your CTR, check out our <a href=\"http://blog.adstage.io/2013/05/23/5-tips-for-creating-effective-ppc-ads/\" target=\"_blank\">5 tips for creating effective ads</a>.",
+                    "format": "PERCENTAGE",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": true,
+                    "is_bing_ads": true,
+                    "is_facebook": true,
+                    "is_linkedin": true,
+                    "is_twitter": true,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": true,
+                    "is_post": null,
+                    "is_company_status_update": null
                 }
             ]
-        }
+
+### Network Metric Descriptors [GET /metric_descriptors/{network}]
+
+This endpoint provides information on the names and formats of metrics from external providers available in AdStage's V1 reporting endpoint.
+
+Note that metric descriptors from non-AdStage reporting providers are currently considered separate from AdStage provider metric descriptors.
+Descriptors may share the same `id` across providers but not necessarily associate to the same metrics (for example, the `clicks` metric from `facebook` provider reports actually matches the `total_clicks` metric in `adstage` provider reports).
+Developers should therefore take care to maintain separate metric descriptor lists for each reporting provider accessed through the AdStage API.
+Additionally, non-AdStage network provider metrics do not distinguish between meta and metric fields; instead, any response from this endpoint will include meta fields in the metric descriptors list (typically as `"TEXT"` type).
+
++ Parameters
+
+    + network: facebook (string)
+
+        Which network you want descriptors for. Currently `"facebook"`, `"adwords"`, `"gemini"`, and `"google_analytics"` are supported.
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
++ Response 200
+
+    A list of columns that are available to pull via the reporting endpoint.
+
+    + Attributes
+
+        + descriptors (array)
+            + (object)
+                + id: "clicks" (string) - the identifier assigned to the metric in reports
+                + short_name: "Clicks" (string) - a short human readable name for the metric
+                + display_names: ["Clicks"] (array[string]) - the network's list of allowable human readable display names for the metric; this key is omitted unless `adwords` was specified for the `network` param
+                + name: "Clicks" (string) - the full human readable name for the metric used in AdStage UIs
+                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
+                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum[string]) - format for the metric (default is `INTEGER`)
+                + type: "METRIC", "TEXT" (enum[string]) - whether the descriptor is for a metric or metadata
+                + can_filter: true (boolean) - if the metric is allowed to be used in a filter field for a reporting request; this key is omitted unless `gemini` was specified for the `network` param
+                + supports_filters: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that allow filtering on the metric; this key is omitted unless `adwords` was specified for the `network` param
+                + supports_zero_impressions: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that maintain metrics even when the ad entity has not logged any impressions; this key is omitted unless `adwords` was specified for the `network` param
+                + reports: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that provide data for the metric; this key is omitted unless `adwords` was specified for the `network` param
+                + is_adwords: true (boolean) - if the metric is valid for the Google Ads network
+                + is_bing_ads: true (boolean) - if the metric is valid for the Microsoft Ads network
+                + is_facebook: true (boolean) - if the metric is valid for the Facebook network
+                + is_gemini: false (boolean) - if the metric is valid for the Gemini network; this key is omitted unless `gemini` was specified for the `network` param
+                + is_google_analytics: false (boolean) - if the metric is valid for the Google Analytics network; this key is omitted unless `google_analytics` was specified for the `network` param
+                + is_linkedin: true (boolean) - if the metric is valid for the LinkedIn network
+                + is_twitter: true (boolean) - if the metric is valid for the Twitter network
+                + is_account: true (boolean) - if the metric is valid for the account reporting level
+                + is_campaign: true (boolean) - if the metric is valid for the campaign reporting level
+                + is_ad_group: true (boolean) - if the metric is valid for the ad group reporting level
+                + is_ad: true (boolean) - if the metric is valid for the ad reporting level
+                + is_keyword: true (boolean) - if the metric is valid for keyword reporting level
+
+    + Body
+
+            [
+                {
+                    "id": "reach",
+                    "short_name": "Reach",
+                    "name": "Reach",
+                    "is_default": true,
+                    "tooltip": "The number of people who saw your ads at least once. Reach is different from impressions, which may include multiple views of your ads by the same people.",
+                    "format": "DEFAULT",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": false,
+                    "is_bing_ads": false,
+                    "is_facebook": true,
+                    "is_linkedin": false,
+                    "is_twitter": false,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": false,
+                    "is_post": false,
+                    "is_company_status_update": false,
+                    "show_increase_as": "POSITIVE"
+                },
+                {
+                    "id": "results",
+                    "short_name": "Results",
+                    "name": "Results",
+                    "is_default": true,
+                    "tooltip": "The number of outcomes you achieved in your ad campaign, based on the objective you selected.",
+                    "format": "DEFAULT",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": false,
+                    "is_bing_ads": false,
+                    "is_facebook": true,
+                    "is_linkedin": false,
+                    "is_twitter": false,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": false,
+                    "is_post": false,
+                    "is_company_status_update": false,
+                    "show_increase_as": "POSITIVE"
+                }
+            ]
 
 ## Building Reports [/organizations/{org_id}/build_report]
 
@@ -888,7 +1311,7 @@ This type of report will return one row per requested entity with metrics aggreg
         + order: "desc" (string) - sort either ascending (`"asc"`) or descending (`"desc"`)
         + `group_by`: "network" (string) - if supplied, metrics will be grouped by this meta key
 
-        + aggregate_by: "day" (string) - if supplied, will get a Time Series Report instead.
+        + `aggregate_by`: "day" (string) - if supplied, will get a Time Series Report instead.
         + networks: "adwords" (string) - list of networks to include in the result, can be array, single value, or comma-separated list
         + statuses: "all_visible" (string)
             filter based on entity status codes
@@ -954,7 +1377,7 @@ This type of report will return one row per requested entity with metrics aggreg
 
     + Attributes
 
-        + _embedded
+        + `_embedded`
             - `adstage:metrics` (array) - list of report rows (if `"aggregate_by"` is set, will return `"adstage:time_series"` instead)
                 - (object)
                     - data (object) - key-value pairs of metric identifiers to floats
@@ -967,60 +1390,60 @@ This type of report will return one row per requested entity with metrics aggreg
     + Body
 
             {
-              "_embedded": {
-                "adstage:metrics": [
-                  {
-                    "data": {
-                      "clicks": 1014,
-                      "spend": 339.460006713867
-                    },
-                    "timeframe": {
-                      "start": "2016-12-22T00:00:00Z",
-                      "end": "2017-01-20T23:59:59Z"
-                    },
-                    "meta": {
-                      "campaign_name": "Display - US - Gmail Ads v2",
-                      "entity_id": "/network/adwords/campaign/735025362",
-                      "remote_campaign_id": "735025362",
-                      "network": "adwords",
-                      "currency_code": "USD",
-                      "currency_symbol": "$",
-                      "row_name": "Display - US - Gmail Ads v2"
+                "_embedded": {
+                    "adstage:metrics": [
+                        {
+                            "data": {
+                                "clicks": 1014,
+                                "spend": 339.460006713867
+                            },
+                            "timeframe": {
+                                "start": "2016-12-22T00:00:00Z",
+                                "end": "2017-01-20T23:59:59Z"
+                            },
+                            "meta": {
+                                "campaign_name": "Display - US - Gmail Ads v2",
+                                "entity_id": "/network/adwords/campaign/735025362",
+                                "remote_campaign_id": "735025362",
+                                "network": "adwords",
+                                "currency_code": "USD",
+                                "currency_symbol": "$",
+                                "row_name": "Display - US - Gmail Ads v2"
+                            }
+                        }
+                    ],
+                    "adstage:metrics/totals": {
+                        "id": "totals",
+                        "data": {
+                            "clicks": 8783,
+                            "spend": 23780.8718175292
+                        },
+                        "timeframe": {
+                            "start": "2016-12-01T00:00:00Z",
+                            "end": "2017-01-31T23:59:59Z"
+                        },
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$",
+                            "series_name": "All"
+                        }
                     }
-                  }
-                ],
-                "adstage:metrics/totals": {
-                  "id": "totals",
-                  "data": {
-                    "clicks": 8783,
-                    "spend": 23780.8718175292
-                  },
-                  "timeframe": {
-                    "start": "2016-12-01T00:00:00Z",
-                    "end": "2017-01-31T23:59:59Z"
-                  },
-                  "meta": {
-                    "currency_code": "USD",
-                    "currency_symbol": "$",
-                    "series_name": "All"
-                  }
-                }
-              },
-              "counts": {
-                "overall": 73262,
-                "filtered_buckets": 11820,
-                "page": 10,
-                "filtered": 11820,
-                "overall_buckets": 73262
-              },
-              "_links": {
-                "next": {
-                  "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=10&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
                 },
-                "last": {
-                  "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=11810&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                "counts": {
+                    "overall": 73262,
+                    "filtered_buckets": 11820,
+                    "page": 10,
+                    "filtered": 11820,
+                    "overall_buckets": 73262
+                },
+                "_links": {
+                    "next": {
+                        "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=10&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                    },
+                    "last": {
+                        "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=11810&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                    }
                 }
-              }
             }
 
 ### Time Series Report [POST /organizations/{org_id}/build_report]
@@ -1083,12 +1506,11 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
                     + "imatch" - case-insensitive string matching
                     + "inomatch" - case-insensitive string NOT matching
 
-
         + fields: "clicks", "spend", "impressions" (array) - optional list of fields to include in the result. If fields are not requested, all possible fields will be returned in the report.
         + query (object) - Dynamically includes or excludes fields in the response. Set to true to include all available metadata, or pick and choose specific keys to show with an object. For example:
             ```
             {"_embedded
-              {"adstage:time_series/totals": {"data": true}}}
+                {"adstage:time_series/totals": {"data": true}}}
             ```
         + provider: "adstage" (string)
             To pull reports from other sources, you can set this to a source name.
@@ -1123,7 +1545,7 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
 
     + Attributes
 
-        + _embedded
+        + `_embedded`
             - `adstage:time_series` (array) - list of report time series rows (if `"aggregate_by"` is not set, see `"adstage:metrics"`)
                 - (object)
                     - series (array) - datapoints separated by aggregation
@@ -1152,105 +1574,105 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
     + Body
 
             {
-              "_embedded": {
-                "adstage:time_series": [
-                  {
-                    "id": "production.1.accounts.bing_ads.2982670.campaigns.53744320",
-                    "data": {
-                      "clicks": 1458,
-                      "spend": 2715.01000976562
-                    },
-                    "series": [
-                      {
-                        "data": {
-                          "clicks": 829,
-                          "spend": 1549.68005371094
-                        },
-                        "timeframe": {
-                          "start": "2016-12-01T00:00:00Z",
-                          "end": "2016-12-31T23:59:59Z"
+                "_embedded": {
+                    "adstage:time_series": [
+                        {
+                            "id": "production.1.accounts.bing_ads.2982670.campaigns.53744320",
+                            "data": {
+                                "clicks": 1458,
+                                "spend": 2715.01000976562
+                            },
+                            "series": [
+                                {
+                                    "data": {
+                                        "clicks": 829,
+                                        "spend": 1549.68005371094
+                                    },
+                                    "timeframe": {
+                                        "start": "2016-12-01T00:00:00Z",
+                                        "end": "2016-12-31T23:59:59Z"
+                                    }
+                                },
+                                {
+                                    "data": {
+                                        "clicks": 629,
+                                        "spend": 1165.32995605469
+                                    },
+                                    "timeframe": {
+                                        "start": "2017-01-01T00:00:00Z",
+                                        "end": "2017-01-31T23:59:59Z"
+                                    }
+                                }
+                            ],
+                            "timeframe": {
+                                "start": "2016-12-01T00:00:00Z",
+                                "end": "2017-01-31T23:59:59Z"
+                            },
+                            "meta": {
+                                "campaign_name": "Search - US - Nonbrand - Facebook Ads Jacob",
+                                "remote_campaign_id": "53744320",
+                                "entity_id": "/network/bing_ads/campaign/53744320",
+                                "network": "bing_ads",
+                                "currency_code": "USD",
+                                "currency_symbol": "$",
+                                "series_name": "Search - US - Nonbrand - Facebook Ads Jacob"
+                            }
                         }
-                      },
-                      {
-                        "data": {
-                          "clicks": 629,
-                          "spend": 1165.32995605469
-                        },
-                        "timeframe": {
-                          "start": "2017-01-01T00:00:00Z",
-                          "end": "2017-01-31T23:59:59Z"
-                        }
-                      }
                     ],
-                    "timeframe": {
-                      "start": "2016-12-01T00:00:00Z",
-                      "end": "2017-01-31T23:59:59Z"
-                    },
-                    "meta": {
-                      "campaign_name": "Search - US - Nonbrand - Facebook Ads Jacob",
-                      "remote_campaign_id": "53744320",
-                      "entity_id": "/network/bing_ads/campaign/53744320",
-                      "network": "bing_ads",
-                      "currency_code": "USD",
-                      "currency_symbol": "$",
-                      "series_name": "Search - US - Nonbrand - Facebook Ads Jacob"
+                    "adstage:time_series/totals": {
+                        "id": "totals",
+                        "data": {
+                            "clicks": 8783,
+                            "spend": 23780.8718175292
+                        },
+                        "series": [
+                            {
+                                "data": {
+                                    "clicks": 4025,
+                                    "spend": 11414.1101390719
+                                },
+                                "timeframe": {
+                                    "start": "2016-12-01T00:00:00Z",
+                                    "end": "2016-12-31T23:59:59Z"
+                                }
+                            },
+                            {
+                                "data": {
+                                    "clicks": 4758,
+                                    "spend": 12366.7616784573
+                                },
+                                "timeframe": {
+                                    "start": "2017-01-01T00:00:00Z",
+                                    "end": "2017-01-31T23:59:59Z"
+                                }
+                            }
+                        ],
+                        "timeframe": {
+                            "start": "2016-12-01T00:00:00Z",
+                            "end": "2017-01-31T23:59:59Z"
+                        },
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$",
+                            "series_name": "All"
+                        }
                     }
-                  }
-                ],
-                "adstage:time_series/totals": {
-                  "id": "totals",
-                  "data": {
-                    "clicks": 8783,
-                    "spend": 23780.8718175292
-                  },
-                  "series": [
-                    {
-                      "data": {
-                        "clicks": 4025,
-                        "spend": 11414.1101390719
-                      },
-                      "timeframe": {
-                        "start": "2016-12-01T00:00:00Z",
-                        "end": "2016-12-31T23:59:59Z"
-                      }
-                    },
-                    {
-                      "data": {
-                        "clicks": 4758,
-                        "spend": 12366.7616784573
-                      },
-                      "timeframe": {
-                        "start": "2017-01-01T00:00:00Z",
-                        "end": "2017-01-31T23:59:59Z"
-                      }
-                    }
-                  ],
-                  "timeframe": {
-                    "start": "2016-12-01T00:00:00Z",
-                    "end": "2017-01-31T23:59:59Z"
-                  },
-                  "meta": {
-                    "currency_code": "USD",
-                    "currency_symbol": "$",
-                    "series_name": "All"
-                  }
-                }
-              },
-              "counts": {
-                "overall": 73262,
-                "filtered_buckets": 11820,
-                "page": 10,
-                "filtered": 11820,
-                "overall_buckets": 73262
-              },
-              "_links": {
-                "next": {
-                  "href": "https://platform.adstage.io/api/organizations/40/build_report?aggregate_by=month&date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=10&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
                 },
-                "last": {
-                  "href": "https://platform.adstage.io/api/organizations/40/build_report?aggregate_by=month&date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=11810&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                "counts": {
+                    "overall": 73262,
+                    "filtered_buckets": 11820,
+                    "page": 10,
+                    "filtered": 11820,
+                    "overall_buckets": 73262
+                },
+                "_links": {
+                    "next": {
+                        "href": "https://platform.adstage.io/api/organizations/40/build_report?aggregate_by=month&date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=10&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                    },
+                    "last": {
+                        "href": "https://platform.adstage.io/api/organizations/40/build_report?aggregate_by=month&date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=11810&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                    }
                 }
-              }
             }
 
 ## Custom Conversions [/organizations/{org_id}/metric_descriptors]
@@ -1267,7 +1689,7 @@ To get a list of existing conversion columns, see the [Discovering Metrics](disc
 
 + Parameters
 
-    + org_id (number) - the fetch id of the user's organization
+    + `org_id` (number) - The fetch id of the user's organization.
 
 + Request (application/json)
 
@@ -1284,40 +1706,40 @@ To get a list of existing conversion columns, see the [Discovering Metrics](disc
 
     + Body
 
-                    {
-                      "name": "Sales Leads: A+",
-                      "short_name": "A+ Leads",
-                      "tooltip": "Leads scored A+ in Salesforce"
-                    }
+            {
+                "name": "Sales Leads: A+",
+                "short_name": "A+ Leads",
+                "tooltip": "Leads scored A+ in Salesforce"
+            }
 
 + Response 201
 
-  Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
-  You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
+    Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
+    You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
 
-  + Attributes
+    + Attributes
 
         + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-              + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the url for step 3.
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the url for step 3.
 
-  + Body
+    + Body
 
             {
-              "id": "custom_conversions:14:conversions",
-              "category": "CUSTOM_CONVERSION",
-              "type": "METRIC",
-              "name": "Sales Leads: A+",
-              "short_name": "A+ Leads",
-              "tooltip": "Doesn't matter",
-              "default_sort_order": "DESC",
-              "format": "DEFAULT",
-              "_links": {
-                "adstage:custom_conversion_upload": {
-                  "href": "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions"
+                "id": "custom_conversions:14:conversions",
+                "category": "CUSTOM_CONVERSION",
+                "type": "METRIC",
+                "name": "Sales Leads: A+",
+                "short_name": "A+ Leads",
+                "tooltip": "Doesn't matter",
+                "default_sort_order": "DESC",
+                "format": "DEFAULT",
+                "_links": {
+                    "adstage:custom_conversion_upload": {
+                        "href": "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions"
+                    }
                 }
-              }
             }
 
 ### Step 2. Post metrics data for the custom metric descriptor [POST /organizations/{org_id}/metric_descriptors/{descriptor_id}/conversions]
@@ -1330,8 +1752,8 @@ Alternatively, the V2 endpoint implements an automatic roll up feature.
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
-    + descriptor_id (integer) - the fetch id of the metric descriptor
+    + `org_id` (integer) - the fetch id of the user's organization
+    + `descriptor_id` (integer) - the fetch id of the metric descriptor
 
 + Request (application/json)
 
@@ -1357,24 +1779,150 @@ Alternatively, the V2 endpoint implements an automatic roll up feature.
 
     + Body
 
-                {
-                  "conversions": [
-                      {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365350": 1}},
-                      {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365350": 0.5}},
-                      {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
-                   ],
-                   "date_range": "2016-11-11..2016-11-17"
-                }
+            {
+                "conversions": [
+                    {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365350": 1}},
+                    {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365350": 0.5}},
+                    {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
+                ],
+                "date_range": "2016-11-11..2016-11-17"
+            }
 
 + Response 201
+
+### Retrieve Organization Metric Descriptors [GET /organizations/{org_id}/metric_descriptors]
+
+This endpoint returns information about the names and formats of custom metrics created for a single organization.
+
+These metric descriptors can be:
+* (AdStage) Custom Conversions, describing user-uploaded custom data.
+* Network Custom Conversions, describing conversion data imported from supported remote netwokrs (currently Facebook and LinkedIn).
+* Calculated Metrics, describing user-defined combinations of other metrics (not supported in the V1 reporting endpoint).
+
+Additionally, AdStage will automatically derive several metrics that are listed in this endpoint based on both AdStage and Network Custom Conversions:
+* Conversion Value
+* Cost per Conversion
+* Conversion Rate
+* Return on Ad Spend (ROAS)
+
++ Parameters
+
+    + org_id: 40 (string)
+
+        Which organization you want descriptors for.
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
++ Response 200
+
+    A list of columns that are available to pull via the reporting endpoint.
+
+    + Attributes
+
+        + `descriptors` (array)
+            + (object)
+                + id: "clicks" (string) - the identifier assigned to the metric in reports
+                + `short_name`: "Clicks" (string) - a short human readable name for the metric
+                + name: "Clicks" (string) - the full human readable name for the metric
+                + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
+                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum[string]) - format for the metric (default is `INTEGER`)
+                + type: "METRIC", "TEXT" (enum[string]) - whether the descriptor is for a metric or metadata
+                + `is_adwords`: true (string) - if the metric is valid for the adwords network
+                + `is_facebook`: true (string) - if the metric is valid for the facebook network
+                + `is_linkedin`: true (string) - if the metric is valid for the linkedin network
+                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
+                + `is_twitter`: true (string) - if the metric is valid for the twitter network
+                + `is_account`: true (string) - if the metric is valid for the account reporting level
+                + `is_campaign`: true (string) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
+                + `is_keyword`: true (string) - if the metric is valid for keyword reporting level
+
+    + Body
+
+            [
+                {
+                    "id": "clicks",
+                    "short_name": "Clicks",
+                    "name": "Clicks",
+                    "is_default": true,
+                    "tooltip": "<b>Clicks</b> show how many times your ads have been clicked.",
+                    "format": "DEFAULT",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": true,
+                    "is_bing_ads": true,
+                    "is_facebook": true,
+                    "is_linkedin": true,
+                    "is_twitter": true,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": true,
+                    "is_post": null,
+                    "is_company_status_update": null
+                },
+                {
+                    "id": "impressions",
+                    "short_name": "Impr.",
+                    "name": "Impressions",
+                    "is_default": true,
+                    "tooltip": "<b>Impressions</b> show how many times your ads have been shown.",
+                    "format": "DEFAULT",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": true,
+                    "is_bing_ads": true,
+                    "is_facebook": true,
+                    "is_linkedin": true,
+                    "is_twitter": true,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": true,
+                    "is_post": null,
+                    "is_company_status_update": null
+                },
+                {
+                    "id": "ctr",
+                    "short_name": "CTR",
+                    "name": "CTR",
+                    "is_default": true,
+                    "tooltip": "<b>Clickthrough rate</b> shows how often people who saw your ad ended up clicking it.<br><br> CTR is clicks divided by impressions.<br><br> To improve your CTR, check out our <a href=\"http://blog.adstage.io/2013/05/23/5-tips-for-creating-effective-ppc-ads/\" target=\"_blank\">5 tips for creating effective ads</a>.",
+                    "format": "PERCENTAGE",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": true,
+                    "is_bing_ads": true,
+                    "is_facebook": true,
+                    "is_linkedin": true,
+                    "is_twitter": true,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": true,
+                    "is_post": null,
+                    "is_company_status_update": null
+                }
+            ]
 
 # Group AdStage API V2
 
@@ -1401,7 +1949,7 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
 + Parameters
 
-    + org_id (integer) - The fetch id of the user's organization
+    + `org_id` (integer) - The fetch id of the user's organization
 
 + Request (application/json)
 
@@ -1418,40 +1966,40 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
     + Body
 
-                    {
-                      "name": "Sales Leads: A+",
-                      "short_name": "A+ Leads",
-                      "tooltip": "Leads scored A+ in Salesforce"
-                    }
+            {
+                "name": "Sales Leads: A+",
+                "short_name": "A+ Leads",
+                "tooltip": "Leads scored A+ in Salesforce"
+            }
 
 + Response 201
 
-  Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
-  You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
+    Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
+    You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
 
-  + Attributes
+    + Attributes
 
         + id: "custom_conversions:14:conversions" (string) - The metric name reports reports will return when providing conversion metrics for this descriptor.
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-              + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor.
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor.
 
-  + Body
+    + Body
 
             {
-              "id": "custom_conversions:14:conversions",
-              "category": "CUSTOM_CONVERSION",
-              "type": "METRIC",
-              "name": "Sales Leads: A+",
-              "short_name": "A+ Leads",
-              "tooltip": "Doesn't matter",
-              "default_sort_order": "DESC",
-              "format": "DEFAULT",
-              "_links": {
-                "adstage:custom_conversion_upload": {
-                  "href": "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions"
+                "id": "custom_conversions:14:conversions",
+                "category": "CUSTOM_CONVERSION",
+                "type": "METRIC",
+                "name": "Sales Leads: A+",
+                "short_name": "A+ Leads",
+                "tooltip": "Doesn't matter",
+                "default_sort_order": "DESC",
+                "format": "DEFAULT",
+                "_links": {
+                        "adstage:custom_conversion_upload": {
+                            "href": "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions"
+                        }
                 }
-              }
             }
 
 ### Step 2. Post metrics data for the custom metric descriptor [POST /v2/organizations/{org_id}/custom_metric_descriptors/{descriptor_id}/conversions]
@@ -1472,8 +2020,8 @@ Similarly, for users planning on updating conversion data over multiple requests
 
 + Parameters
 
-    + org_id (integer) - The fetch id of the user's organization
-    + descriptor_id (integer) - The fetch id of the metric descriptor
+    + `org_id` (integer) - The fetch id of the user's organization
+    + `descriptor_id` (integer) - The fetch id of the metric descriptor
 
 + Request (application/json)
 
@@ -1504,23 +2052,23 @@ Similarly, for users planning on updating conversion data over multiple requests
 
     + Body
 
-                {
-                  "conversions": [
-                      {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365351": 1}},
-                      {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365351": 0.5}},
-                      {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
-                      {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
-                   ],
-                   "date_range": "2016-11-11..2016-11-17",
-                   "aggregate_conversions": true
-                }
+            {
+                "conversions": [
+                    {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365351": 1}},
+                    {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365351": 0.5}},
+                    {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
+                ],
+                "date_range": "2016-11-11..2016-11-17",
+                "aggregate_conversions": true
+            }
 
 + Response 201
 
@@ -1551,7 +2099,7 @@ This is shaped differently than time series data in a `series` formatted request
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + `org_id` (integer) - the fetch id of the user's organization
 
 + Request (application/json)
 
@@ -1568,13 +2116,13 @@ This is shaped differently than time series data in a `series` formatted request
 
             Note that in the future, AdStage may release other minor or patch versions within the `/v2` URL namespace according to semantic versioning.
 
-        + date_range: "last 30 days" (string, required)
+        + `date_range`: "last 30 days" (string, required)
 
             An AdStage date range string indicating the period to report data for.
 
             See the [list of allowed relative or absolute date strings](date-ranges) in API Concepts.
 
-        + output_format: "row", "series" (enum[string], required)
+        + `output_format`: "row", "series" (enum[string], required)
 
             Determines whether a report will aggregate metrics within the given date range (a `row` report), or whether the results will be given as a time series (a `series` report).
 
@@ -1663,7 +2211,7 @@ This is shaped differently than time series data in a `series` formatted request
 
             **Note that `series` summaries require the `aggregate_by` key to be set to a non-null value, while `row` summaries typically omit it.**
 
-        + sort_by: "clicks" (string, required)
+        + `sort_by`: "clicks" (string, required)
 
             The name of the metric or meta field to sort the results by.
             If no particular sorting is desired, consider an arbitary metric such as `spend`.
@@ -1673,14 +2221,14 @@ This is shaped differently than time series data in a `series` formatted request
             The direction to sort the results.
             If this key is omitted, the sort will default to descending order.
 
-        + group_by: "network" (string)
+        + `group_by`: "network" (string)
 
             The meta field to group the results by.
             The metrics for each grouping will all be aggregated in the report results.
 
             Meta text fields such as campaign names will also be grouped (text will be aggregated in an array); however, the report will truncate to only the first 100 text results per group if there are over 100 entities in the group.
 
-        + ignore_precision: false (boolean)
+        + `ignore_precision`: false (boolean)
 
             Determines whether metrics should be rounded to their AdStage determined precision.
             Enabling this will disable automatic rounding.
@@ -1702,7 +2250,7 @@ This is shaped differently than time series data in a `series` formatted request
             + `all_inactive` - includes only `Paused` and `Completed` entities
             + `all_with_deleted` - includes `Active`, `Paused`, `Completed`, `Archived`, and `Deleted` entities
 
-        + page_token: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
+        + `page_token`: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
 
             A Base64 encoded string describing a specific page to lookup.
             When provided, limit and offset keys will be ignored in favor of the page token.
@@ -1710,35 +2258,35 @@ This is shaped differently than time series data in a `series` formatted request
     + Body
 
             {
-              "version": "2",
-              "date_range": "last 2 months",
-              "output_format": "row",
-              "aggregate_by": "month",
-              "sources": {
-                "metrics": {
-                  "targets": ["/network/adstage/folder/1"],
-                  "networks": ["facebook", "adwords", "linkedin"],
-                  "entity_level": "campaigns"
-                }
-              },
-              "summarize_on": ["page", "filtered"],
-              "summary_fields": ["spend", "calculated_metric:123"],
-              "summary_format": "row",
-              "fields": ["spend", "clicks", "calculated_metric:123"],
-              "filters": [
-                {
-                  "op": "gt",
-                  "path": "clicks",
-                  "value": 5
-                }
-              ],
-              "sort_by": "spend",
-              "order": "asc",
-              "group_by": "network",
-              "ignore_precision": false,
-              "limit": 1,
-              "offset": 1,
-              "statuses": "all_visible"
+                "version": "2",
+                "date_range": "last 2 months",
+                "output_format": "row",
+                "aggregate_by": "month",
+                "sources": {
+                    "metrics": {
+                        "targets": ["/network/adstage/folder/1"],
+                        "networks": ["facebook", "adwords", "linkedin"],
+                        "entity_level": "campaigns"
+                    }
+                },
+                "summarize_on": ["page", "filtered"],
+                "summary_fields": ["spend", "calculated_metric:123"],
+                "summary_format": "row",
+                "fields": ["spend", "clicks", "calculated_metric:123"],
+                "filters": [
+                    {
+                        "op": "gt",
+                        "path": "clicks",
+                        "value": 5
+                    }
+                ],
+                "sort_by": "spend",
+                "order": "asc",
+                "group_by": "network",
+                "ignore_precision": false,
+                "limit": 1,
+                "offset": 1,
+                "statuses": "all_visible"
             }
 
 + Response 200 (application/json)
@@ -1748,29 +2296,29 @@ This is shaped differently than time series data in a `series` formatted request
         + summary: (object, required) - Shows metrics aggregated across _entities_ (see the `summary_format` request key for different options on aggrgation). Value is explicit `null` if no `summary_format` was given in the request.
             + filtered (object, optional) - Shows metrics aggregated across entities on all pages for the report, subject to the constraint of given filters. Is omitted if `filtered` was not requested in the `summary_format` array.
                 + calculated (object, required) - An empty object, reserved for future use.
-                
+
                 + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
-                
+
                 + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 1000`.
-                
+
                 + series (array, required) - Gives a single list of objects that describe all metric values for each timeslice. Omitted unless `aggregate_by` is set in the request. Note that meta values are not given in the series because they are consistent across all timeslices.
                     + (object)
                         + calculated (object, required) - An empty object, reserved for future use.
-                
+
                         + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 250`.
-                
+
                         + time (object, required) - Gives an object describing the span of the particular timeslice in the series data.
                             + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
-                
+
                             + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
-            
+
             + page: (object, optional) - Shows metrics aggrgated across all entities on the current report response page. Is omitted if `page` was not requested in the `summary_format` array. Currently omits a series even if `aggregate_by` is provided, though this may be added at a later time.
                 + calculated (object, required) - Gives key-value pairs of calculated metric fields and their values, such as `"calculated_metric:123": 1000`.
 
                 + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
 
                 + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 50`.
-            
+
             + type: (enum, required) - Gives the format of the summary.
                 + `"summary_row"` - Indicates the summary section is formatted as a `row` summary.
                 + `"summary_series"` - Indicates the summary section is formatted as a `series` summary.
@@ -1789,7 +2337,7 @@ This is shaped differently than time series data in a `series` formatted request
             + interval: "month" (string, optional) - The timeslice interval of reported data. Only returned if the request set an `aggregate_by` parameter.
 
             + timestamps (array[string], optional) - An array of ISO 8601 timestamps indicating the start days of each timeslice for every reported series of data. Only returned if the request was a `series` output format.
-        
+
         + `_embedded`: (object)
             + results (array) - Lists the reported data entity-by-entity (or group-by-group if `group_by` is set)
                 + (object) - The reported data for one entity or grouping.
@@ -1809,7 +2357,7 @@ This is shaped differently than time series data in a `series` formatted request
                                 + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
 
                                 + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
-                    
+
                     + `_embedded` (object, required) - An empty object implementing the HAL JSON interface (reserved for future use).
 
                     + `_forms` (object, required) - An empty object implementing the HAL JSON interface (reserved for future use).
@@ -1824,285 +2372,285 @@ This is shaped differently than time series data in a `series` formatted request
 
     + Body
 
-        {
-          "summary": {
-            "filtered": {
-              "calculated": {},
-              "count": 3,
-              "meta": {
-                "currency_code": "USD",
-                "currency_symbol": "$",
-                "entity_id": null,
-                "id": "production.1.adwords.1.accounts.adwords.123.campaigns,production.1.accounts.facebook.456.campaigns,production.1.linkedin.1.accounts.linkedin.789.campaigns",
-                "network": [
-                  "linkedin",
-                  "adwords",
-                  "facebook"
-                ]
-              },
-              "metrics": {
-                "spend": 50973.39
-              },
-              "series": [
-                {
-                  "calculated": {},
-                  "metrics": {
-                    "spend": 29980.59
-                  },
-                  "time": {
-                    "end": "2019-05-31T23:59:59Z",
-                    "start": "2019-05-01T00:00:00Z"
-                  }
+            {
+                "summary": {
+                    "filtered": {
+                        "calculated": {},
+                        "count": 3,
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$",
+                            "entity_id": null,
+                            "id": "production.1.adwords.1.accounts.adwords.123.campaigns,production.1.accounts.facebook.456.campaigns,production.1.linkedin.1.accounts.linkedin.789.campaigns",
+                            "network": [
+                                "linkedin",
+                                "adwords",
+                                "facebook"
+                            ]
+                        },
+                        "metrics": {
+                            "spend": 50973.39
+                        },
+                        "series": [
+                            {
+                                "calculated": {},
+                                "metrics": {
+                                    "spend": 29980.59
+                                },
+                                "time": {
+                                    "end": "2019-05-31T23:59:59Z",
+                                    "start": "2019-05-01T00:00:00Z"
+                                }
+                            },
+                            {
+                                "calculated": {},
+                                "metrics": {
+                                    "spend": 20992.8
+                                },
+                                "time": {
+                                    "end": "2019-06-30T23:59:59Z",
+                                    "start": "2019-06-01T00:00:00Z"
+                                }
+                            }
+                        ]
+                    },
+                    "page": {
+                        "calculated": {
+                            "calculated_metric:123": 51591
+                        },
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$"
+                        },
+                        "metrics": {
+                            "spend": 3711.92
+                        }
+                    },
+                    "summaries": [
+                        "page",
+                        "filtered"
+                    ],
+                    "type": "summary_row"
                 },
-                {
-                  "calculated": {},
-                  "metrics": {
-                    "spend": 20992.8
-                  },
-                  "time": {
+                "type": "rows",
+                "time": {
                     "end": "2019-06-30T23:59:59Z",
-                    "start": "2019-06-01T00:00:00Z"
-                  }
+                    "interval": "month",
+                    "start": "2019-05-01T00:00:00Z"
+                },
+                "_embedded": {
+                    "results": [
+                        {
+                            "calculated": {
+                                "calculated_metric:123": 51591
+                            },
+                            "meta": {
+                                "currency_code": "USD",
+                                "currency_symbol": "$",
+                                "entity_id": null,
+                                "id": "production.1.adwords.1.accounts.adwords.8193448926.campaigns,production.1.accounts.facebook.694893930603203.campaigns,production.1.linkedin.1.accounts.linkedin.500678349.campaigns[network=linkedin]",
+                                "network": "linkedin"
+                            },
+                            "metrics": {
+                                "clicks": 266,
+                                "spend": 3711.92
+                            },
+                            "series": [
+                                {
+                                    "calculated": {
+                                        "calculated_metric:123": 35259
+                                    },
+                                    "metrics": {
+                                        "clicks": 178,
+                                        "spend": 2443.85
+                                    },
+                                    "time": {
+                                        "end": "2019-05-31T23:59:59Z",
+                                        "start": "2019-05-01T00:00:00Z"
+                                    }
+                                },
+                                {
+                                    "calculated": {
+                                        "calculated_metric:123": 16330
+                                    },
+                                    "metrics": {
+                                        "clicks": 88,
+                                        "spend": 1268.07
+                                    },
+                                    "time": {
+                                        "end": "2019-06-30T23:59:59Z",
+                                        "start": "2019-06-01T00:00:00Z"
+                                    }
+                                }
+                            ],
+                            "_embedded": {},
+                            "_forms": {},
+                            "_links": {}
+                        }
+                    ]
+                },
+                "_forms": {
+                    "next_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "fields": {
+                            "date_range": {
+                                "type": "string",
+                                "value": "last 2 months"
+                            },
+                            "fields": {
+                                "type": "array",
+                                "value": [
+                                    "spend",
+                                    "clicks",
+                                    "calculated_metric:123"
+                                ]
+                            },
+                            "filters": {
+                                "type": "array",
+                                "value": [
+                                    {
+                                    "op": "gt",
+                                    "path": "clicks",
+                                    "value": 5
+                                    }
+                                ]
+                            },
+                            "forms": {
+                                "type": "array",
+                                "value": null
+                            },
+                            "ignore_precision": {
+                                "type": "boolean",
+                                "value": false
+                            },
+                            "links": {
+                                "type": [
+                                    "boolean",
+                                    "array"
+                                ],
+                                "value": null
+                            },
+                            "output_format": {
+                                "type": "string",
+                                "value": "row"
+                            },
+                            "sort_by": {
+                                "type": "string",
+                                "value": "spend"
+                            },
+                            "sources": {
+                                "type": "object",
+                                "value": {
+                                    "metrics": {
+                                        "targets": null,
+                                        "networks": [
+                                            "facebook",
+                                            "adwords",
+                                            "linkedin"
+                                        ],
+                                        "entity_level": "campaigns"
+                                    }
+                                }
+                            },
+                            "version": {
+                                "type": "string",
+                                "value": "2"
+                            },
+                            "page_token": {
+                                "type": "string",
+                                "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGECZAABdG0AAAAGb2Zmc2V0"
+                            }
+                        }
+                    },
+                    "prev_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "fields": {
+                            "date_range": {
+                                "type": "string",
+                                "value": "last 2 months"
+                            },
+                            "fields": {
+                                "type": "array",
+                                "value": [
+                                    "spend",
+                                    "clicks",
+                                    "calculated_metric:123"
+                                ]
+                            },
+                            "filters": {
+                                "type": "array",
+                                "value": [
+                                    {
+                                    "op": "gt",
+                                    "path": "clicks",
+                                    "value": 5
+                                    }
+                                ]
+                            },
+                            "forms": {
+                                "type": "array",
+                                "value": null
+                            },
+                            "ignore_precision": {
+                                "type": "boolean",
+                                "value": false
+                            },
+                            "links": {
+                                "type": [
+                                    "boolean",
+                                    "array"
+                                ],
+                                "value": null
+                            },
+                            "output_format": {
+                                "type": "string",
+                                "value": "row"
+                            },
+                            "sort_by": {
+                                "type": "string",
+                                "value": "spend"
+                            },
+                            "sources": {
+                                "type": "object",
+                                "value": {
+                                    "metrics": {
+                                        "targets": null,
+                                        "networks": [
+                                            "facebook",
+                                            "adwords",
+                                            "linkedin"
+                                        ],
+                                        "entity_level": "campaigns"
+                                    }
+                                }
+                            },
+                            "version": {
+                                "type": "string",
+                                "value": "2"
+                            },
+                            "page_token": {
+                                "type": "string",
+                                "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0"
+                            }
+                        }
+                    }
+                },
+                "_links": {
+                    "results": [],
+                    "next_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "form": true
+                    },
+                    "prev_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "form": true
+                    }
                 }
-              ]
-            },
-            "page": {
-              "calculated": {
-                "calculated_metric:123": 51591
-              },
-              "meta": {
-                "currency_code": "USD",
-                "currency_symbol": "$"
-              },
-              "metrics": {
-                "spend": 3711.92
-              }
-            },
-            "summaries": [
-              "page",
-              "filtered"
-            ],
-            "type": "summary_row"
-          },
-          "type": "rows",
-          "time": {
-            "end": "2019-06-30T23:59:59Z",
-            "interval": "month",
-            "start": "2019-05-01T00:00:00Z"
-          },
-          "_embedded": {
-            "results": [
-              {
-                "calculated": {
-                  "calculated_metric:123": 51591
-                },
-                "meta": {
-                  "currency_code": "USD",
-                  "currency_symbol": "$",
-                  "entity_id": null,
-                  "id": "production.1.adwords.1.accounts.adwords.8193448926.campaigns,production.1.accounts.facebook.694893930603203.campaigns,production.1.linkedin.1.accounts.linkedin.500678349.campaigns[network=linkedin]",
-                  "network": "linkedin"
-                },
-                "metrics": {
-                  "clicks": 266,
-                  "spend": 3711.92
-                },
-                "series": [
-                  {
-                    "calculated": {
-                      "calculated_metric:123": 35259
-                    },
-                    "metrics": {
-                      "clicks": 178,
-                      "spend": 2443.85
-                    },
-                    "time": {
-                      "end": "2019-05-31T23:59:59Z",
-                      "start": "2019-05-01T00:00:00Z"
-                    }
-                  },
-                  {
-                    "calculated": {
-                      "calculated_metric:123": 16330
-                    },
-                    "metrics": {
-                      "clicks": 88,
-                      "spend": 1268.07
-                    },
-                    "time": {
-                      "end": "2019-06-30T23:59:59Z",
-                      "start": "2019-06-01T00:00:00Z"
-                    }
-                  }
-                ],
-                "_embedded": {},
-                "_forms": {},
-                "_links": {}
-              }
-            ]
-          },
-          "_forms": {
-            "next_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "fields": {
-                "date_range": {
-                  "type": "string",
-                  "value": "last 2 months"
-                },
-                "fields": {
-                  "type": "array",
-                  "value": [
-                    "spend",
-                    "clicks",
-                    "calculated_metric:123"
-                  ]
-                },
-                "filters": {
-                  "type": "array",
-                  "value": [
-                    {
-                      "op": "gt",
-                      "path": "clicks",
-                      "value": 5
-                    }
-                  ]
-                },
-                "forms": {
-                  "type": "array",
-                  "value": null
-                },
-                "ignore_precision": {
-                  "type": "boolean",
-                  "value": false
-                },
-                "links": {
-                  "type": [
-                    "boolean",
-                    "array"
-                  ],
-                  "value": null
-                },
-                "output_format": {
-                  "type": "string",
-                  "value": "row"
-                },
-                "sort_by": {
-                  "type": "string",
-                  "value": "spend"
-                },
-                "sources": {
-                  "type": "object",
-                  "value": {
-                    "metrics": {
-                      "targets": null,
-                      "networks": [
-                        "facebook",
-                        "adwords",
-                        "linkedin"
-                      ],
-                      "entity_level": "campaigns"
-                    }
-                  }
-                },
-                "version": {
-                  "type": "string",
-                  "value": "2"
-                },
-                "page_token": {
-                  "type": "string",
-                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGECZAABdG0AAAAGb2Zmc2V0"
-                }
-              }
-            },
-            "prev_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "fields": {
-                "date_range": {
-                  "type": "string",
-                  "value": "last 2 months"
-                },
-                "fields": {
-                  "type": "array",
-                  "value": [
-                    "spend",
-                    "clicks",
-                    "calculated_metric:123"
-                  ]
-                },
-                "filters": {
-                  "type": "array",
-                  "value": [
-                    {
-                      "op": "gt",
-                      "path": "clicks",
-                      "value": 5
-                    }
-                  ]
-                },
-                "forms": {
-                  "type": "array",
-                  "value": null
-                },
-                "ignore_precision": {
-                  "type": "boolean",
-                  "value": false
-                },
-                "links": {
-                  "type": [
-                    "boolean",
-                    "array"
-                  ],
-                  "value": null
-                },
-                "output_format": {
-                  "type": "string",
-                  "value": "row"
-                },
-                "sort_by": {
-                  "type": "string",
-                  "value": "spend"
-                },
-                "sources": {
-                  "type": "object",
-                  "value": {
-                    "metrics": {
-                      "targets": null,
-                      "networks": [
-                        "facebook",
-                        "adwords",
-                        "linkedin"
-                      ],
-                      "entity_level": "campaigns"
-                    }
-                  }
-                },
-                "version": {
-                  "type": "string",
-                  "value": "2"
-                },
-                "page_token": {
-                  "type": "string",
-                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0"
-                }
-              }
             }
-          },
-          "_links": {
-            "results": [],
-            "next_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "form": true
-            },
-            "prev_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "form": true
-            }
-          }
-        }
 
 ### Time Series Report [POST /v2/organizations/{org_id}/report]
 
@@ -2116,7 +2664,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + `org_id` (integer) - the fetch id of the user's organization
 
 + Request (application/json)
 
@@ -2133,13 +2681,13 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
             Note that in the future, AdStage may release other minor or patch versions within the `/v2` URL namespace according to semantic versioning.
 
-        + date_range: "last 30 days" (string, required)
+        + `date_range`: "last 30 days" (string, required)
 
             An AdStage date range string indicating the period to report data for.
 
             See the [list of allowed relative or absolute date strings](date-ranges) in API Concepts.
 
-        + output_format: "row", "series" (enum[string], required)
+        + `output_format`: "row", "series" (enum[string], required)
 
             Determines whether a report will aggregate metrics within the given date range (a `row` report), or whether the results will be given as a time series (a `series` report).
 
@@ -2228,7 +2776,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
             **Note that `series` summaries require the `aggregate_by` key to be set to a non-null value, while `row` summaries typically omit it.**
 
-        + sort_by: "clicks" (string, required)
+        + `sort_by`: "clicks" (string, required)
 
             The name of the metric or meta field to sort the results by.
             If no particular sorting is desired, consider an arbitary metric such as `spend`.
@@ -2238,14 +2786,14 @@ In contrast to the `series` formatted request, which splits out timeseries data 
             The direction to sort the results.
             If this key is omitted, the sort will default to descending order.
 
-        + group_by: "network" (string)
+        + `group_by`: "network" (string)
 
             The meta field to group the results by.
             The metrics for each grouping will all be aggregated in the report results.
 
             Meta text fields such as campaign names will also be grouped (text will be aggregated in an array); however, the report will truncate to only the first 100 text results per group if there are over 100 entities in the group.
 
-        + ignore_precision: false (boolean)
+        + `ignore_precision`: false (boolean)
 
             Determines whether metrics should be rounded to their AdStage determined precision.
             Enabling this will disable automatic rounding.
@@ -2267,7 +2815,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
             + `all_inactive` - includes only `Paused` and `Completed` entities
             + `all_with_deleted` - includes `Active`, `Paused`, `Completed`, `Archived`, and `Deleted` entities
 
-        + page_token: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
+        + `page_token`: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
 
             A Base64 encoded string describing a specific page to lookup.
             When provided, limit and offset keys will be ignored in favor of the page token.
@@ -2275,35 +2823,35 @@ In contrast to the `series` formatted request, which splits out timeseries data 
     + Body
 
             {
-              "version": "2",
-              "date_range": "last 2 months",
-              "output_format": "series",
-              "aggregate_by": "month",
-              "sources": {
-                "metrics": {
-                  "targets": ["/network/adstage/folder/1"],
-                  "networks": ["facebook", "adwords", "linkedin"],
-                  "entity_level": "campaigns"
-                }
-              },
-              "summarize_on": ["page", "filtered"],
-              "summary_fields": ["spend", "calculated_metric:123"],
-              "summary_format": "series",
-              "fields": ["spend", "clicks", "calculated_metric:123"],
-              "filters": [
-                {
-                  "op": "gt",
-                  "path": "clicks",
-                  "value": 5
-                }
-              ],
-              "sort_by": "spend",
-              "order": "asc",
-              "group_by": "network",
-              "ignore_precision": false,
-              "limit": 1,
-              "offset": 1,
-              "statuses": "all_visible"
+                "version": "2",
+                "date_range": "last 2 months",
+                "output_format": "series",
+                "aggregate_by": "month",
+                "sources": {
+                        "metrics": {
+                            "targets": ["/network/adstage/folder/1"],
+                            "networks": ["facebook", "adwords", "linkedin"],
+                            "entity_level": "campaigns"
+                        }
+                },
+                "summarize_on": ["page", "filtered"],
+                "summary_fields": ["spend", "calculated_metric:123"],
+                "summary_format": "series",
+                "fields": ["spend", "clicks", "calculated_metric:123"],
+                "filters": [
+                    {
+                        "op": "gt",
+                        "path": "clicks",
+                        "value": 5
+                    }
+                ],
+                "sort_by": "spend",
+                "order": "asc",
+                "group_by": "network",
+                "ignore_precision": false,
+                "limit": 1,
+                "offset": 1,
+                "statuses": "all_visible"
             }
 
 + Response 200 (application/json)
@@ -2313,21 +2861,21 @@ In contrast to the `series` formatted request, which splits out timeseries data 
         + summary: (object, required) - Shows metrics aggregated across _entities_ (see the `summary_format` request key for different options on aggrgation). Value is explicit `null` if no `summary_format` was given in the request.
             + filtered (object, optional) - Shows metrics aggregated across entities on all pages for the report, subject to the constraint of given filters. Is omitted if `filtered` was not requested in the `summary_format` array.
                 + calculated (object, required) - An empty object, reserved for future use.
-                
+
                 + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
-                
+
                 + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 2000`.
-                
+
                 + series (object, required) - Gives a time series array of metric values for each timeslice. A separate array is provided for every metric field. Note that meta values are not given in the series because they are consistent across all timeslices.
                     + calculated (object, required) - An empty object, reserved for future use.
-            
+
                     + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": [500, 1500]`.
-            
+
                     + time (object, required) - Gives an object describing the span of the particular timeslice in the series data.
                         + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
-            
+
                         + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
-            
+
             + page: (object, optional) - Shows metrics aggrgated across all entities on the current report response page. Is omitted if `page` was not requested in the `summary_format` array. Currently omits a series even if `aggregate_by` is provided, though this may be added at a later time.
                 + calculated (object, required) - Gives key-value pairs of calculated metric fields and their values, such as `"calculated_metric:123": 200`.
 
@@ -2337,14 +2885,14 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
                 + series (object, required) - Gives a time series array of metric values for each timeslice. A separate array is provided for every metric field. Note that meta values are not given in the series because they are consistent across all timeslices.
                     + calculated (object, required) - Gives key-value pairs of calculated metric fields and their time series values, such as `"calculated_metric:123": [50, 150]`.
-            
+
                     + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": [200, 500]`.
-            
+
                     + time (object, required) - Gives an object describing the span of the particular timeslice in the series data.
                         + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
-            
+
                         + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
-            
+
             + type: (enum, required) - Gives the format of the summary.
                 + `"summary_row"` - Indicates the summary section is formatted as a `row` summary.
                 + `"summary_series"` - Indicates the summary section is formatted as a `series` summary.
@@ -2363,7 +2911,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
             + interval: "month" (string, optional) - The timeslice interval of reported data. Only returned if the request set an `aggregate_by` parameter.
 
             + timestamps (array[string], optional) - An array of ISO 8601 timestamps indicating the start days of each timeslice for every reported series of data. Only returned if the request was a `series` output format.
-        
+
         + `_embedded`: (object)
             + results (array) - Lists the reported data entity-by-entity (or group-by-group if `group_by` is set)
                 + (object) - The reported data for one entity or grouping.
@@ -2397,281 +2945,281 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
     + Body
 
-        {
-          "summary": {
-            "filtered": {
-              "calculated": {},
-              "count": 3,
-              "meta": {
-                "currency_code": "USD",
-                "currency_symbol": "$",
-                "entity_id": null,
-                "network": [
-                  "linkedin",
-                  "adwords",
-                  "facebook"
-                ]
-              },
-              "metrics": {
-                "spend": 50973.39
-              },
-              "series": {
-                "calculated": {},
-                "metrics": {
-                  "spend": [
-                    29980.59,
-                    20992.8
-                  ]
-                }
-              }
-            },
-            "page": {
-              "calculated": {
-                "calculated_metric:123": 51591
-              },
-              "meta": {
-                "currency_code": "USD",
-                "currency_symbol": "$"
-              },
-              "metrics": {
-                "spend": 3711.92
-              },
-              "series": {
-                "calculated": {
-                  "calculated_metric:123": [
-                    35259,
-                    16330
-                  ]
-                },
-                "metrics": {
-                  "spend": [
-                    2443.85,
-                    1268.07
-                  ]
-                }
-              }
-            },
-            "summaries": [
-              "page",
-              "filtered"
-            ],
-            "type": "summary_series"
-          },
-          "type": "timeseries",
-          "time": {
-            "end": "2019-06-30T23:59:59Z",
-            "interval": "month",
-            "start": "2019-05-01T00:00:00Z",
-            "timestamps": [
-              "2019-05-01T00:00:00Z",
-              "2019-06-01T00:00:00Z"
-            ]
-          },
-          "_embedded": {
-            "results": [
-              {
+            {
                 "summary": {
-                  "calculated": {
-                    "calculated_metric:123": 51591
-                  },
-                  "meta": {
-                    "currency_code": "USD",
-                    "currency_symbol": "$",
-                    "entity_id": null,
-                    "network": "linkedin"
-                  },
-                  "metrics": {
-                    "clicks": 266,
-                    "spend": 3711.92
-                  }
-                },
-                "series": {
-                  "calculated": {
-                    "calculated_metric:123": [
-                      35259,
-                      16330
-                    ]
-                  },
-                  "metrics": {
-                    "clicks": [
-                      178,
-                      88
+                    "filtered": {
+                        "calculated": {},
+                        "count": 3,
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$",
+                            "entity_id": null,
+                            "network": [
+                                "linkedin",
+                                "adwords",
+                                "facebook"
+                            ]
+                        },
+                        "metrics": {
+                            "spend": 50973.39
+                        },
+                        "series": {
+                            "calculated": {},
+                            "metrics": {
+                                "spend": [
+                                    29980.59,
+                                    20992.8
+                                ]
+                            }
+                        }
+                    },
+                    "page": {
+                        "calculated": {
+                            "calculated_metric:123": 51591
+                        },
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$"
+                        },
+                        "metrics": {
+                            "spend": 3711.92
+                        },
+                        "series": {
+                            "calculated": {
+                                "calculated_metric:123": [
+                                    35259,
+                                    16330
+                                ]
+                            },
+                            "metrics": {
+                                "spend": [
+                                    2443.85,
+                                    1268.07
+                                ]
+                            }
+                        }
+                    },
+                    "summaries": [
+                        "page",
+                        "filtered"
                     ],
-                    "spend": [
-                      2443.85,
-                      1268.07
+                    "type": "summary_series"
+                },
+                "type": "timeseries",
+                "time": {
+                    "end": "2019-06-30T23:59:59Z",
+                    "interval": "month",
+                    "start": "2019-05-01T00:00:00Z",
+                    "timestamps": [
+                        "2019-05-01T00:00:00Z",
+                        "2019-06-01T00:00:00Z"
                     ]
-                  }
                 },
-                "_embedded": {},
-                "_forms": {},
-                "_links": {}
-              }
-            ]
-          },
-          "_forms": {
-            "next_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "fields": {
-                "date_range": {
-                  "type": "string",
-                  "value": "last 2 months"
+                "_embedded": {
+                    "results": [
+                        {
+                            "summary": {
+                                "calculated": {
+                                    "calculated_metric:123": 51591
+                                },
+                                "meta": {
+                                    "currency_code": "USD",
+                                    "currency_symbol": "$",
+                                    "entity_id": null,
+                                    "network": "linkedin"
+                                },
+                                "metrics": {
+                                    "clicks": 266,
+                                    "spend": 3711.92
+                                }
+                            },
+                            "series": {
+                                "calculated": {
+                                    "calculated_metric:123": [
+                                        35259,
+                                        16330
+                                    ]
+                                },
+                                "metrics": {
+                                    "clicks": [
+                                        178,
+                                        88
+                                    ],
+                                    "spend": [
+                                        2443.85,
+                                        1268.07
+                                    ]
+                                }
+                            },
+                            "_embedded": {},
+                            "_forms": {},
+                            "_links": {}
+                        }
+                    ]
                 },
-                "fields": {
-                  "type": "array",
-                  "value": [
-                    "spend",
-                    "clicks",
-                    "calculated_metric:123"
-                  ]
-                },
-                "filters": {
-                  "type": "array",
-                  "value": [
-                    {
-                      "op": "gt",
-                      "path": "clicks",
-                      "value": 5
+                "_forms": {
+                    "next_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "fields": {
+                            "date_range": {
+                                "type": "string",
+                                "value": "last 2 months"
+                            },
+                            "fields": {
+                                "type": "array",
+                                "value": [
+                                    "spend",
+                                    "clicks",
+                                    "calculated_metric:123"
+                                ]
+                            },
+                            "filters": {
+                                "type": "array",
+                                "value": [
+                                    {
+                                        "op": "gt",
+                                        "path": "clicks",
+                                        "value": 5
+                                    }
+                                ]
+                            },
+                            "forms": {
+                                "type": "array",
+                                "value": null
+                            },
+                            "ignore_precision": {
+                                "type": "boolean",
+                                "value": false
+                            },
+                            "links": {
+                                "type": [
+                                    "boolean",
+                                    "array"
+                                ],
+                                "value": null
+                            },
+                            "output_format": {
+                                "type": "string",
+                                "value": "series"
+                            },
+                            "sort_by": {
+                                "type": "string",
+                                "value": "spend"
+                            },
+                            "sources": {
+                                "type": "object",
+                                "value": {
+                                    "metrics": {
+                                        "targets": [
+                                            "/network/adstage/organization/1"
+                                        ],
+                                        "networks": [
+                                            "facebook",
+                                            "adwords",
+                                            "linkedin"
+                                        ],
+                                        "entity_level": "campaigns"
+                                    }
+                                }
+                            },
+                            "version": {
+                                "type": "string",
+                                "value": "2"
+                            },
+                            "page_token": {
+                                "type": "string",
+                                "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGECZAABdG0AAAAGb2Zmc2V0"
+                            }
+                        }
+                    },
+                    "prev_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "fields": {
+                            "date_range": {
+                                "type": "string",
+                                "value": "last 2 months"
+                            },
+                            "fields": {
+                                "type": "array",
+                                "value": [
+                                    "spend",
+                                    "clicks",
+                                    "calculated_metric:123"
+                                ]
+                            },
+                            "filters": {
+                                "type": "array",
+                                "value": [
+                                    {
+                                        "op": "gt",
+                                        "path": "clicks",
+                                        "value": 5
+                                    }
+                                ]
+                            },
+                            "forms": {
+                                "type": "array",
+                                "value": null
+                            },
+                            "ignore_precision": {
+                                "type": "boolean",
+                                "value": false
+                            },
+                            "links": {
+                                "type": [
+                                    "boolean",
+                                    "array"
+                                ],
+                                "value": null
+                            },
+                            "output_format": {
+                                "type": "string",
+                                "value": "series"
+                            },
+                            "sort_by": {
+                                "type": "string",
+                                "value": "spend"
+                            },
+                            "sources": {
+                                "type": "object",
+                                "value": {
+                                    "metrics": {
+                                        "targets": [
+                                            "/network/adstage/organization/1"
+                                        ],
+                                        "networks": [
+                                            "facebook",
+                                            "adwords",
+                                            "linkedin"
+                                        ],
+                                        "entity_level": "campaigns"
+                                    }
+                                }
+                            },
+                            "version": {
+                                "type": "string",
+                                "value": "2"
+                            },
+                            "page_token": {
+                                "type": "string",
+                                "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0"
+                            }
+                        }
                     }
-                  ]
                 },
-                "forms": {
-                  "type": "array",
-                  "value": null
-                },
-                "ignore_precision": {
-                  "type": "boolean",
-                  "value": false
-                },
-                "links": {
-                  "type": [
-                    "boolean",
-                    "array"
-                  ],
-                  "value": null
-                },
-                "output_format": {
-                  "type": "string",
-                  "value": "series"
-                },
-                "sort_by": {
-                  "type": "string",
-                  "value": "spend"
-                },
-                "sources": {
-                  "type": "object",
-                  "value": {
-                    "metrics": {
-                      "targets": [
-                        "/network/adstage/organization/1"
-                      ],
-                      "networks": [
-                        "facebook",
-                        "adwords",
-                        "linkedin"
-                      ],
-                      "entity_level": "campaigns"
+                "_links": {
+                    "results": [],
+                    "next_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "form": true
+                    },
+                    "prev_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "form": true
                     }
-                  }
-                },
-                "version": {
-                  "type": "string",
-                  "value": "2"
-                },
-                "page_token": {
-                  "type": "string",
-                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGECZAABdG0AAAAGb2Zmc2V0"
                 }
-              }
-            },
-            "prev_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "fields": {
-                "date_range": {
-                  "type": "string",
-                  "value": "last 2 months"
-                },
-                "fields": {
-                  "type": "array",
-                  "value": [
-                    "spend",
-                    "clicks",
-                    "calculated_metric:123"
-                  ]
-                },
-                "filters": {
-                  "type": "array",
-                  "value": [
-                    {
-                      "op": "gt",
-                      "path": "clicks",
-                      "value": 5
-                    }
-                  ]
-                },
-                "forms": {
-                  "type": "array",
-                  "value": null
-                },
-                "ignore_precision": {
-                  "type": "boolean",
-                  "value": false
-                },
-                "links": {
-                  "type": [
-                    "boolean",
-                    "array"
-                  ],
-                  "value": null
-                },
-                "output_format": {
-                  "type": "string",
-                  "value": "series"
-                },
-                "sort_by": {
-                  "type": "string",
-                  "value": "spend"
-                },
-                "sources": {
-                  "type": "object",
-                  "value": {
-                    "metrics": {
-                      "targets": [
-                        "/network/adstage/organization/1"
-                      ],
-                      "networks": [
-                        "facebook",
-                        "adwords",
-                        "linkedin"
-                      ],
-                      "entity_level": "campaigns"
-                    }
-                  }
-                },
-                "version": {
-                  "type": "string",
-                  "value": "2"
-                },
-                "page_token": {
-                  "type": "string",
-                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0"
-                }
-              }
             }
-          },
-          "_links": {
-            "results": [],
-            "next_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "form": true
-            },
-            "prev_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "form": true
-            }
-          }
-        }

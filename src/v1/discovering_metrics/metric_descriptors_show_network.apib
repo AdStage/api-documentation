@@ -1,9 +1,6 @@
 ### Network Metric Descriptors [GET /metric_descriptors/{network}]
 
-AdStage's reporting endpoints allow developers to request data from non-AdStage reporting providers, normalized in a single, convenient format.
-Ad network reporting providers can often provide real-time data and/or data that is not importable into AdStage's database, such as demographic dimensions from Facebook Direct.
-However, separate metrics descriptors need to be loaded to properly specify fields in reports from remote ad networks; this endpoint provides information on the names and formats of these metrics.
-
+This endpoint provides information on the names and formats of metrics from external providers available in AdStage's V1 reporting endpoint.
 
 Note that metric descriptors from non-AdStage reporting providers are currently considered separate from AdStage provider metric descriptors.
 Descriptors may share the same `id` across providers but not necessarily associate to the same metrics (for example, the `clicks` metric from `facebook` provider reports actually matches the `total_clicks` metric in `adstage` provider reports).
@@ -14,29 +11,29 @@ Additionally, non-AdStage network provider metrics do not distinguish between me
 
     + network: facebook (string)
 
-        which network you want descriptors for. Currently `"facebook"`, `"adwords"`, `"gemini"`, and `"google_analytics"` are supported.
+        Which network you want descriptors for. Currently `"facebook"`, `"adwords"`, `"gemini"`, and `"google_analytics"` are supported.
 
 + Request
 
     + Headers
 
-        Accept: application/json
+            Accept: application/json
 
 + Response 200
 
-  A list of columns that are available to pull via the reporting endpoint.
+    A list of columns that are available to pull via the reporting endpoint.
 
-  + Attributes
+    + Attributes
 
-        + (array)
+        + descriptors (array)
             + (object)
                 + id: "clicks" (string) - the identifier assigned to the metric in reports
                 + short_name: "Clicks" (string) - a short human readable name for the metric
                 + display_names: ["Clicks"] (array[string]) - the network's list of allowable human readable display names for the metric; this key is omitted unless `adwords` was specified for the `network` param
                 + name: "Clicks" (string) - the full human readable name for the metric used in AdStage UIs
                 + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
-                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum, string) - format for the metric (default is integer)
-                + type: "METRIC", "TEXT" (enum, string) - whether the descriptor is for a metric, or metadata
+                + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum[string]) - format for the metric (default is `INTEGER`)
+                + type: "METRIC", "TEXT" (enum[string]) - whether the descriptor is for a metric or metadata
                 + can_filter: true (boolean) - if the metric is allowed to be used in a filter field for a reporting request; this key is omitted unless `gemini` was specified for the `network` param
                 + supports_filters: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that allow filtering on the metric; this key is omitted unless `adwords` was specified for the `network` param
                 + supports_zero_impressions: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that maintain metrics even when the ad entity has not logged any impressions; this key is omitted unless `adwords` was specified for the `network` param
@@ -54,55 +51,55 @@ Additionally, non-AdStage network provider metrics do not distinguish between me
                 + is_ad: true (boolean) - if the metric is valid for the ad reporting level
                 + is_keyword: true (boolean) - if the metric is valid for keyword reporting level
 
-  + Body
+    + Body
 
-        [
-            {
-                "id": "reach",
-                "short_name": "Reach",
-                "name": "Reach",
-                "is_default": true,
-                "tooltip": "The number of people who saw your ads at least once. Reach is different from impressions, which may include multiple views of your ads by the same people.",
-                "format": "DEFAULT",
-                "type": "METRIC",
-                "category": "PERFORMANCE",
-                "default_sort_order": "DESC",
-                "is_adwords": false,
-                "is_bing_ads": false,
-                "is_facebook": true,
-                "is_linkedin": false,
-                "is_twitter": false,
-                "is_account": true,
-                "is_campaign": true,
-                "is_ad_group": true,
-                "is_ad": true,
-                "is_keyword": false,
-                "is_post": false,
-                "is_company_status_update": false,
-                "show_increase_as": "POSITIVE"
-            },
-            {
-                "id": "results",
-                "short_name": "Results",
-                "name": "Results",
-                "is_default": true,
-                "tooltip": "The number of outcomes you achieved in your ad campaign, based on the objective you selected.",
-                "format": "DEFAULT",
-                "type": "METRIC",
-                "category": "PERFORMANCE",
-                "default_sort_order": "DESC",
-                "is_adwords": false,
-                "is_bing_ads": false,
-                "is_facebook": true,
-                "is_linkedin": false,
-                "is_twitter": false,
-                "is_account": true,
-                "is_campaign": true,
-                "is_ad_group": true,
-                "is_ad": true,
-                "is_keyword": false,
-                "is_post": false,
-                "is_company_status_update": false,
-                "show_increase_as": "POSITIVE"
-            }
-        ]
+            [
+                {
+                    "id": "reach",
+                    "short_name": "Reach",
+                    "name": "Reach",
+                    "is_default": true,
+                    "tooltip": "The number of people who saw your ads at least once. Reach is different from impressions, which may include multiple views of your ads by the same people.",
+                    "format": "DEFAULT",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": false,
+                    "is_bing_ads": false,
+                    "is_facebook": true,
+                    "is_linkedin": false,
+                    "is_twitter": false,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": false,
+                    "is_post": false,
+                    "is_company_status_update": false,
+                    "show_increase_as": "POSITIVE"
+                },
+                {
+                    "id": "results",
+                    "short_name": "Results",
+                    "name": "Results",
+                    "is_default": true,
+                    "tooltip": "The number of outcomes you achieved in your ad campaign, based on the objective you selected.",
+                    "format": "DEFAULT",
+                    "type": "METRIC",
+                    "category": "PERFORMANCE",
+                    "default_sort_order": "DESC",
+                    "is_adwords": false,
+                    "is_bing_ads": false,
+                    "is_facebook": true,
+                    "is_linkedin": false,
+                    "is_twitter": false,
+                    "is_account": true,
+                    "is_campaign": true,
+                    "is_ad_group": true,
+                    "is_ad": true,
+                    "is_keyword": false,
+                    "is_post": false,
+                    "is_company_status_update": false,
+                    "show_increase_as": "POSITIVE"
+                }
+            ]

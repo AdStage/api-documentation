@@ -7,18 +7,18 @@ For your convenience, the responses from these endpoints also include links to t
 **Limit/offset pagination example:**
 ```
 {
-  // The data for this page
-  "_embedded": { ... },
+    // The data for this page
+    "_embedded": { ... },
 
-  // Links to related pages
-  "_links": {
-    "next": {
-      "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=3000&..."
-    },
-    "prev": {
-      "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=1000&..."
+    // Links to related pages
+    "_links": {
+        "next": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=3000&..."
+        },
+        "prev": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=1000&..."
+        },
     }
-  }
 }
 ```
 
@@ -30,17 +30,17 @@ If a request provides both a limit and/or offset as well as a page token, AdStag
 **Token pagination example:**
 ```
 {
-  // The data for this page_page
-  "_embedded": { ... },
+    // The data for this page_page
+    "_embedded": { ... },
 
-  // Links to related pages
-  "_links": {
-    "next_page": {
-      "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0&..."
-    },
-    "prev_page": {
-      "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0&..."
+    // Links to related pages
+    "_links": {
+        "next_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0&..."
+        },
+        "prev_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0&..."
+        }
     }
-  }
 }
 ```

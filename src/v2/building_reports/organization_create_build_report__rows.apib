@@ -10,7 +10,7 @@ This is shaped differently than time series data in a `series` formatted request
 
 + Parameters
 
-    + org_id (integer) - the fetch id of the user's organization
+    + `org_id` (integer) - the fetch id of the user's organization
 
 + Request (application/json)
 
@@ -27,13 +27,13 @@ This is shaped differently than time series data in a `series` formatted request
 
             Note that in the future, AdStage may release other minor or patch versions within the `/v2` URL namespace according to semantic versioning.
 
-        + date_range: "last 30 days" (string, required)
+        + `date_range`: "last 30 days" (string, required)
 
             An AdStage date range string indicating the period to report data for.
 
             See the [list of allowed relative or absolute date strings](date-ranges) in API Concepts.
 
-        + output_format: "row", "series" (enum[string], required)
+        + `output_format`: "row", "series" (enum[string], required)
 
             Determines whether a report will aggregate metrics within the given date range (a `row` report), or whether the results will be given as a time series (a `series` report).
 
@@ -122,7 +122,7 @@ This is shaped differently than time series data in a `series` formatted request
 
             **Note that `series` summaries require the `aggregate_by` key to be set to a non-null value, while `row` summaries typically omit it.**
 
-        + sort_by: "clicks" (string, required)
+        + `sort_by`: "clicks" (string, required)
 
             The name of the metric or meta field to sort the results by.
             If no particular sorting is desired, consider an arbitary metric such as `spend`.
@@ -132,14 +132,14 @@ This is shaped differently than time series data in a `series` formatted request
             The direction to sort the results.
             If this key is omitted, the sort will default to descending order.
 
-        + group_by: "network" (string)
+        + `group_by`: "network" (string)
 
             The meta field to group the results by.
             The metrics for each grouping will all be aggregated in the report results.
 
             Meta text fields such as campaign names will also be grouped (text will be aggregated in an array); however, the report will truncate to only the first 100 text results per group if there are over 100 entities in the group.
 
-        + ignore_precision: false (boolean)
+        + `ignore_precision`: false (boolean)
 
             Determines whether metrics should be rounded to their AdStage determined precision.
             Enabling this will disable automatic rounding.
@@ -161,7 +161,7 @@ This is shaped differently than time series data in a `series` formatted request
             + `all_inactive` - includes only `Paused` and `Completed` entities
             + `all_with_deleted` - includes `Active`, `Paused`, `Completed`, `Archived`, and `Deleted` entities
 
-        + page_token: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
+        + `page_token`: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
 
             A Base64 encoded string describing a specific page to lookup.
             When provided, limit and offset keys will be ignored in favor of the page token.
@@ -169,35 +169,35 @@ This is shaped differently than time series data in a `series` formatted request
     + Body
 
             {
-              "version": "2",
-              "date_range": "last 2 months",
-              "output_format": "row",
-              "aggregate_by": "month",
-              "sources": {
-                "metrics": {
-                  "targets": ["/network/adstage/folder/1"],
-                  "networks": ["facebook", "adwords", "linkedin"],
-                  "entity_level": "campaigns"
-                }
-              },
-              "summarize_on": ["page", "filtered"],
-              "summary_fields": ["spend", "calculated_metric:123"],
-              "summary_format": "row",
-              "fields": ["spend", "clicks", "calculated_metric:123"],
-              "filters": [
-                {
-                  "op": "gt",
-                  "path": "clicks",
-                  "value": 5
-                }
-              ],
-              "sort_by": "spend",
-              "order": "asc",
-              "group_by": "network",
-              "ignore_precision": false,
-              "limit": 1,
-              "offset": 1,
-              "statuses": "all_visible"
+                "version": "2",
+                "date_range": "last 2 months",
+                "output_format": "row",
+                "aggregate_by": "month",
+                "sources": {
+                    "metrics": {
+                        "targets": ["/network/adstage/folder/1"],
+                        "networks": ["facebook", "adwords", "linkedin"],
+                        "entity_level": "campaigns"
+                    }
+                },
+                "summarize_on": ["page", "filtered"],
+                "summary_fields": ["spend", "calculated_metric:123"],
+                "summary_format": "row",
+                "fields": ["spend", "clicks", "calculated_metric:123"],
+                "filters": [
+                    {
+                        "op": "gt",
+                        "path": "clicks",
+                        "value": 5
+                    }
+                ],
+                "sort_by": "spend",
+                "order": "asc",
+                "group_by": "network",
+                "ignore_precision": false,
+                "limit": 1,
+                "offset": 1,
+                "statuses": "all_visible"
             }
 
 + Response 200 (application/json)
@@ -207,29 +207,29 @@ This is shaped differently than time series data in a `series` formatted request
         + summary: (object, required) - Shows metrics aggregated across _entities_ (see the `summary_format` request key for different options on aggrgation). Value is explicit `null` if no `summary_format` was given in the request.
             + filtered (object, optional) - Shows metrics aggregated across entities on all pages for the report, subject to the constraint of given filters. Is omitted if `filtered` was not requested in the `summary_format` array.
                 + calculated (object, required) - An empty object, reserved for future use.
-                
+
                 + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
-                
+
                 + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 1000`.
-                
+
                 + series (array, required) - Gives a single list of objects that describe all metric values for each timeslice. Omitted unless `aggregate_by` is set in the request. Note that meta values are not given in the series because they are consistent across all timeslices.
                     + (object)
                         + calculated (object, required) - An empty object, reserved for future use.
-                
+
                         + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 250`.
-                
+
                         + time (object, required) - Gives an object describing the span of the particular timeslice in the series data.
                             + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
-                
+
                             + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
-            
+
             + page: (object, optional) - Shows metrics aggrgated across all entities on the current report response page. Is omitted if `page` was not requested in the `summary_format` array. Currently omits a series even if `aggregate_by` is provided, though this may be added at a later time.
                 + calculated (object, required) - Gives key-value pairs of calculated metric fields and their values, such as `"calculated_metric:123": 1000`.
 
                 + meta (object, required) - Gives key-value pairs of meta fields and their values, such as `"currency_code": "USD"`.
 
                 + metrics (object, required) - Gives key-value pairs of metric fields and their values, such as `"spend": 50`.
-            
+
             + type: (enum, required) - Gives the format of the summary.
                 + `"summary_row"` - Indicates the summary section is formatted as a `row` summary.
                 + `"summary_series"` - Indicates the summary section is formatted as a `series` summary.
@@ -248,7 +248,7 @@ This is shaped differently than time series data in a `series` formatted request
             + interval: "month" (string, optional) - The timeslice interval of reported data. Only returned if the request set an `aggregate_by` parameter.
 
             + timestamps (array[string], optional) - An array of ISO 8601 timestamps indicating the start days of each timeslice for every reported series of data. Only returned if the request was a `series` output format.
-        
+
         + `_embedded`: (object)
             + results (array) - Lists the reported data entity-by-entity (or group-by-group if `group_by` is set)
                 + (object) - The reported data for one entity or grouping.
@@ -268,7 +268,7 @@ This is shaped differently than time series data in a `series` formatted request
                                 + start: "2019-05-01T00:00:00Z" (string, required) - An ISO 8601 timestamp indicating the first day of the reported data for the timeslice.
 
                                 + end: "2019-06-30T23:59:59Z" (string, required) - An ISO 8601 timestamp indicating the final day of the reported data for the timeslice.
-                    
+
                     + `_embedded` (object, required) - An empty object implementing the HAL JSON interface (reserved for future use).
 
                     + `_forms` (object, required) - An empty object implementing the HAL JSON interface (reserved for future use).
@@ -283,282 +283,282 @@ This is shaped differently than time series data in a `series` formatted request
 
     + Body
 
-        {
-          "summary": {
-            "filtered": {
-              "calculated": {},
-              "count": 3,
-              "meta": {
-                "currency_code": "USD",
-                "currency_symbol": "$",
-                "entity_id": null,
-                "id": "production.1.adwords.1.accounts.adwords.123.campaigns,production.1.accounts.facebook.456.campaigns,production.1.linkedin.1.accounts.linkedin.789.campaigns",
-                "network": [
-                  "linkedin",
-                  "adwords",
-                  "facebook"
-                ]
-              },
-              "metrics": {
-                "spend": 50973.39
-              },
-              "series": [
-                {
-                  "calculated": {},
-                  "metrics": {
-                    "spend": 29980.59
-                  },
-                  "time": {
-                    "end": "2019-05-31T23:59:59Z",
-                    "start": "2019-05-01T00:00:00Z"
-                  }
+            {
+                "summary": {
+                    "filtered": {
+                        "calculated": {},
+                        "count": 3,
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$",
+                            "entity_id": null,
+                            "id": "production.1.adwords.1.accounts.adwords.123.campaigns,production.1.accounts.facebook.456.campaigns,production.1.linkedin.1.accounts.linkedin.789.campaigns",
+                            "network": [
+                                "linkedin",
+                                "adwords",
+                                "facebook"
+                            ]
+                        },
+                        "metrics": {
+                            "spend": 50973.39
+                        },
+                        "series": [
+                            {
+                                "calculated": {},
+                                "metrics": {
+                                    "spend": 29980.59
+                                },
+                                "time": {
+                                    "end": "2019-05-31T23:59:59Z",
+                                    "start": "2019-05-01T00:00:00Z"
+                                }
+                            },
+                            {
+                                "calculated": {},
+                                "metrics": {
+                                    "spend": 20992.8
+                                },
+                                "time": {
+                                    "end": "2019-06-30T23:59:59Z",
+                                    "start": "2019-06-01T00:00:00Z"
+                                }
+                            }
+                        ]
+                    },
+                    "page": {
+                        "calculated": {
+                            "calculated_metric:123": 51591
+                        },
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$"
+                        },
+                        "metrics": {
+                            "spend": 3711.92
+                        }
+                    },
+                    "summaries": [
+                        "page",
+                        "filtered"
+                    ],
+                    "type": "summary_row"
                 },
-                {
-                  "calculated": {},
-                  "metrics": {
-                    "spend": 20992.8
-                  },
-                  "time": {
+                "type": "rows",
+                "time": {
                     "end": "2019-06-30T23:59:59Z",
-                    "start": "2019-06-01T00:00:00Z"
-                  }
+                    "interval": "month",
+                    "start": "2019-05-01T00:00:00Z"
+                },
+                "_embedded": {
+                    "results": [
+                        {
+                            "calculated": {
+                                "calculated_metric:123": 51591
+                            },
+                            "meta": {
+                                "currency_code": "USD",
+                                "currency_symbol": "$",
+                                "entity_id": null,
+                                "id": "production.1.adwords.1.accounts.adwords.8193448926.campaigns,production.1.accounts.facebook.694893930603203.campaigns,production.1.linkedin.1.accounts.linkedin.500678349.campaigns[network=linkedin]",
+                                "network": "linkedin"
+                            },
+                            "metrics": {
+                                "clicks": 266,
+                                "spend": 3711.92
+                            },
+                            "series": [
+                                {
+                                    "calculated": {
+                                        "calculated_metric:123": 35259
+                                    },
+                                    "metrics": {
+                                        "clicks": 178,
+                                        "spend": 2443.85
+                                    },
+                                    "time": {
+                                        "end": "2019-05-31T23:59:59Z",
+                                        "start": "2019-05-01T00:00:00Z"
+                                    }
+                                },
+                                {
+                                    "calculated": {
+                                        "calculated_metric:123": 16330
+                                    },
+                                    "metrics": {
+                                        "clicks": 88,
+                                        "spend": 1268.07
+                                    },
+                                    "time": {
+                                        "end": "2019-06-30T23:59:59Z",
+                                        "start": "2019-06-01T00:00:00Z"
+                                    }
+                                }
+                            ],
+                            "_embedded": {},
+                            "_forms": {},
+                            "_links": {}
+                        }
+                    ]
+                },
+                "_forms": {
+                    "next_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "fields": {
+                            "date_range": {
+                                "type": "string",
+                                "value": "last 2 months"
+                            },
+                            "fields": {
+                                "type": "array",
+                                "value": [
+                                    "spend",
+                                    "clicks",
+                                    "calculated_metric:123"
+                                ]
+                            },
+                            "filters": {
+                                "type": "array",
+                                "value": [
+                                    {
+                                    "op": "gt",
+                                    "path": "clicks",
+                                    "value": 5
+                                    }
+                                ]
+                            },
+                            "forms": {
+                                "type": "array",
+                                "value": null
+                            },
+                            "ignore_precision": {
+                                "type": "boolean",
+                                "value": false
+                            },
+                            "links": {
+                                "type": [
+                                    "boolean",
+                                    "array"
+                                ],
+                                "value": null
+                            },
+                            "output_format": {
+                                "type": "string",
+                                "value": "row"
+                            },
+                            "sort_by": {
+                                "type": "string",
+                                "value": "spend"
+                            },
+                            "sources": {
+                                "type": "object",
+                                "value": {
+                                    "metrics": {
+                                        "targets": null,
+                                        "networks": [
+                                            "facebook",
+                                            "adwords",
+                                            "linkedin"
+                                        ],
+                                        "entity_level": "campaigns"
+                                    }
+                                }
+                            },
+                            "version": {
+                                "type": "string",
+                                "value": "2"
+                            },
+                            "page_token": {
+                                "type": "string",
+                                "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGECZAABdG0AAAAGb2Zmc2V0"
+                            }
+                        }
+                    },
+                    "prev_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "fields": {
+                            "date_range": {
+                                "type": "string",
+                                "value": "last 2 months"
+                            },
+                            "fields": {
+                                "type": "array",
+                                "value": [
+                                    "spend",
+                                    "clicks",
+                                    "calculated_metric:123"
+                                ]
+                            },
+                            "filters": {
+                                "type": "array",
+                                "value": [
+                                    {
+                                    "op": "gt",
+                                    "path": "clicks",
+                                    "value": 5
+                                    }
+                                ]
+                            },
+                            "forms": {
+                                "type": "array",
+                                "value": null
+                            },
+                            "ignore_precision": {
+                                "type": "boolean",
+                                "value": false
+                            },
+                            "links": {
+                                "type": [
+                                    "boolean",
+                                    "array"
+                                ],
+                                "value": null
+                            },
+                            "output_format": {
+                                "type": "string",
+                                "value": "row"
+                            },
+                            "sort_by": {
+                                "type": "string",
+                                "value": "spend"
+                            },
+                            "sources": {
+                                "type": "object",
+                                "value": {
+                                    "metrics": {
+                                        "targets": null,
+                                        "networks": [
+                                            "facebook",
+                                            "adwords",
+                                            "linkedin"
+                                        ],
+                                        "entity_level": "campaigns"
+                                    }
+                                }
+                            },
+                            "version": {
+                                "type": "string",
+                                "value": "2"
+                            },
+                            "page_token": {
+                                "type": "string",
+                                "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0"
+                            }
+                        }
+                    }
+                },
+                "_links": {
+                    "results": [],
+                    "next_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "form": true
+                    },
+                    "prev_page": {
+                        "href": "https://platform.adstage.io/api/organizations/1/report",
+                        "method": "POST",
+                        "form": true
+                    }
                 }
-              ]
-            },
-            "page": {
-              "calculated": {
-                "calculated_metric:123": 51591
-              },
-              "meta": {
-                "currency_code": "USD",
-                "currency_symbol": "$"
-              },
-              "metrics": {
-                "spend": 3711.92
-              }
-            },
-            "summaries": [
-              "page",
-              "filtered"
-            ],
-            "type": "summary_row"
-          },
-          "type": "rows",
-          "time": {
-            "end": "2019-06-30T23:59:59Z",
-            "interval": "month",
-            "start": "2019-05-01T00:00:00Z"
-          },
-          "_embedded": {
-            "results": [
-              {
-                "calculated": {
-                  "calculated_metric:123": 51591
-                },
-                "meta": {
-                  "currency_code": "USD",
-                  "currency_symbol": "$",
-                  "entity_id": null,
-                  "id": "production.1.adwords.1.accounts.adwords.8193448926.campaigns,production.1.accounts.facebook.694893930603203.campaigns,production.1.linkedin.1.accounts.linkedin.500678349.campaigns[network=linkedin]",
-                  "network": "linkedin"
-                },
-                "metrics": {
-                  "clicks": 266,
-                  "spend": 3711.92
-                },
-                "series": [
-                  {
-                    "calculated": {
-                      "calculated_metric:123": 35259
-                    },
-                    "metrics": {
-                      "clicks": 178,
-                      "spend": 2443.85
-                    },
-                    "time": {
-                      "end": "2019-05-31T23:59:59Z",
-                      "start": "2019-05-01T00:00:00Z"
-                    }
-                  },
-                  {
-                    "calculated": {
-                      "calculated_metric:123": 16330
-                    },
-                    "metrics": {
-                      "clicks": 88,
-                      "spend": 1268.07
-                    },
-                    "time": {
-                      "end": "2019-06-30T23:59:59Z",
-                      "start": "2019-06-01T00:00:00Z"
-                    }
-                  }
-                ],
-                "_embedded": {},
-                "_forms": {},
-                "_links": {}
-              }
-            ]
-          },
-          "_forms": {
-            "next_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "fields": {
-                "date_range": {
-                  "type": "string",
-                  "value": "last 2 months"
-                },
-                "fields": {
-                  "type": "array",
-                  "value": [
-                    "spend",
-                    "clicks",
-                    "calculated_metric:123"
-                  ]
-                },
-                "filters": {
-                  "type": "array",
-                  "value": [
-                    {
-                      "op": "gt",
-                      "path": "clicks",
-                      "value": 5
-                    }
-                  ]
-                },
-                "forms": {
-                  "type": "array",
-                  "value": null
-                },
-                "ignore_precision": {
-                  "type": "boolean",
-                  "value": false
-                },
-                "links": {
-                  "type": [
-                    "boolean",
-                    "array"
-                  ],
-                  "value": null
-                },
-                "output_format": {
-                  "type": "string",
-                  "value": "row"
-                },
-                "sort_by": {
-                  "type": "string",
-                  "value": "spend"
-                },
-                "sources": {
-                  "type": "object",
-                  "value": {
-                    "metrics": {
-                      "targets": null,
-                      "networks": [
-                        "facebook",
-                        "adwords",
-                        "linkedin"
-                      ],
-                      "entity_level": "campaigns"
-                    }
-                  }
-                },
-                "version": {
-                  "type": "string",
-                  "value": "2"
-                },
-                "page_token": {
-                  "type": "string",
-                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGECZAABdG0AAAAGb2Zmc2V0"
-                }
-              }
-            },
-            "prev_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "fields": {
-                "date_range": {
-                  "type": "string",
-                  "value": "last 2 months"
-                },
-                "fields": {
-                  "type": "array",
-                  "value": [
-                    "spend",
-                    "clicks",
-                    "calculated_metric:123"
-                  ]
-                },
-                "filters": {
-                  "type": "array",
-                  "value": [
-                    {
-                      "op": "gt",
-                      "path": "clicks",
-                      "value": 5
-                    }
-                  ]
-                },
-                "forms": {
-                  "type": "array",
-                  "value": null
-                },
-                "ignore_precision": {
-                  "type": "boolean",
-                  "value": false
-                },
-                "links": {
-                  "type": [
-                    "boolean",
-                    "array"
-                  ],
-                  "value": null
-                },
-                "output_format": {
-                  "type": "string",
-                  "value": "row"
-                },
-                "sort_by": {
-                  "type": "string",
-                  "value": "spend"
-                },
-                "sources": {
-                  "type": "object",
-                  "value": {
-                    "metrics": {
-                      "targets": null,
-                      "networks": [
-                        "facebook",
-                        "adwords",
-                        "linkedin"
-                      ],
-                      "entity_level": "campaigns"
-                    }
-                  }
-                },
-                "version": {
-                  "type": "string",
-                  "value": "2"
-                },
-                "page_token": {
-                  "type": "string",
-                  "value": "g3QAAAADZAAFbGltaXRhAWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0"
-                }
-              }
             }
-          },
-          "_links": {
-            "results": [],
-            "next_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "form": true
-            },
-            "prev_page": {
-              "href": "https://platform.adstage.io/api/organizations/1/report",
-              "method": "POST",
-              "form": true
-            }
-          }
-        }

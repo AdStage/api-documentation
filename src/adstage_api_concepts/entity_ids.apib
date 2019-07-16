@@ -8,18 +8,18 @@ To generate the entity id by hand, use the following string template:
 
 `"/network/{network}/{entity_level}/{remote_id}"`, where:
 
-+ the `{network}` variable must be be one of:
-  + `adwords`
-  + `bing_ads`
-  + `twitter`
-  + `linkedin`
-  + `facebook`
-  + `adstage` (with entities managed on the AdStage platform: `account_group`, `user`, `organization` and `folder`)
-+ the `{entity_level}` variable must be one of:
-  + `account`
-  + `campaign`
-  + `ad_group`
-  + `ad`
-  + `keyword` (including all Microsoft Ads keywords)
-  + `criterion` (including all Google Ads keywords)
-+ the `{remote_id}` variable must be the entity's ID on the advertising network; these can be obtained from our reporting endpoint with the `remote_account_id`, `remote_campaign_id`, `remote_ad_group_id`, `remote_ad_id`, or `remote_keyword_id` (which includes `criterion` ids) meta fields
++ The `{network}` variable must be be one of:
+    + `adwords`
+    + `bing_ads`
+    + `twitter`
+    + `linkedin`
+    + `facebook`
+    + `adstage` (with entities managed on the AdStage platform: `account_group`, `user`, `organization` and `folder`)
++ The `{entity_level}` variable must be one of:
+    + `account`
+    + `campaign`
+    + `ad_group`
+    + `ad`
+    + `keyword` (including all Microsoft Ads keywords)
+    + `criterion` (including all Google Ads keywords)
++ The `{remote_id}` variable must be the entity's ID on the advertising network; these can be obtained from our reporting endpoint with the `remote_account_id`, `remote_campaign_id`, `remote_ad_group_id`, `remote_ad_id`, or `remote_keyword_id` (which includes `criterion` ids) meta fields

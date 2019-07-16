@@ -2,22 +2,22 @@
 
 + Parameters
 
-    + user_id: 40 (number)
+    + `user_id`: 40 (number)
         The id for the user that owns the accounts to be listed.
 
 + Request
 
     + Headers
 
-        Accept: application/json
-        Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+            Authorization: Bearer de4dxxxxb33f
 
 + Response 200
 
-  A list of accounts.
+    A list of accounts.
 
-  + Attributes
-        + _links (object)
+    + Attributes
+        + `_links` (object)
             + next (object)
                 + href (string) - A URL to get the next page of accounts
 
@@ -28,7 +28,7 @@
 
                     `"https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=10&offset=0"`
 
-        + _embedded (object)
+        + `_embedded` (object)
             + item (array)
                 + (object)
                     + remote_id: "12345" (string) - the identifier assigned to this account by the ad network
@@ -36,63 +36,63 @@
                     + name: "AdWords Account #1" (string) - the human readable name for the account
                     + is_visible: true (boolean) - whether or not this account is visible
 
-  + Body
+    + Body
 
-        {
-            "_embedded": {
-                "item": [
-                    {
-                        "remote_id": "12345",
-                        "network": "adwords",
-                        "network_name": "AdWords",
-                        "name": "AdWords Account #1",
-                        "is_visible": true,
-                        "currency_code": "USD",
-                        "status": "ACTIVE",
-                        "_embedded": {},
-                        "_forms": {
-                            "adstage:unlink": {
-                                "href": "https://platform.adstage.io/api/organizations/40/unlink_network_account",
-                                "method": "PUT",
-                                "fields": {
-                                    "network": {
-                                        "type": "hidden",
-                                        "value": "adwords"
-                                    },
-                                    "network_account_id": {
-                                        "type": "hidden",
-                                        "value": "12345"
+            {
+                "_embedded": {
+                    "item": [
+                        {
+                            "remote_id": "12345",
+                            "network": "adwords",
+                            "network_name": "AdWords",
+                            "name": "AdWords Account #1",
+                            "is_visible": true,
+                            "currency_code": "USD",
+                            "status": "ACTIVE",
+                            "_embedded": {},
+                            "_forms": {
+                                "adstage:unlink": {
+                                    "href": "https://platform.adstage.io/api/organizations/40/unlink_network_account",
+                                    "method": "PUT",
+                                    "fields": {
+                                        "network": {
+                                            "type": "hidden",
+                                            "value": "adwords"
+                                        },
+                                        "network_account_id": {
+                                            "type": "hidden",
+                                            "value": "12345"
+                                        }
                                     }
                                 }
-                            }
-                        },
-                        "_links": {
-                            "self": {
-                                "href": "https://platform.adstage.io/api/network/adwords/accounts/12345",
-                                "title": "AdWords Account #1"
+                            },
+                            "_links": {
+                                "self": {
+                                    "href": "https://platform.adstage.io/api/network/adwords/accounts/12345",
+                                    "title": "AdWords Account #1"
+                                }
                             }
                         }
+                    ]
+                },
+                "_links": {
+                    "next": {
+                        "href": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc"
                     }
-                ]
-            },
-            "_links": {
-                "next": {
-                    "href": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc"
-                }
-            },
-            "counts": {
-                "overall": 5,
-                "page": 1
-            },
-            "current_page": 1,
-            "id": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc",
-            "list_of": "item",
-            "page_options": {
-                "limit": 1,
-                "offset": 0
-            },
-            "page_size": 1,
-            "page_total": 1,
-            "total": 5,
-            "total_pages": 5
-        }
+                },
+                "counts": {
+                    "overall": 5,
+                    "page": 1
+                },
+                "current_page": 1,
+                "id": "https://platform.adstage.io/api/users/40/list_network_accounts/all?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=name&order=asc",
+                "list_of": "item",
+                "page_options": {
+                    "limit": 1,
+                    "offset": 0
+                },
+                "page_size": 1,
+                "page_total": 1,
+                "total": 5,
+                "total_pages": 5
+            }

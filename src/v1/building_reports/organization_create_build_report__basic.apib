@@ -31,7 +31,7 @@ This type of report will return one row per requested entity with metrics aggreg
         + order: "desc" (string) - sort either ascending (`"asc"`) or descending (`"desc"`)
         + `group_by`: "network" (string) - if supplied, metrics will be grouped by this meta key
 
-        + aggregate_by: "day" (string) - if supplied, will get a Time Series Report instead.
+        + `aggregate_by`: "day" (string) - if supplied, will get a Time Series Report instead.
         + networks: "adwords" (string) - list of networks to include in the result, can be array, single value, or comma-separated list
         + statuses: "all_visible" (string)
             filter based on entity status codes
@@ -97,7 +97,7 @@ This type of report will return one row per requested entity with metrics aggreg
 
     + Attributes
 
-        + _embedded
+        + `_embedded`
             - `adstage:metrics` (array) - list of report rows (if `"aggregate_by"` is set, will return `"adstage:time_series"` instead)
                 - (object)
                     - data (object) - key-value pairs of metric identifiers to floats
@@ -110,58 +110,58 @@ This type of report will return one row per requested entity with metrics aggreg
     + Body
 
             {
-              "_embedded": {
-                "adstage:metrics": [
-                  {
-                    "data": {
-                      "clicks": 1014,
-                      "spend": 339.460006713867
-                    },
-                    "timeframe": {
-                      "start": "2016-12-22T00:00:00Z",
-                      "end": "2017-01-20T23:59:59Z"
-                    },
-                    "meta": {
-                      "campaign_name": "Display - US - Gmail Ads v2",
-                      "entity_id": "/network/adwords/campaign/735025362",
-                      "remote_campaign_id": "735025362",
-                      "network": "adwords",
-                      "currency_code": "USD",
-                      "currency_symbol": "$",
-                      "row_name": "Display - US - Gmail Ads v2"
+                "_embedded": {
+                    "adstage:metrics": [
+                        {
+                            "data": {
+                                "clicks": 1014,
+                                "spend": 339.460006713867
+                            },
+                            "timeframe": {
+                                "start": "2016-12-22T00:00:00Z",
+                                "end": "2017-01-20T23:59:59Z"
+                            },
+                            "meta": {
+                                "campaign_name": "Display - US - Gmail Ads v2",
+                                "entity_id": "/network/adwords/campaign/735025362",
+                                "remote_campaign_id": "735025362",
+                                "network": "adwords",
+                                "currency_code": "USD",
+                                "currency_symbol": "$",
+                                "row_name": "Display - US - Gmail Ads v2"
+                            }
+                        }
+                    ],
+                    "adstage:metrics/totals": {
+                        "id": "totals",
+                        "data": {
+                            "clicks": 8783,
+                            "spend": 23780.8718175292
+                        },
+                        "timeframe": {
+                            "start": "2016-12-01T00:00:00Z",
+                            "end": "2017-01-31T23:59:59Z"
+                        },
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$",
+                            "series_name": "All"
+                        }
                     }
-                  }
-                ],
-                "adstage:metrics/totals": {
-                  "id": "totals",
-                  "data": {
-                    "clicks": 8783,
-                    "spend": 23780.8718175292
-                  },
-                  "timeframe": {
-                    "start": "2016-12-01T00:00:00Z",
-                    "end": "2017-01-31T23:59:59Z"
-                  },
-                  "meta": {
-                    "currency_code": "USD",
-                    "currency_symbol": "$",
-                    "series_name": "All"
-                  }
-                }
-              },
-              "counts": {
-                "overall": 73262,
-                "filtered_buckets": 11820,
-                "page": 10,
-                "filtered": 11820,
-                "overall_buckets": 73262
-              },
-              "_links": {
-                "next": {
-                  "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=10&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
                 },
-                "last": {
-                  "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=11810&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                "counts": {
+                    "overall": 73262,
+                    "filtered_buckets": 11820,
+                    "page": 10,
+                    "filtered": 11820,
+                    "overall_buckets": 73262
+                },
+                "_links": {
+                    "next": {
+                        "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=10&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                    },
+                    "last": {
+                        "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=11810&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                    }
                 }
-              }
             }
