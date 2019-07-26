@@ -22,4 +22,9 @@ To generate the entity id by hand, use the following string template:
     + `ad`
     + `keyword` (including all Microsoft Ads keywords)
     + `criterion` (including all Google Ads keywords)
-+ The `{remote_id}` variable must be the entity's ID on the advertising network; these can be obtained from our reporting endpoint with the `remote_account_id`, `remote_campaign_id`, `remote_ad_group_id`, `remote_ad_id`, or `remote_keyword_id` (which includes `criterion` ids) meta fields
++ The `{remote_id}` variable must be the entity's ID on the advertising network. This can be obtained directly from the advertising network - often the entity's URL contains the `remote_id` in the relevant network's UI. Alternatively, the AdStage reporting endpoints can query `remote_id`s when a report includes the following meta fields:
+    + `remote_account_id`
+    + `remote_campaign_id`
+    + `remote_ad_group_id`
+    + `remote_ad_id`
+    + `remote_keyword_id` (includes results for `criterion` ids)
