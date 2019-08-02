@@ -20,7 +20,7 @@ The next sections group version-specific documentation for the API endpoints and
 ## Date Ranges
 
 The AdStage endpoints use date range strings to represent time periods and implement a unified date range format throughout the platform.
-Date range strings can be written in two possible styles: either an absolute range such as `"2016-12-25..2016-12-31"`, or a relative range, such as `"last_30_days"` or `"this_month"`.
+Date range strings can be written in two possible styles: either an absolute range such as `"2016-12-25..2016-12-31"`, or a relative range, such as `"last 30 days"` or `"this month"`.
 
 Absolute date ranges must be formatted as `yyyy-mm-dd..yyyy-mm-dd` and refer to data for all calendar days between the two dates provided (inclusive).
 
@@ -110,7 +110,6 @@ Note that any particular resource returned in the `_embedded` object may have ad
 {
     // The main response contains data about the user resource,
     // which was the item requested from the endpoint
-    "admin": false,
     "avatar_url": "https://www.gravatar.com/avatar/123456",
     "created_at": 1522185933,
     "customer_status": "trialing",
@@ -165,7 +164,6 @@ Most supported HAL links for API customers are pagination related._
 {
     // The main response contains data about the user resource,
     // which was the item requested from the endpoint
-    "admin": false,
     "avatar_url": "https://www.gravatar.com/avatar/123456",
     "created_at": 1522185933,
     "customer_status": "trialing",
@@ -255,14 +253,14 @@ Most supported HAL forms for API customers are pagination related._
                 // For example, this item asks users to include `"date_range": "yesterday"`
                 // in the JSON body for the request
                 "date_range": {
-                "type": "string",
-                "value": "yesterday"
+                    "type": "string",
+                    "value": "yesterday"
                 },
                 "fields": {
-                "type": "array",
-                "value": [
-                    "spend"
-                ]
+                    "type": "array",
+                    "value": [
+                        "spend"
+                    ]
                 },
                 ...,
                 "page_token": {
@@ -969,7 +967,7 @@ Note that `bid_float` and `bid.value` represent the same data as a float and str
 | ---------------------- | ------------------------------ |
 | Bid                    | `bid_float`                    |
 | Pretty Bid             | `bid.pretty_bid`               |
-| Bid Title"             | `bid.title`                    |
+| Bid Title              | `bid.title`                    |
 | Bid Subtitle           | `bid.subtitle`                 |
 | Bid Type               | `bid.type`                     |
 | Bid Value              | `bid.value`                    |
@@ -1306,7 +1304,7 @@ This type of report will return one row per requested entity with metrics aggreg
             which entity level of report you want to fetch (`"accounts"`, `"campaigns"`, 
             `"ad_groups"`, `"ads"`, `"keywords"`)
 
-        + `date_range`: "last_30_days" (string, required)
+        + `date_range`: "last 30 days" (string, required)
 
             An AdStage date range string.
             See the [Date Ranges](date-ranges) section for details about allowed date range formats.
@@ -1374,7 +1372,7 @@ This type of report will return one row per requested entity with metrics aggreg
 
             {
                 "entity_level": "campaigns",
-                "date_range": "last_30_days",
+                "date_range": "last 30 days",
                 "fields": ["clicks", "spend", "campaign_name", "remote_campaign_id", "network"]
             }
 
@@ -1476,7 +1474,7 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
             `"ad_groups"`, `"ads"`, `"keywords"`)
 
         + `aggregate_by`: "day", "week", "month" (enum) - the level of detail to include in the time series
-        + `date_range`: "last_30_days" (string, required)
+        + `date_range`: "last 30 days" (string, required)
 
             An AdStage date range string.
             See the [Date Ranges](date-ranges) section for details about allowed date range formats.
@@ -1542,7 +1540,7 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
             {
                 "entity_level": "campaigns",
                 "aggregate_by": "day",
-                "date_range": "last_30_days",
+                "date_range": "last 30 days",
                 "fields": ["clicks", "spend", "campaign_name", "remote_campaign_id", "network"]
             }
 
@@ -1688,7 +1686,7 @@ This requires a few steps to get data flowing:
 
 ### Step 1. Create a custom metric descriptor [POST /organizations/{org_id}/metric_descriptors]
 
-Creates a custom metric descriptor to allow data upload and returns the url which will accept metric data for the new descriptor.
+Creates a custom metric descriptor to allow data upload and returns the URL which will accept metric data for the new descriptor.
 This step only needs to be performed once per conversion column - the metric descriptor can be reused across multiple data uploads.
 To get a list of existing conversion columns, see the [Discovering Metrics](discovering-metrics) section.
 
@@ -1727,7 +1725,7 @@ To get a list of existing conversion columns, see the [Discovering Metrics](disc
         + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the url for step 3.
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the URL for step 3.
 
     + Body
 
@@ -1777,7 +1775,7 @@ Alternatively, the V2 endpoint implements an automatic roll up feature.
                     + `/network/adwords/campaign/530303`: 1 (number) - (this id is just an example; use valid ids)
                     + `/network/adwords/acount/530303`: 1 (number) - (this id is just an example; use valid ids)
 
-        + `date_range`: `"last_30_days"` (string, required)
+        + `date_range`: `"last 30 days"` (string, required)
 
             An AdStage date range string.
             See the [Date Ranges](date-ranges) section for details about allowed date range formats.
@@ -1828,6 +1826,7 @@ Additionally, AdStage will automatically derive several metrics that are listed 
 
     + Headers
 
+            Authorization: Bearer de4dxxxxb33f
             Accept: application/json
 
 + Response 200
@@ -1945,10 +1944,10 @@ There are two steps required to set up a new Custom Conversion in the API:
 ### Step 1. Create a custom metric descriptor [POST /organizations/{org_id}/metric_descriptors]
 
 **Note that this endpoint is identical to the V1 endpoint.
-Its documentation has been copied here for convenience in explaing the custom conversion upload flow.
+Its documentation has been copied here for convenience in explaining the custom conversion upload flow.
 AdStage may choose to release a V2 namespaced endpoint with a different feature set and shape in the future.**
 
-Sets up a metric descriptor to allow data upload. Returns the url to allow upload.
+Sets up a metric descriptor to allow data upload. Returns the URL to allow upload.
 You only need to do this step once per conversion column you want to created.
 To get a list of conversion columns, see the Build Reports section - "Organization Metric Descriptors".
 
@@ -2046,7 +2045,7 @@ Similarly, for users planning on updating conversion data over multiple requests
                     + `/network/adwords/campaign/530304`: 0.25 (number) - (this id is just an example, use valid ids)
                     + `/network/adwords/campaign/530305`: 0.5 (number) - (this id is just an example, use valid ids)
 
-        + `date_range`: "last_30_days" (string, required) - An AdStage date range string (this_month, last_30_days, 2016-12-12..2016-12-15).
+        + `date_range`: "last 30 days" (string, required) - An AdStage date range string ("this month", "last 30 days", "2016-12-12..2016-12-15").
 
         + `aggregate_conversions`: true (boolean, optional)
 

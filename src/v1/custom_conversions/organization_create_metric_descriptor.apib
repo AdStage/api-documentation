@@ -1,6 +1,6 @@
 ### Step 1. Create a custom metric descriptor [POST /organizations/{org_id}/metric_descriptors]
 
-Creates a custom metric descriptor to allow data upload and returns the url which will accept metric data for the new descriptor.
+Creates a custom metric descriptor to allow data upload and returns the URL which will accept metric data for the new descriptor.
 This step only needs to be performed once per conversion column - the metric descriptor can be reused across multiple data uploads.
 To get a list of existing conversion columns, see the [Discovering Metrics](discovering-metrics) section.
 
@@ -39,7 +39,7 @@ To get a list of existing conversion columns, see the [Discovering Metrics](disc
         + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the url for step 3.
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the URL for step 3.
 
     + Body
 
