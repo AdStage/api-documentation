@@ -1,0 +1,128 @@
+### Folders [GET /users/{user_id}/list_folders]
+
++ Parameters
+
+    + user_id: 40 (number)
+        The id for the user that owns the folders to be listed.
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer de4dxxxxb33f
+
++ Response 200
+
+    A list of folders.
+
+    + Attributes
+        + _links (object)
+            + next (object)
+                + href (string) - A URL to get next page of folders
+
+                    `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=20&networks=all"`
+
+            + prev (object)
+                + href (string) - A URL to get previous page of folders
+
+                    `"https://platform.adstage.io/api/users/40/list_folders?limit=10&offset=0&networks=all"`
+
+        + _embedded (object)
+            + item (array) - list of folders
+                + (object)
+                    + fetch_id: 40 (string) - the identifier assigned to this folder
+                    + id: "/api/folders/40" (string) - a uri identifier for the folder
+                    + name: "Folder #1" (string) - name of the folder
+                    + network_counts (object) - count of campaigns in folder by network
+                    + _forms (object) - list of actions available on the folder
+                    + _links (object) - list of actions and related entities to the folder
+                        + `adstage:network_campaign` - HAL links to adstage campaigns
+
+    + Body
+
+            {
+                "_embedded": {
+                    "item": [
+                        {
+                            "daily_budget_value": 0.0,
+                            "fetch_id": "168",
+                            "id": "/api/folders/168",
+                            "lifetime_budget_value": 0.0,
+                            "monthly_budget_value": 0.0,
+                            "name": "040414 Updated",
+                            "network_counts": {
+                                "bing_ads": 1,
+                                "totals": 1
+                            },
+                            "_forms": {
+                                "adstage:link": {
+                                    "fields": {
+                                        "folder_id": {
+                                            "title": "Choose a folder",
+                                            "type": "adstage:folder",
+                                            "validators": [
+                                                "required"
+                                            ],
+                                            "value": "/api/folders/168"
+                                        },
+                                        "network_campaign_ids": {
+                                            "title": "Choose one or more campaigns",
+                                            "type": "adstage:folder",
+                                            "validators": [
+                                                "required"
+                                            ],
+                                            "value": []
+                                        }
+                                    },
+                                    "href": "https://platform.adstage.io/api/folders/168/add",
+                                    "method": "POST",
+                                    "title": "Link Campaigns to Folder"
+                                }
+                            },
+                            "_links": {
+                                "adstage:network_campaign": [
+                                    {
+                                        "data-fetch_id": 6745,
+                                        "data-id": "/api/network/bing_ads/campaigns/6745",
+                                        "data-navgroup": "search",
+                                        "data-network": "bing_ads",
+                                        "data-network_name": "Bing",
+                                        "href": "https://platform.adstage.io/api/network/bing_ads/accounts/506/campaigns/6745",
+                                        "name": "/api/network/bing_ads/campaigns/6745",
+                                        "network_account_id": "/api/network/bing_ads/accounts/506",
+                                        "network_account_name": "AdStage, Inc.",
+                                        "title": "AdStage: 040414"
+                                    }
+                                ],
+                                "self": {
+                                    "data-fetch_id": "168",
+                                    "href": "https://platform.adstage.io/api/folders/168",
+                                    "name": "168",
+                                    "title": "040414 Updated"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "_links": {
+                    "next": {
+                        "href": "https://platform.adstage.io/api/users/40/list_folders?limit=1&offset=1&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc"
+                    },
+                    "self": {
+                        "href": "https://platform.adstage.io/api/users/40/list_folders?limit=1&access_token=57a082a0de5d9eba2d6580a3b1a7ba1876c23d0a46177f327a4289a3b272b670"
+                    }
+                },
+                "counts": {},
+                "current_page": 1,
+                "id": "https://platform.adstage.io/api/users/40/list_folders?limit=1&offset=0&networks=adwords,bing_ads,facebook,linkedin,twitter&sort_by=clicks&order=desc",
+                "list_of": "item",
+                "page_options": {
+                    "limit": 1,
+                    "offset": 0
+                },
+                "page_size": 1,
+                "page_total": 1,
+                "total": 2309,
+                "total_pages": 2309
+            }

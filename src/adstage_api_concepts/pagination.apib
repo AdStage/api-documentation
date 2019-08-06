@@ -1,0 +1,46 @@
+## Pagination
+
+Most AdStage API endpoints that return lists or reports have support for pagination via HAL JSON links or forms.
+You can specify the number of items or rows to return with a `limit` parameter, and you can page through results by adding an `offset` parameter to subsequent requests.
+For your convenience, the responses from these endpoints also include links to the next and previous pages; some endpoints may also provide links to first and last pages.
+
+**Limit/offset pagination example:**
+```
+{
+    // The data for this page
+    "_embedded": { ... },
+
+    // Links to related pages
+    "_links": {
+        "next": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=3000&..."
+        },
+        "prev": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?limit=1000&offset=1000&..."
+        },
+    }
+}
+```
+
+Some newer endpoints may return a page token in the response link or form.
+When a providing the page token as a parameter in a subsequent HTTP request, AdStage will locate the proper page of data with the page token without the need to manually manage limit and offsets.
+AdStage generated tokens will always encode the proper limit and offset for the designated page, and may attempt to encode a reference to a cached page for faster performance.
+If a request provides both a limit and/or offset as well as a page token, AdStage will attempt to locate the page based on the page token.
+
+**Token pagination example:**
+```
+{
+    // The data for this page_page
+    "_embedded": { ... },
+
+    // Links to related pages
+    "_links": {
+        "next_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0&..."
+        },
+        "prev_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/build_report?page_token=g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0&..."
+        }
+    }
+}
+```

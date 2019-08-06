@@ -1,0 +1,18 @@
+## Building Reports [/v2/organizations/{org_id}/report]
+
+Use this endpoint to pull reports at any level of reporting available within AdStage.
+The V2 version of the reporting endpoint implements a full rewrite of the V1 version, providing new capabilities such as access to calculated metrics, and a much lighter weight, substantially streamlined response shape.
+
+While this endpoint is preferred for most reporting use cases, it does not currently support reporting from external API providers, such as Facebook Direct in the Build Report V1 implementation.
+Though support for data from external API providers may be introduced in the future or in a subsequent version, it is important to fully evaluate your intended development use case before selecting the V2 endpoint, the V1 endpoint, or a combination of both.
+
+After receiving a request through the V2 reporting endpoint, AdStage will dynamically generate responses of different shapes based on the user's request.
+The two main report shapes are `row` reports, which return single, metric values for each entity aggregated over the specified date range, and `series` reports, which return a time series of data points over the specified date range.
+For example, AdStage uses `row` reports to return data used for displaying a pie chart of last month's spend on several campaigns, but uses a `series` report to return data used to display a line chart comparing the same campaigns' day-by-day spend.
+
+**Because this endpoint returns results with a dynamic shape, the endpoint is split into two documentation sections.
+The sections share a request schema, but document different schemas for the response shape.**
+
+:[Rows Report](organization_create_build_report__rows.apib)
+
+:[Time Series Report](organization_create_build_report__timeseries.apib)

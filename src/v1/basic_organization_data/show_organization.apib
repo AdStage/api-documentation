@@ -1,0 +1,41 @@
+### Organization [GET /organizations/{org_id}]
+
++ Parameters
+
+    + org_id: 1 (number)
+        The fetch_id for the organization to be reported.
+
++ Request
+    + Headers
+
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
++ Response 200 (application/json)
+
+    + Attributes
+
+        + id: /api/organizations/1 (string)
+            The path to the organization in the AdStage API.
+
+        + fetch_id: 40 (number)
+            The fetch id for the organization being reported.
+
+    + Body
+
+            {
+                "active_accounts_count": 45,
+                "is_active_customer": true,
+                "additional_accounts_purchased": 23,
+                "advertiser_type": "Agency / Consultant",
+                "advertising_objective": "Unknown",
+                "billable_accounts_count": 43,
+                "billing_contact_email": "clark@adstage.io",
+                "is_billing_error": false,
+                "blurb": "Connect ad accounts to the AdStage analytics dashboard and compare performance.",
+                "company_name": "AdStage",
+                "company_url": "http://www.adstage.io",
+                "cumulative_monthly_spend": 12654,
+                "customer_status": "paying",
+                "fetch_id": 40
+            }

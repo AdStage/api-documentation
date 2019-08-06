@@ -1,0 +1,51 @@
+## Embedded Resources
+
+When issuing a request to a HAL endpoint, the requested resource will typically appear inside the top-level JSON response body.
+However, the response body may also contain `_embedded` objects containing information about resources related to the parent resource.
+For example, when requesting information about a user in example below, the main JSON body returns data about that user, and the `_embedded` key returns information about the user's organization.
+
+Note that any particular resource returned in the `_embedded` object may have additional HAL resources, links, and forms of its own.
+
+**Modified HAL response from a request to a user data endpoint**
+
+```
+{
+    // The main response contains data about the user resource,
+    // which was the item requested from the endpoint
+    "avatar_url": "https://www.gravatar.com/avatar/123456",
+    "created_at": 1522185933,
+    "customer_status": "trialing",
+    "default_organization_role": "OWNER",
+    "email": "polarbear@adstage.io",
+    "fetch_id": 1,
+    "id": "/api/users/1",
+    ...,
+
+    // The embedded section of the response returns data about the user's organization
+    // because API consumers frequently wish to use data from both resources at once
+    "_embedded": {
+        "adstage:organization": {
+            "active_accounts_count": 9,
+            "is_active_customer": true,
+            "id": "/api/organizations/1",
+            "user_count": 1,
+            ...,
+
+            // The embedded resource has HAL resources of its own,
+            // such as links to additional resources related to the *organization*.
+            "_links": {
+                "profile": [
+                    {
+                        "name": "organization",
+                        "href": "http://platform.adstage.io/api/docs/profile/organization"
+                    }
+                ],
+                ...
+            },
+            ...
+        },
+        ...
+    },
+    ...
+}
+```

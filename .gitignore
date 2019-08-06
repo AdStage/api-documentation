@@ -1,0 +1,9 @@
+# NPM / Yarn stuff
+node_modules/
+yarn-error.log
+
+# Allow users to make a previewable .md file that won't be confused with the .apib
+apiary.md
+
+# Editor prefs
+.vscode/

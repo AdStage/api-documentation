@@ -1,0 +1,73 @@
+## Forms
+
+Though forms are not officially part of the HAL standard, AdStage uses a common forms implementation in some responses.
+In these responses, HAL links may also provide a related form that describes options for submitting richer data to an endpoint.
+In particular, forms allow HAL to describe how to complete a non-GET request requiring complex or lengthy parameters in a JSON body.
+In a few cases, forms describe a menu of allowable options for such a request and then expect the client application to determine which values to actually send from those options.
+However, AdStage typically uses forms merely as more descriptive links by designating suggested values for all of the request's JSON parameters.
+
+_Note that some forms in the API responses may contain URLs for endpoints not documented here.
+These are not maintained as stable for external users and are not supported.
+Check whether a form's endpoint is documented here before using it in your application.
+Most supported HAL forms for API customers are pagination related._
+
+**Modified HAL response from a reporting request**
+
+```
+{
+    // The main report resource
+    "summary": { ... },
+    "type": "rows",
+    "time": {
+        "end": "2019-06-26T23:59:59Z",
+        "start": "2019-06-26T00:00:00Z"
+    },
+    ...,
+
+    // A link gives "fallback" information about the next page resource,
+    // but the form should be used instead since the link shows "form": true
+    "_links": {
+        "results": [],
+        "next_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/report",
+            "method": "POST",
+            "form": true
+        }
+    }
+
+    // The form includes information needed to make a request to the URL
+    // using a rich JSON body instead of just URL parameters
+    "_forms": {
+        "next_page": {
+            "href": "https://platform.adstage.io/api/organizations/1/report",
+
+            // Note that the the HTTP method for a form always uses a JSON body
+            "method": "POST",
+
+            // Each field shows a JSON key, a JSON Schema V4 type, and a suggested value
+            "fields": {
+
+                // For example, this item asks users to include `"date_range": "yesterday"`
+                // in the JSON body for the request
+                "date_range": {
+                    "type": "string",
+                    "value": "yesterday"
+                },
+                "fields": {
+                    "type": "array",
+                    "value": [
+                        "spend"
+                    ]
+                },
+                ...,
+                "page_token": {
+                    "type": "string",
+                    "value": "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEyZAABdG0AAAAGb2Zmc2V0"
+                }
+            }
+        }
+        ...
+    }
+    ...
+}
+```

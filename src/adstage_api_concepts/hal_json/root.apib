@@ -1,0 +1,22 @@
+## HAL JSON Resources
+
+The AdStage API models the data it returns as discrete resources, each of which can have rich relationships to other resources.
+Relationships among API resources is modeled in JSON responses with the [Hypertext Application Language (HAL) standard](https://en.wikipedia.org/wiki/Hypertext_Application_Language).
+For example, an endpoint returning comprehensive data about a user may also return links to other related resources, such as the user's organization, in the JSON response.
+Though a full overview of HAL is beyond the scope of this documentation, this section explains the basic principles needed to successfully interact with the rich data in most AdStage HAL responses.
+HAL attempts to make JSON navigable by organizing JSON content and providing links to related content similar to how HTML organizes web content.
+Just as a web page allows human users to view content and follow links to related pages, HAL allows automated systems to access JSON content and discover links to related JSON endpoints.
+
+AdStage's HAL JSON responses are divided into four distinct sections: the main response (inside the top level JSON object), `_embedded`, `_links`, and `_forms`.
+
+The main response contains information about the requested resource.
+The `_embedded` object contains resources related to the requested resource.
+The `_links` object contains URLs that define API requests for related resources or URLs for next and previous pages of the current resource.
+Note that both the main request and also any embedded resources may include links specific to that resource.
+The `_forms` object can optionally be provided with a link to describe various options that can be used to change or enhance the request, often with recommended submission values.
+
+:[Embedded Resources](embedded_resources.apib)
+
+:[Links](links.apib)
+
+:[Forms](forms.apib)

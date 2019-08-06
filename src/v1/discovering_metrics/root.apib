@@ -1,0 +1,18 @@
+## Discovering Metrics [/metric_descriptors]
+
+Developers will often need to discover various data fields to request and interpret their desired advertising data.
+The following endpoints and documentation comprise comprehensive list of permitted options for advertising data fields.
+
+Broadly, AdStage separates these fields into two categories: metrics and meta fields.
+A field is stored as a metric if an advertising network allows AdStage to request the data as a daily timeseries (for example, `"clicks"`).
+Metric fields are discoverable through the Metric Descriptor resource, which provides information about how to interpret and present the field (for example, by maintaining a list of networks supporting that metric).
+In contrast, a field is stored as metadata if an advertising network only allows AdStage to request a single value for the data (for example, `"title"`).
+Meta fields do not have associated rich descriptor resources at this time.
+
+**Note: In addition to checking metrics via the API, developers can refer to [this document](https://docs.google.com/spreadsheets/d/1jdlZuRMTkCjq2jf1MvH_I60-o1-mJ6SW8WPmeQ60jh8/edit?usp=sharing) that AdStage maintains as a metrics reference.**
+
+:[Meta Fields](meta_fields.apib)
+
+:[Metric Descriptors](index_metric_descriptors.apib)
+
+:[Network Metric Descriptors](metric_descriptors_show_network.apib)

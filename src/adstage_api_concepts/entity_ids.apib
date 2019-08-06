@@ -1,0 +1,30 @@
+## Entity IDs
+
+AdStage has two styles of IDs that refer to a specific advertising entity (for example, a specific campaign or a specific keyword).
+Though other forms of IDs may be found in some response endpoints, the newest version - the `entity_id` - should be strongly preferred, as AdStage may drop maintenance of other ID types in the future.
+
+Often, it can be convenient to generate these ids manually without looking up the entity in the AdStage API.
+To generate the entity id by hand, use the following string template:
+
+`"/network/{network}/{entity_level}/{remote_id}"`, where:
+
++ The `{network}` variable must be be one of:
+    + `adwords`
+    + `bing_ads`
+    + `twitter`
+    + `linkedin`
+    + `facebook`
+    + `adstage` (with entities managed on the AdStage platform: `account_group`, `user`, `organization` and `folder`)
++ The `{entity_level}` variable must be one of:
+    + `account`
+    + `campaign`
+    + `ad_group`
+    + `ad`
+    + `keyword` (including all Microsoft Ads keywords)
+    + `criterion` (including all Google Ads keywords)
++ The `{remote_id}` variable must be the entity's ID on the advertising network. This can be obtained directly from the advertising network - often the entity's URL contains the `remote_id` in the relevant network's UI. Alternatively, the AdStage reporting endpoints can query `remote_id`s when a report includes the following meta fields:
+    + `remote_account_id`
+    + `remote_campaign_id`
+    + `remote_ad_group_id`
+    + `remote_ad_id`
+    + `remote_keyword_id` (includes results for `criterion` ids)

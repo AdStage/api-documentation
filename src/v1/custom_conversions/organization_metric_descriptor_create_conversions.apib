@@ -1,0 +1,55 @@
+### Step 2. Post metrics data for the custom metric descriptor [POST /organizations/{org_id}/metric_descriptors/{descriptor_id}/conversions]
+
+Uploads conversion data to associate it with a custom metric descriptor.
+
+This endpoint does not support automatic "roll up" of conversions to their parent entities.
+To roll up values, for example from campaigns to their accounts, include both the campaign ids and the account ids in the `"attribution"` map.
+Alternatively, the V2 endpoint implements an automatic roll up feature.
+
++ Parameters
+
+    + `org_id` (integer) - the fetch id of the user's organization
+    + `descriptor_id` (integer) - the fetch id of the metric descriptor
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+
+        + `conversions` (array, required) - a list of conversions
+            + (object)
+                + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - ISO8061 formatted string representing when the conversion occurred.
+                + `value`: 30.5 (number) - An optional conversion value, expressed in the currency type for the converting account. Used to compute Return on Ad Spend.
+                + `attribution` - A list of key/value pairs where the key is an [AdStage Entity ID](entity-ids) and the value is a multiplier of how much to weigh the conversion. Use 1 unless you want to do multi-touch attribution modeling.
+                    + `/network/adwords/campaign/530303`: 1 (number) - (this id is just an example; use valid ids)
+                    + `/network/adwords/acount/530303`: 1 (number) - (this id is just an example; use valid ids)
+
+        + `date_range`: `"last 30 days"` (string, required)
+
+            An AdStage date range string.
+            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
+
+    + Body
+
+            {
+                "conversions": [
+                    {"timestamp": "2016-11-11T06:00Z", "value": 35.0, "attribution": {"/network/adwords/campaign/143365350": 1, "/network/adwords/account/143365350": 1}},
+                    {"timestamp": "2016-11-11T07:00Z", "value": 41.25, "attribution": {"/network/adwords/campaign/143365350": 0.5, "/network/adwords/campaign/143365350": 0.5}},
+                    {"timestamp": "2016-11-11T07:30Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-11T08:00Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-11T08:40Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-12T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-13T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-14T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-15T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-16T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}},
+                    {"timestamp": "2016-11-17T06:02Z", "attribution": {"/network/adwords/campaign/143365350": 1}}
+                ],
+                "date_range": "2016-11-11..2016-11-17"
+            }
+
++ Response 201

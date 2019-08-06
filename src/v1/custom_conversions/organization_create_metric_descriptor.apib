@@ -1,0 +1,60 @@
+### Step 1. Create a custom metric descriptor [POST /organizations/{org_id}/metric_descriptors]
+
+Creates a custom metric descriptor to allow data upload and returns the URL which will accept metric data for the new descriptor.
+This step only needs to be performed once per conversion column - the metric descriptor can be reused across multiple data uploads.
+To get a list of existing conversion columns, see the [Discovering Metrics](discovering-metrics) section.
+
++ Parameters
+
+    + `org_id` (number) - The fetch id of the user's organization.
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+
+        + `name`: "Sales Leads: A+" (string, required) - full name of the conversion column
+        + `short_name`: "A+ Leads" (string, required) - a shorter version of name for table column headers
+        + `tooltip`: "Leads scored A+ in Salesforce" (string, required) - a text description of the converion for use in tooltips in AdStage products
+
+    + Body
+
+            {
+                "name": "Sales Leads: A+",
+                "short_name": "A+ Leads",
+                "tooltip": "Leads scored A+ in Salesforce"
+            }
+
++ Response 201
+
+    Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
+    You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
+
+    + Attributes
+
+        + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
+        + `_links` (object)
+            + `adstage:custom_conversion_upload` (object)
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the URL for step 3.
+
+    + Body
+
+            {
+                "id": "custom_conversions:14:conversions",
+                "category": "CUSTOM_CONVERSION",
+                "type": "METRIC",
+                "name": "Sales Leads: A+",
+                "short_name": "A+ Leads",
+                "tooltip": "Doesn't matter",
+                "default_sort_order": "DESC",
+                "format": "DEFAULT",
+                "_links": {
+                    "adstage:custom_conversion_upload": {
+                        "href": "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions"
+                    }
+                }
+            }

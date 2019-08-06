@@ -1,0 +1,167 @@
+### Basic Report [POST /organizations/{org_id}/build_report]
+
+This type of report will return one row per requested entity with metrics aggregated across the requested timeframe.
+
++ Parameters
+
+    + org_id (number)
+        The fetch id for the organization owning the entities that will be reported on.
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer de4dxxxxb33f
+            Accept: application/json
+
+    + Attributes
+
+        + `entity_level`: "accounts", "campaigns", "ad_groups", "ads", "keywords" (enum, required)
+
+            which entity level of report you want to fetch (`"accounts"`, `"campaigns"`, 
+            `"ad_groups"`, `"ads"`, `"keywords"`)
+
+        + `date_range`: "last 30 days" (string, required)
+
+            An AdStage date range string.
+            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
+
+        + limit: 10 (number) - number of rows to include
+        + `sort_by`: "clicks" (string) - metric name/meta name to sort by
+        + order: "desc" (string) - sort either ascending (`"asc"`) or descending (`"desc"`)
+        + `group_by`: "network" (string) - if supplied, metrics will be grouped by this meta key
+
+        + `aggregate_by`: "day" (string) - if supplied, will get a Time Series Report instead.
+        + networks: "adwords" (string) - list of networks to include in the result, can be array, single value, or comma-separated list
+        + statuses: "all_visible" (string)
+            filter based on entity status codes
+
+            * `all_visible` includes Active, Paused, and Completed entities (this is the default option)
+            * `all_active` includes Active entities
+            * `all_inactive` includes Paused and Completed entities
+            * `all_with_deleted` includes Active, Paused, Completed, Archived, and Deleted entities
+
+        + filters (array) - a set of filters to limit the results by (AND conditions)
+
+            + (object) - filter object
+                + path: "meta/campaign_name" (string) - metric name or meta name prefixed with `"meta/"`
+                + value: 5 - a number, string or array, depending on operator 
+                + op (enum)
+                    + "gt" - greater than
+                    + "lt" - less than
+                    + "gte" - greater than or equal
+                    + "lte" - less than or equal
+                    + "in" - exact match to one of the values provided in the filter
+                    + "iin" - case-insensitive match for one of the values provided in the filter
+                    + "match" - case-sensitive string matching
+                    + "nomatch" - case-sensitive string NOT matching
+                    + "imatch" - case-insensitive string matching
+                    + "inomatch" - case-insensitive string NOT matching
+
+
+        + fields: "clicks", "spend", "impressions" (array) - optional list of metrics or meta fields to include in the result (see instructions on listing metrics descriptors to obtain an up-to-date list from the API). If fields are not requested, a selection of the most commonly requested fields will be returned in the report.
+        + query (object) - Dynamically includes or excludes fields in the response. Set to true to include all available metadata, or pick and choose specific keys to show with an object. For example:
+            ```
+            {"_embedded
+              {"adstage:metrics/totals": {"data": true}}}
+            ```
+        + provider: "adstage" (string)
+            To pull reports from other sources, you can set this to a source name.
+            The default is "adstage", which relies on data imported into AdStage.
+            External providers are also supported:
+            "facebook" requires `"targets"` to be set to a single Facebook account,
+            "adwords" requires `"targets"` to be set to a single Google Ads account,
+            "gemini" requires `"targets"` to be set to a single Gemini account (beta access only),
+            and `"google_analytics"` requires `"targets"` to be set to a single GA Profile.
+
+        + targets: "/network/adstage/user/292", "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array)
+            Optional list of AdStage Entity IDs to pull a report for; if omitted, all data available for the organization will be used.
+            This can be a list of accounts, account groups, folders, or campaigns.
+
+        + dimensions (array)
+            Only available if you use a non-AdStage provider - a list of dimension names to break a report by.
+
+            * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
+            * `adwords` provider dimensions change by report, described here: [Google Ads Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
+            * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
+
+    + Body
+
+            {
+                "entity_level": "campaigns",
+                "date_range": "last 30 days",
+                "fields": ["clicks", "spend", "campaign_name", "remote_campaign_id", "network"]
+            }
+
++ Response 200 (application/json)
+
+    + Attributes
+
+        + `_embedded`
+            - `adstage:metrics` (array) - list of report rows (if `"aggregate_by"` is set, will return `"adstage:time_series"` instead)
+                - (object)
+                    - data (object) - key-value pairs of metric identifiers to floats
+                    - meta (object) - key-value pairs of metadata names to strings or objects
+            - `adstage:metrics/totals` (object) - totals row for the result
+                - data (object) - key-value pairs of metric identifiers to floats
+                - meta (object) - key-value pairs of metadata names to arrays of unique values in the results
+
+
+    + Body
+
+            {
+                "_embedded": {
+                    "adstage:metrics": [
+                        {
+                            "data": {
+                                "clicks": 1014,
+                                "spend": 339.460006713867
+                            },
+                            "timeframe": {
+                                "start": "2016-12-22T00:00:00Z",
+                                "end": "2017-01-20T23:59:59Z"
+                            },
+                            "meta": {
+                                "campaign_name": "Display - US - Gmail Ads v2",
+                                "entity_id": "/network/adwords/campaign/735025362",
+                                "remote_campaign_id": "735025362",
+                                "network": "adwords",
+                                "currency_code": "USD",
+                                "currency_symbol": "$",
+                                "row_name": "Display - US - Gmail Ads v2"
+                            }
+                        }
+                    ],
+                    "adstage:metrics/totals": {
+                        "id": "totals",
+                        "data": {
+                            "clicks": 8783,
+                            "spend": 23780.8718175292
+                        },
+                        "timeframe": {
+                            "start": "2016-12-01T00:00:00Z",
+                            "end": "2017-01-31T23:59:59Z"
+                        },
+                        "meta": {
+                            "currency_code": "USD",
+                            "currency_symbol": "$",
+                            "series_name": "All"
+                        }
+                    }
+                },
+                "counts": {
+                    "overall": 73262,
+                    "filtered_buckets": 11820,
+                    "page": 10,
+                    "filtered": 11820,
+                    "overall_buckets": 73262
+                },
+                "_links": {
+                    "next": {
+                        "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=10&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                    },
+                    "last": {
+                        "href": "https://platform.adstage.io/api/organizations/40/build_report?date_range=2016-12-24..2017-01-22&entity_level=campaigns&fields=clicks%2Cspend%2Ccampaign_name%2Cremote_campaign_id%2Cnetwork&limit=10&networks=adwords%2Cbing_ads%2Cfacebook%2Clinkedin%2Ctwitter&offset=11810&order=desc&provider=adstage&sort_by=clicks&statuses=active%2Cad_group_inactive%2Ccampaign_inactive%2Ccompleted%2Cempty%2Cinactive%2Cnot_empty"
+                    }
+                }
+            }
