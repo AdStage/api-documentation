@@ -60,10 +60,16 @@ To generate the entity id by hand, use the following string template:
 
 + The `{network}` variable must be be one of:
     + `adwords`
+    + `amazon`
     + `bing_ads`
-    + `twitter`
-    + `linkedin`
     + `facebook`
+    + `gemini` (not available in cross-network reporting; see Build Report V1)
+    + `google_analytics` (not available in cross-network reporting; see Build Report V1)
+    + `linkedin`
+    + `pinterest`
+    + `quora`
+    + `spotify`
+    + `twitter`
     + `adstage` (with entities managed on the AdStage platform: `account_group`, `user`, `organization` and `folder`)
 + The `{entity_level}` variable must be one of:
     + `account`
@@ -1007,7 +1013,7 @@ To request a single, flattened objective field, append a dot and the key name, s
 Gives information about the type or subtype for an entity as designated by the remote network.
 For example, a LinkedIn campaign may have the `campaign_type` of `SSU`, a LinkedIn API designated campaign type.
 Note that the `type` field is an exception and refers to an AdStage generated entity category, such as `network_ad`, rather than a remote network designated category.
-See [Entity IDs](entity-ids) for more information.
+See the Entity IDs section for more information.
 
 | UI Display Name        | API Field Name                 |
 | ---------------------- | ------------------------------ |
@@ -1052,6 +1058,9 @@ Gives information about various URLs associated with an ad.
 
 #### UTM Tracking Information
 
+**Note: UTM tracking information is only available if AdStage Join has been added to your AdStage plan and a Join task has been completed for the entity.
+Currently, Join available only as a paid Add-On.**
+
 Gives information about the UTM parameters associated with the entity.
 Note that AdStage stores these parameters formatted as JSON in `tracking_params`.
 To request a single, flattened parameter, append a dot and the key name, such as `tracking_params.utm_term`.
@@ -1089,16 +1098,22 @@ This endpoint provides information on the names and formats of cross-channel (`a
                 + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
                 + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum[string]) - format for the metric (default is `INTEGER`)
                 + type: "METRIC", "TEXT" (enum[string]) - whether the descriptor is for a metric or metadata
-                + `is_adwords`: true (string) - if the metric is valid for the adwords network
-                + `is_facebook`: true (string) - if the metric is valid for the facebook network
-                + `is_linkedin`: true (string) - if the metric is valid for the linkedin network
-                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
-                + `is_twitter`: true (string) - if the metric is valid for the twitter network
-                + `is_account`: true (string) - if the metric is valid for the account reporting level
-                + `is_campaign`: true (string) - if the metric is valid for the campaign reporting level
-                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
-                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
-                + `is_keyword`: true (string) - if the metric is valid for keyword reporting level
+                + `is_adwords`: true (boolean) - if the metric is valid for the `adwords` network
+                + `is_amazon`: true (boolean) - if the metric is valid for the `amazon` network
+                + `is_bing_ads`: true (boolean) - if the metric is valid for the `bing_ads` network
+                + `is_facebook`: true (boolean) - if the metric is valid for the `facebook` network
+                + `is_gemini`: false (boolean) - if the metric is valid for the `gemini` network
+                + `is_google_analytics`: false (boolean) - if the metric is valid for the `google_analytics` network
+                + `is_linkedin`: true (boolean) - if the metric is valid for the `linkedin` network
+                + `is_pinterest`: true (boolean) - if the metric is valid for the `pinterest` network
+                + `is_quora`: true (boolean) - if the metric is valid for the `quora` network
+                + `is_spotify`: true (boolean) - if the metric is valid for the `spotify` network
+                + `is_twitter`: true (boolean) - if the metric is valid for the `twitter` network
+                + `is_account`: true (boolean) - if the metric is valid for the account reporting level
+                + `is_campaign`: true (boolean) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (boolean) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (boolean) - if the metric is valid for the ad reporting level
+                + `is_keyword`: true (boolean) - if the metric is valid for keyword reporting level
 
     + Body
 
@@ -1114,9 +1129,15 @@ This endpoint provides information on the names and formats of cross-channel (`a
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": true,
+                    "is_amazon": true,
                     "is_bing_ads": true,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": true,
+                    "is_pinterest": true,
+                    "is_quora": true,
+                    "is_spotify": true,
                     "is_twitter": true,
                     "is_account": true,
                     "is_campaign": true,
@@ -1136,9 +1157,15 @@ This endpoint provides information on the names and formats of cross-channel (`a
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": true,
+                    "is_amazon": true,
                     "is_bing_ads": true,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": true,
+                    "is_pinterest": true,
+                    "is_quora": true,
+                    "is_spotify": true,
                     "is_twitter": true,
                     "is_account": true,
                     "is_campaign": true,
@@ -1158,9 +1185,15 @@ This endpoint provides information on the names and formats of cross-channel (`a
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": true,
+                    "is_amazon": true,
                     "is_bing_ads": true,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": true,
+                    "is_pinterest": true,
+                    "is_quora": true,
+                    "is_spotify": true,
                     "is_twitter": true,
                     "is_account": true,
                     "is_campaign": true,
@@ -1202,28 +1235,32 @@ Additionally, non-AdStage network provider metrics do not distinguish between me
         + descriptors (array)
             + (object)
                 + id: "clicks" (string) - the identifier assigned to the metric in reports
-                + short_name: "Clicks" (string) - a short human readable name for the metric
-                + display_names: ["Clicks"] (array[string]) - the network's list of allowable human readable display names for the metric; this key is omitted unless `adwords` was specified for the `network` param
+                + `short_name`: "Clicks" (string) - a short human readable name for the metric
+                + `display_names`: ["Clicks"] (array[string]) - the network's list of allowable human readable display names for the metric; this key is omitted unless `adwords` was specified for the `network` param
                 + name: "Clicks" (string) - the full human readable name for the metric used in AdStage UIs
                 + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
                 + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum[string]) - format for the metric (default is `INTEGER`)
                 + type: "METRIC", "TEXT" (enum[string]) - whether the descriptor is for a metric or metadata
-                + can_filter: true (boolean) - if the metric is allowed to be used in a filter field for a reporting request; this key is omitted unless `gemini` was specified for the `network` param
+                + `can_filter`: true (boolean) - if the metric is allowed to be used in a filter field for a reporting request; this key is omitted unless `gemini` was specified for the `network` param
                 + supports_filters: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that allow filtering on the metric; this key is omitted unless `adwords` was specified for the `network` param
                 + supports_zero_impressions: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that maintain metrics even when the ad entity has not logged any impressions; this key is omitted unless `adwords` was specified for the `network` param
                 + reports: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that provide data for the metric; this key is omitted unless `adwords` was specified for the `network` param
-                + is_adwords: true (boolean) - if the metric is valid for the Google Ads network
-                + is_bing_ads: true (boolean) - if the metric is valid for the Microsoft Ads network
-                + is_facebook: true (boolean) - if the metric is valid for the Facebook network
-                + is_gemini: false (boolean) - if the metric is valid for the Gemini network; this key is omitted unless `gemini` was specified for the `network` param
-                + is_google_analytics: false (boolean) - if the metric is valid for the Google Analytics network; this key is omitted unless `google_analytics` was specified for the `network` param
-                + is_linkedin: true (boolean) - if the metric is valid for the LinkedIn network
-                + is_twitter: true (boolean) - if the metric is valid for the Twitter network
-                + is_account: true (boolean) - if the metric is valid for the account reporting level
-                + is_campaign: true (boolean) - if the metric is valid for the campaign reporting level
-                + is_ad_group: true (boolean) - if the metric is valid for the ad group reporting level
-                + is_ad: true (boolean) - if the metric is valid for the ad reporting level
-                + is_keyword: true (boolean) - if the metric is valid for keyword reporting level
+                + `is_adwords`: true (boolean) - if the metric is valid for the `adwords` network
+                + `is_amazon`: true (boolean) - if the metric is valid for the `amazon` network
+                + `is_bing_ads`: true (boolean) - if the metric is valid for the `bing_ads` network
+                + `is_facebook`: true (boolean) - if the metric is valid for the `facebook` network
+                + `is_gemini`: false (boolean) - if the metric is valid for the `gemini` network
+                + `is_google_analytics`: false (boolean) - if the metric is valid for the `google_analytics` network
+                + `is_linkedin`: true (boolean) - if the metric is valid for the `linkedin` network
+                + `is_pinterest`: true (boolean) - if the metric is valid for the `pinterest` network
+                + `is_quora`: true (boolean) - if the metric is valid for the `quora` network
+                + `is_spotify`: true (boolean) - if the metric is valid for the `spotify` network
+                + `is_twitter`: true (boolean) - if the metric is valid for the `twitter` network
+                + `is_account`: true (boolean) - if the metric is valid for the account reporting level
+                + `is_campaign`: true (boolean) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (boolean) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (boolean) - if the metric is valid for the ad reporting level
+                + `is_keyword`: true (boolean) - if the metric is valid for keyword reporting level
 
     + Body
 
@@ -1239,9 +1276,15 @@ Additionally, non-AdStage network provider metrics do not distinguish between me
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": false,
+                    "is_amazon": false,
                     "is_bing_ads": false,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": false,
+                    "is_pinterest": false,
+                    "is_quora": false,
+                    "is_spotify": false,
                     "is_twitter": false,
                     "is_account": true,
                     "is_campaign": true,
@@ -1263,9 +1306,15 @@ Additionally, non-AdStage network provider metrics do not distinguish between me
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": false,
+                    "is_amazon": false,
                     "is_bing_ads": false,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": false,
+                    "is_pinterest": false,
+                    "is_quora": false,
+                    "is_spotify": false,
                     "is_twitter": false,
                     "is_account": true,
                     "is_campaign": true,
@@ -1309,7 +1358,7 @@ This type of report will return one row per requested entity with metrics aggreg
         + `date_range`: "last 30 days" (string, required)
 
             An AdStage date range string.
-            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
+            See the Date Ranges section for details about allowed date range formats.
 
         + limit: 10 (number) - number of rows to include
         + `sort_by`: "clicks" (string) - metric name/meta name to sort by
@@ -1479,7 +1528,7 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
         + `date_range`: "last 30 days" (string, required)
 
             An AdStage date range string.
-            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
+            See the Date Ranges section for details about allowed date range formats.
 
         + limit: 10 (number) - number of rows to include
         + `sort_by`: "clicks" (string) - metric name/meta name to sort by
@@ -1690,7 +1739,7 @@ This requires a few steps to get data flowing:
 
 Creates a custom metric descriptor to allow data upload and returns the URL which will accept metric data for the new descriptor.
 This step only needs to be performed once per conversion column - the metric descriptor can be reused across multiple data uploads.
-To get a list of existing conversion columns, see the [Discovering Metrics](discovering-metrics) section.
+To get a list of existing conversion columns, see the Discovering Metrics section.
 
 + Parameters
 
@@ -1719,15 +1768,15 @@ To get a list of existing conversion columns, see the [Discovering Metrics](disc
 
 + Response 201
 
-    Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
-    You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
+    Note that in the response, the id is returned as `custom_conversions:{fetch_id}:conversions`.
+    You can use the link to find the appropriate URL for upload in Step 2 of the conversion upload process.
 
     + Attributes
 
-        + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
+        + id: "custom_conversions:14:conversions" (string) - the raw metric id returned in reports (see the Building Reports section)
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the URL for step 3.
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the URL for uploading data in step 2.
 
     + Body
 
@@ -1773,14 +1822,14 @@ Alternatively, the V2 endpoint implements an automatic roll up feature.
             + (object)
                 + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - ISO8061 formatted string representing when the conversion occurred.
                 + `value`: 30.5 (number) - An optional conversion value, expressed in the currency type for the converting account. Used to compute Return on Ad Spend.
-                + `attribution` - A list of key/value pairs where the key is an [AdStage Entity ID](entity-ids) and the value is a multiplier of how much to weigh the conversion. Use 1 unless you want to do multi-touch attribution modeling.
+                + `attribution` - A list of key/value pairs where the key is an AdStage Entity ID and the value is a multiplier of how much to weigh the conversion. Use 1 unless you want to do multi-touch attribution modeling.
                     + `/network/adwords/campaign/530303`: 1 (number) - (this id is just an example; use valid ids)
                     + `/network/adwords/acount/530303`: 1 (number) - (this id is just an example; use valid ids)
 
         + `date_range`: `"last 30 days"` (string, required)
 
             An AdStage date range string.
-            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
+            See the Date Ranges section for details about allowed date range formats.
 
     + Body
 
@@ -1845,16 +1894,22 @@ Additionally, AdStage will automatically derive several metrics that are listed 
                 + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
                 + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum[string]) - format for the metric (default is `INTEGER`)
                 + type: "METRIC", "TEXT" (enum[string]) - whether the descriptor is for a metric or metadata
-                + `is_adwords`: true (string) - if the metric is valid for the adwords network
-                + `is_facebook`: true (string) - if the metric is valid for the facebook network
-                + `is_linkedin`: true (string) - if the metric is valid for the linkedin network
-                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
-                + `is_twitter`: true (string) - if the metric is valid for the twitter network
-                + `is_account`: true (string) - if the metric is valid for the account reporting level
-                + `is_campaign`: true (string) - if the metric is valid for the campaign reporting level
-                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
-                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
-                + `is_keyword`: true (string) - if the metric is valid for keyword reporting level
+                + `is_adwords`: true (boolean) - if the metric is valid for the `adwords` network
+                + `is_amazon`: true (boolean) - if the metric is valid for the `amazon` network
+                + `is_bing_ads`: true (boolean) - if the metric is valid for the `bing_ads` network
+                + `is_facebook`: true (boolean) - if the metric is valid for the `facebook` network
+                + `is_gemini`: false (boolean) - if the metric is valid for the `gemini` network
+                + `is_google_analytics`: false (boolean) - if the metric is valid for the `google_analytics` network
+                + `is_linkedin`: true (boolean) - if the metric is valid for the `linkedin` network
+                + `is_pinterest`: true (boolean) - if the metric is valid for the `pinterest` network
+                + `is_quora`: true (boolean) - if the metric is valid for the `quora` network
+                + `is_spotify`: true (boolean) - if the metric is valid for the `spotify` network
+                + `is_twitter`: true (boolean) - if the metric is valid for the twitter network
+                + `is_account`: true (boolean) - if the metric is valid for the account reporting level
+                + `is_campaign`: true (boolean) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (boolean) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (boolean) - if the metric is valid for the ad reporting level
+                + `is_keyword`: true (boolean) - if the metric is valid for keyword reporting level
 
     + Body
 
@@ -1870,9 +1925,15 @@ Additionally, AdStage will automatically derive several metrics that are listed 
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": true,
+                    "is_amazon": true,
                     "is_bing_ads": true,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": true,
+                    "is_pinterest": true,
+                    "is_quora": true,
+                    "is_spotify": true,
                     "is_twitter": true,
                     "is_account": true,
                     "is_campaign": true,
@@ -1893,9 +1954,15 @@ Additionally, AdStage will automatically derive several metrics that are listed 
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": true,
+                    "is_amazon": true,
                     "is_bing_ads": true,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": true,
+                    "is_pinterest": true,
+                    "is_quora": true,
+                    "is_spotify": true,
                     "is_twitter": true,
                     "is_account": true,
                     "is_campaign": true,
@@ -1916,9 +1983,15 @@ Additionally, AdStage will automatically derive several metrics that are listed 
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": true,
+                    "is_amazon": true,
                     "is_bing_ads": true,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": true,
+                    "is_pinterest": true,
+                    "is_quora": true,
+                    "is_spotify": true,
                     "is_twitter": true,
                     "is_account": true,
                     "is_campaign": true,
@@ -1947,7 +2020,8 @@ There are two steps required to set up a new Custom Conversion in the API:
 
 **Note that this endpoint is identical to the V1 endpoint.
 Its documentation has been copied here for convenience in explaining the custom conversion upload flow.
-AdStage may choose to release a V2 namespaced endpoint with a different feature set and shape in the future.**
+AdStage may choose to release a V2 namespaced endpoint with a different feature set and shape in the future.
+Given this, note that the link returned from this endpoint's response refers to the V1 upload endpoint.**
 
 Sets up a metric descriptor to allow data upload. Returns the URL to allow upload.
 You only need to do this step once per conversion column you want to created.
@@ -1980,15 +2054,15 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
 + Response 201
 
-    Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
-    You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
+    Note that in the response, the id is returned as `custom_conversions:{fetch_id}:conversions`.
+    You can use the link to find the appropriate URL for upload in Step 2 of the conversion upload process.
 
     + Attributes
 
         + id: "custom_conversions:14:conversions" (string) - The metric name reports reports will return when providing conversion metrics for this descriptor.
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor.
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor. Note that because this endpoint is currently equivalent to the V1 endpoint, this link will point to the V1 conversion upload endpoint - if using features from the V2 endpoint, AdStage currently recommends parsing the id number from the `id` response's `id` field, which will allow a seamless upgrade if a V2 endpoint is released, pointing to the V2 upload endpoint.
 
     + Body
 
@@ -2098,7 +2172,7 @@ The sections share a request schema, but document different schemas for the resp
 This type of report will return one row of metric data per requested entity with metrics aggregated across the requested timeframe.
 
 Note however that the `results` and `summary` sections of the endpoint are independent - for example, it is possible to request `row` formatted results and a `series` formatted summary.
-The [Time Series Report](time-series-report) section describes the response shapes of any components using that format.
+The Time Series Report section describes the response shapes of any components using that format.
 
 Providing the optional `aggregate_by` key will also change the response by adding a single bulk array time series data for all metrics.
 This is shaped differently than time series data in a `series` formatted request, which splits out timeseries data into one array per metric, giving just that metric's datapoints.
@@ -2126,7 +2200,7 @@ This is shaped differently than time series data in a `series` formatted request
 
             An AdStage date range string indicating the period to report data for.
 
-            See the [list of allowed relative or absolute date strings](date-ranges) in API Concepts.
+            See the list of allowed relative or absolute date strings in the Date Ranges section.
 
         + `output_format`: "row", "series" (enum[string], required)
 
@@ -2156,7 +2230,7 @@ This is shaped differently than time series data in a `series` formatted request
 
                 + targets: "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array[string]) - An optional list of AdStage Entity IDs to pull a report for, if not included all data available for the organization will be used. This can be a list of account groups, accounts, folders, campaigns, ad groups, ads, or keywords, so long as they are a coarser grouping than the `"entity_level"` specifies (e.g. if a campaign is given in this array and `"entity_level"` is set to `"ad_group"`, AdStage will report on all of the ad groups in the given campaign).
 
-                + networks: "adwords", "bing_ads", "facebook", "linkedin", "twitter" (array[string], required) - The list of networks to report data for; must contain at least one network.
+                + networks: "adwords", "amazon", "bing_ads", "facebook", "linkedin", "pinterest", "quora", "spotify", "twitter" (array[string], required) - The list of networks to report data for; must contain at least one network.
 
                 + `entity_level`: "accounts", "campaigns", `"ad_groups"`, "ads", "keywords" (enum, required) - The entity level for which the report should return data.
 
@@ -2164,7 +2238,7 @@ This is shaped differently than time series data in a `series` formatted request
 
             A non-empty list of metrics or meta fields to include in the result.
 
-            See [instructions on discovering fields](discovering-metrics) for a comprehensive list of allowed options.
+            See the Discovering Metrics section (under V1) for a comprehensive list of allowed options.
 
         + filters (array) - A set of filters to limit the results by using AND conditions.
             + (object) - A filter object. Results are only returned if filter computes to true.
@@ -2663,7 +2737,7 @@ This is shaped differently than time series data in a `series` formatted request
 This type of report will return one row of metric data per requested entity with a time series split out of that entity's metrics data.
 
 Note however that the `results` and `summary` sections of the endpoint are independent - for example, it is possible to request `row` formatted results and a `series` formatted summary.
-The [Rows Report](rows-report) section describes the response shapes of any components using that format.
+The Rows Report section describes the response shapes of any components using that format.
 
 Be advised that in addition to `series` reports, `row` reports can also provide time series data, though with a different shape.
 In contrast to the `series` formatted request, which splits out timeseries data into several arrays of time series (one series per metric), `row` reports are optionally able to give a single array of objects containing each metric's datapoints.
@@ -2691,7 +2765,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
             An AdStage date range string indicating the period to report data for.
 
-            See the [list of allowed relative or absolute date strings](date-ranges) in API Concepts.
+            See the Date Ranges section in API Concepts.
 
         + `output_format`: "row", "series" (enum[string], required)
 
@@ -2721,7 +2795,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
                 + targets: "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array[string]) - An optional list of AdStage Entity IDs to pull a report for, if not included all data available for the organization will be used. This can be a list of account groups, accounts, folders, campaigns, ad groups, ads, or keywords, so long as they are a coarser grouping than the `"entity_level"` specifies (e.g. if a campaign is given in this array and `"entity_level"` is set to `"ad_group"`, AdStage will report on all of the ad groups in the given campaign).
 
-                + networks: "adwords", "bing_ads", "facebook", "linkedin", "twitter" (array[string], required) - The list of networks to report data for; must contain at least one network.
+                + networks: "adwords", "amazon", "bing_ads", "facebook", "linkedin", "pinterest", "quora", "spotify", "twitter" (array[string], required) - The list of networks to report data for; must contain at least one network.
 
                 + `entity_level`: "accounts", "campaigns", `"ad_groups"`, "ads", "keywords" (enum, required) - The entity level for which the report should return data.
 
@@ -2729,7 +2803,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
             A non-empty list of metrics or meta fields to include in the result.
 
-            See [instructions on discovering fields](discovering-metrics) for a comprehensive list of allowed options.
+            See the Discovering Metrics section (under V1) for a comprehensive list of allowed options.
 
         + filters (array) - A set of filters to limit the results by using AND conditions.
             + (object) - A filter object. Results are only returned if filter computes to true.

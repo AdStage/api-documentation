@@ -2,7 +2,7 @@
 
 Creates a custom metric descriptor to allow data upload and returns the URL which will accept metric data for the new descriptor.
 This step only needs to be performed once per conversion column - the metric descriptor can be reused across multiple data uploads.
-To get a list of existing conversion columns, see the [Discovering Metrics](discovering-metrics) section.
+To get a list of existing conversion columns, see the Discovering Metrics section.
 
 + Parameters
 
@@ -31,15 +31,15 @@ To get a list of existing conversion columns, see the [Discovering Metrics](disc
 
 + Response 201
 
-    Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
-    You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
+    Note that in the response, the id is returned as `custom_conversions:{fetch_id}:conversions`.
+    You can use the link to find the appropriate URL for upload in Step 2 of the conversion upload process.
 
     + Attributes
 
-        + id: "custom_conversions:14:conversions" (string) - the raw metric name returned in reports (see [Getting Report](#reference/0/building-reports/getting-report) )
+        + id: "custom_conversions:14:conversions" (string) - the raw metric id returned in reports (see the Building Reports section)
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the URL for step 3.
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - the URL for uploading data in step 2.
 
     + Body
 

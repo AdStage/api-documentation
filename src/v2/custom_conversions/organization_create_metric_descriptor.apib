@@ -2,7 +2,8 @@
 
 **Note that this endpoint is identical to the V1 endpoint.
 Its documentation has been copied here for convenience in explaining the custom conversion upload flow.
-AdStage may choose to release a V2 namespaced endpoint with a different feature set and shape in the future.**
+AdStage may choose to release a V2 namespaced endpoint with a different feature set and shape in the future.
+Given this, note that the link returned from this endpoint's response refers to the V1 upload endpoint.**
 
 Sets up a metric descriptor to allow data upload. Returns the URL to allow upload.
 You only need to do this step once per conversion column you want to created.
@@ -35,15 +36,15 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
 
 + Response 201
 
-    Note that in the response, the id is returned as `custom_conversions:{fetch id}:conversions`.
-    You can use the link to find the appropriate URL for upload in Step 3 of the conversion upload process.
+    Note that in the response, the id is returned as `custom_conversions:{fetch_id}:conversions`.
+    You can use the link to find the appropriate URL for upload in Step 2 of the conversion upload process.
 
     + Attributes
 
         + id: "custom_conversions:14:conversions" (string) - The metric name reports reports will return when providing conversion metrics for this descriptor.
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor.
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor. Note that because this endpoint is currently equivalent to the V1 endpoint, this link will point to the V1 conversion upload endpoint - if using features from the V2 endpoint, AdStage currently recommends parsing the id number from the `id` response's `id` field, which will allow a seamless upgrade if a V2 endpoint is released, pointing to the V2 upload endpoint.
 
     + Body
 

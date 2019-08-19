@@ -28,28 +28,32 @@ Additionally, non-AdStage network provider metrics do not distinguish between me
         + descriptors (array)
             + (object)
                 + id: "clicks" (string) - the identifier assigned to the metric in reports
-                + short_name: "Clicks" (string) - a short human readable name for the metric
-                + display_names: ["Clicks"] (array[string]) - the network's list of allowable human readable display names for the metric; this key is omitted unless `adwords` was specified for the `network` param
+                + `short_name`: "Clicks" (string) - a short human readable name for the metric
+                + `display_names`: ["Clicks"] (array[string]) - the network's list of allowable human readable display names for the metric; this key is omitted unless `adwords` was specified for the `network` param
                 + name: "Clicks" (string) - the full human readable name for the metric used in AdStage UIs
                 + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
                 + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum[string]) - format for the metric (default is `INTEGER`)
                 + type: "METRIC", "TEXT" (enum[string]) - whether the descriptor is for a metric or metadata
-                + can_filter: true (boolean) - if the metric is allowed to be used in a filter field for a reporting request; this key is omitted unless `gemini` was specified for the `network` param
+                + `can_filter`: true (boolean) - if the metric is allowed to be used in a filter field for a reporting request; this key is omitted unless `gemini` was specified for the `network` param
                 + supports_filters: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that allow filtering on the metric; this key is omitted unless `adwords` was specified for the `network` param
                 + supports_zero_impressions: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that maintain metrics even when the ad entity has not logged any impressions; this key is omitted unless `adwords` was specified for the `network` param
                 + reports: ["ACCOUNT_PERFORMANCE_REPORT"] (array[string]) - a list of all reports on the provider's network that provide data for the metric; this key is omitted unless `adwords` was specified for the `network` param
-                + is_adwords: true (boolean) - if the metric is valid for the Google Ads network
-                + is_bing_ads: true (boolean) - if the metric is valid for the Microsoft Ads network
-                + is_facebook: true (boolean) - if the metric is valid for the Facebook network
-                + is_gemini: false (boolean) - if the metric is valid for the Gemini network; this key is omitted unless `gemini` was specified for the `network` param
-                + is_google_analytics: false (boolean) - if the metric is valid for the Google Analytics network; this key is omitted unless `google_analytics` was specified for the `network` param
-                + is_linkedin: true (boolean) - if the metric is valid for the LinkedIn network
-                + is_twitter: true (boolean) - if the metric is valid for the Twitter network
-                + is_account: true (boolean) - if the metric is valid for the account reporting level
-                + is_campaign: true (boolean) - if the metric is valid for the campaign reporting level
-                + is_ad_group: true (boolean) - if the metric is valid for the ad group reporting level
-                + is_ad: true (boolean) - if the metric is valid for the ad reporting level
-                + is_keyword: true (boolean) - if the metric is valid for keyword reporting level
+                + `is_adwords`: true (boolean) - if the metric is valid for the `adwords` network
+                + `is_amazon`: true (boolean) - if the metric is valid for the `amazon` network
+                + `is_bing_ads`: true (boolean) - if the metric is valid for the `bing_ads` network
+                + `is_facebook`: true (boolean) - if the metric is valid for the `facebook` network
+                + `is_gemini`: false (boolean) - if the metric is valid for the `gemini` network
+                + `is_google_analytics`: false (boolean) - if the metric is valid for the `google_analytics` network
+                + `is_linkedin`: true (boolean) - if the metric is valid for the `linkedin` network
+                + `is_pinterest`: true (boolean) - if the metric is valid for the `pinterest` network
+                + `is_quora`: true (boolean) - if the metric is valid for the `quora` network
+                + `is_spotify`: true (boolean) - if the metric is valid for the `spotify` network
+                + `is_twitter`: true (boolean) - if the metric is valid for the `twitter` network
+                + `is_account`: true (boolean) - if the metric is valid for the account reporting level
+                + `is_campaign`: true (boolean) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (boolean) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (boolean) - if the metric is valid for the ad reporting level
+                + `is_keyword`: true (boolean) - if the metric is valid for keyword reporting level
 
     + Body
 
@@ -65,9 +69,15 @@ Additionally, non-AdStage network provider metrics do not distinguish between me
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": false,
+                    "is_amazon": false,
                     "is_bing_ads": false,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": false,
+                    "is_pinterest": false,
+                    "is_quora": false,
+                    "is_spotify": false,
                     "is_twitter": false,
                     "is_account": true,
                     "is_campaign": true,
@@ -89,9 +99,15 @@ Additionally, non-AdStage network provider metrics do not distinguish between me
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": false,
+                    "is_amazon": false,
                     "is_bing_ads": false,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": false,
+                    "is_pinterest": false,
+                    "is_quora": false,
+                    "is_spotify": false,
                     "is_twitter": false,
                     "is_account": true,
                     "is_campaign": true,
