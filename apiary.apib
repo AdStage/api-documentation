@@ -1059,7 +1059,7 @@ Gives information about various URLs associated with an ad.
 #### UTM Tracking Information
 
 **Note: UTM tracking information is only available if AdStage Join has been added to your AdStage plan and a Join task has been completed for the entity.
-Currently, Join available only as a paid Add-On.**
+Currently, Join is available only as a paid Add-On.**
 
 Gives information about the UTM parameters associated with the entity.
 Note that AdStage stores these parameters formatted as JSON in `tracking_params`.
@@ -2062,7 +2062,7 @@ To get a list of conversion columns, see the Build Reports section - "Organizati
         + id: "custom_conversions:14:conversions" (string) - The metric name reports reports will return when providing conversion metrics for this descriptor.
         + `_links` (object)
             + `adstage:custom_conversion_upload` (object)
-                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor. Note that because this endpoint is currently equivalent to the V1 endpoint, this link will point to the V1 conversion upload endpoint - if using features from the V2 endpoint, AdStage currently recommends parsing the id number from the `id` response's `id` field, which will allow a seamless upgrade if a V2 endpoint is released, pointing to the V2 upload endpoint.
+                + href: "https://platform.adstage.io/api/organizations/40/metric_descriptors/14/conversions" (string) - The URL for Step 2, which will accept conversion data for this metric descriptor. Note that because this endpoint is currently equivalent to the V1 endpoint, this link will point to the V1 conversion upload endpoint - if using features from the V2 endpoint, AdStage currently recommends parsing the id number from the response's `id` field, which will allow a seamless upgrade if a V2 endpoint is released, pointing to the V2 upload endpoint.
 
     + Body
 
