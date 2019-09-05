@@ -3,7 +3,7 @@
 This type of report will return one row of metric data per requested entity with a time series split out of that entity's metrics data.
 
 Note however that the `results` and `summary` sections of the endpoint are independent - for example, it is possible to request `row` formatted results and a `series` formatted summary.
-The [Rows Report](rows-report) section describes the response shapes of any components using that format.
+The Rows Report section describes the response shapes of any components using that format.
 
 Be advised that in addition to `series` reports, `row` reports can also provide time series data, though with a different shape.
 In contrast to the `series` formatted request, which splits out timeseries data into several arrays of time series (one series per metric), `row` reports are optionally able to give a single array of objects containing each metric's datapoints.
@@ -31,7 +31,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
             An AdStage date range string indicating the period to report data for.
 
-            See the [list of allowed relative or absolute date strings](date-ranges) in API Concepts.
+            See the Date Ranges section in API Concepts.
 
         + `output_format`: "row", "series" (enum[string], required)
 
@@ -61,7 +61,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
                 + targets: "/network/adstage/folder/5555", "/network/adstage/account_group/333", "/network/adwords/account/2332" (array[string]) - An optional list of AdStage Entity IDs to pull a report for, if not included all data available for the organization will be used. This can be a list of account groups, accounts, folders, campaigns, ad groups, ads, or keywords, so long as they are a coarser grouping than the `"entity_level"` specifies (e.g. if a campaign is given in this array and `"entity_level"` is set to `"ad_group"`, AdStage will report on all of the ad groups in the given campaign).
 
-                + networks: "adwords", "bing_ads", "facebook", "linkedin", "twitter" (array[string], required) - The list of networks to report data for; must contain at least one network.
+                + networks: "adwords", "amazon", "bing_ads", "facebook", "linkedin", "pinterest", "quora", "spotify", "twitter" (array[string], required) - The list of networks to report data for; must contain at least one network.
 
                 + `entity_level`: "accounts", "campaigns", `"ad_groups"`, "ads", "keywords" (enum, required) - The entity level for which the report should return data.
 
@@ -69,7 +69,7 @@ In contrast to the `series` formatted request, which splits out timeseries data 
 
             A non-empty list of metrics or meta fields to include in the result.
 
-            See [instructions on discovering fields](discovering-metrics) for a comprehensive list of allowed options.
+            See the Discovering Metrics section (under V1) for a comprehensive list of allowed options.
 
         + filters (array) - A set of filters to limit the results by using AND conditions.
             + (object) - A filter object. Results are only returned if filter computes to true.

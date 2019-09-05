@@ -24,14 +24,14 @@ Alternatively, the V2 endpoint implements an automatic roll up feature.
             + (object)
                 + `timestamp`: `"2016-02-03T03:40Z"` (string, required) - ISO8061 formatted string representing when the conversion occurred.
                 + `value`: 30.5 (number) - An optional conversion value, expressed in the currency type for the converting account. Used to compute Return on Ad Spend.
-                + `attribution` - A list of key/value pairs where the key is an [AdStage Entity ID](entity-ids) and the value is a multiplier of how much to weigh the conversion. Use 1 unless you want to do multi-touch attribution modeling.
+                + `attribution` - A list of key/value pairs where the key is an AdStage Entity ID and the value is a multiplier of how much to weigh the conversion. Use 1 unless you want to do multi-touch attribution modeling.
                     + `/network/adwords/campaign/530303`: 1 (number) - (this id is just an example; use valid ids)
                     + `/network/adwords/acount/530303`: 1 (number) - (this id is just an example; use valid ids)
 
         + `date_range`: `"last 30 days"` (string, required)
 
             An AdStage date range string.
-            See the [Date Ranges](date-ranges) section for details about allowed date range formats.
+            See the Date Ranges section for details about allowed date range formats.
 
     + Body
 

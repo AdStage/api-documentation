@@ -136,7 +136,7 @@ To request a single, flattened objective field, append a dot and the key name, s
 Gives information about the type or subtype for an entity as designated by the remote network.
 For example, a LinkedIn campaign may have the `campaign_type` of `SSU`, a LinkedIn API designated campaign type.
 Note that the `type` field is an exception and refers to an AdStage generated entity category, such as `network_ad`, rather than a remote network designated category.
-See [Entity IDs](entity-ids) for more information.
+See the Entity IDs section for more information.
 
 | UI Display Name        | API Field Name                 |
 | ---------------------- | ------------------------------ |
@@ -180,6 +180,9 @@ Gives information about various URLs associated with an ad.
 | Tracking Template      | `tracking_url_template`        |
 
 #### UTM Tracking Information
+
+**Note: UTM tracking information is only available if AdStage Join has been added to your AdStage plan and a Join task has been completed for the entity.
+Currently, Join is available only as a paid Add-On.**
 
 Gives information about the UTM parameters associated with the entity.
 Note that AdStage stores these parameters formatted as JSON in `tracking_params`.

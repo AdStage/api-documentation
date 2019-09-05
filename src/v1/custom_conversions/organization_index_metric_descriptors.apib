@@ -40,16 +40,22 @@ Additionally, AdStage will automatically derive several metrics that are listed 
                 + tooltip: "Clicks shows how many times a user clicked on your ad" (string) - additional details about a metric, if available
                 + format: "DEFAULT", "PERCENTAGE", "CURRENCY", "TEXT", "DECIMAL", "INTEGER" (enum[string]) - format for the metric (default is `INTEGER`)
                 + type: "METRIC", "TEXT" (enum[string]) - whether the descriptor is for a metric or metadata
-                + `is_adwords`: true (string) - if the metric is valid for the adwords network
-                + `is_facebook`: true (string) - if the metric is valid for the facebook network
-                + `is_linkedin`: true (string) - if the metric is valid for the linkedin network
-                + `is_bing_ads`: true (string) - if the metric is valid for the bing ads network
-                + `is_twitter`: true (string) - if the metric is valid for the twitter network
-                + `is_account`: true (string) - if the metric is valid for the account reporting level
-                + `is_campaign`: true (string) - if the metric is valid for the campaign reporting level
-                + `is_ad_group`: true (string) - if the metric is valid for the ad group reporting level
-                + `is_ad`: true (string) - if the metric is valid for the ad reporting level
-                + `is_keyword`: true (string) - if the metric is valid for keyword reporting level
+                + `is_adwords`: true (boolean) - if the metric is valid for the `adwords` network
+                + `is_amazon`: true (boolean) - if the metric is valid for the `amazon` network
+                + `is_bing_ads`: true (boolean) - if the metric is valid for the `bing_ads` network
+                + `is_facebook`: true (boolean) - if the metric is valid for the `facebook` network
+                + `is_gemini`: false (boolean) - if the metric is valid for the `gemini` network
+                + `is_google_analytics`: false (boolean) - if the metric is valid for the `google_analytics` network
+                + `is_linkedin`: true (boolean) - if the metric is valid for the `linkedin` network
+                + `is_pinterest`: true (boolean) - if the metric is valid for the `pinterest` network
+                + `is_quora`: true (boolean) - if the metric is valid for the `quora` network
+                + `is_spotify`: true (boolean) - if the metric is valid for the `spotify` network
+                + `is_twitter`: true (boolean) - if the metric is valid for the twitter network
+                + `is_account`: true (boolean) - if the metric is valid for the account reporting level
+                + `is_campaign`: true (boolean) - if the metric is valid for the campaign reporting level
+                + `is_ad_group`: true (boolean) - if the metric is valid for the ad group reporting level
+                + `is_ad`: true (boolean) - if the metric is valid for the ad reporting level
+                + `is_keyword`: true (boolean) - if the metric is valid for keyword reporting level
 
     + Body
 
@@ -65,9 +71,15 @@ Additionally, AdStage will automatically derive several metrics that are listed 
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": true,
+                    "is_amazon": true,
                     "is_bing_ads": true,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": true,
+                    "is_pinterest": true,
+                    "is_quora": true,
+                    "is_spotify": true,
                     "is_twitter": true,
                     "is_account": true,
                     "is_campaign": true,
@@ -88,9 +100,15 @@ Additionally, AdStage will automatically derive several metrics that are listed 
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": true,
+                    "is_amazon": true,
                     "is_bing_ads": true,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": true,
+                    "is_pinterest": true,
+                    "is_quora": true,
+                    "is_spotify": true,
                     "is_twitter": true,
                     "is_account": true,
                     "is_campaign": true,
@@ -111,9 +129,15 @@ Additionally, AdStage will automatically derive several metrics that are listed 
                     "category": "PERFORMANCE",
                     "default_sort_order": "DESC",
                     "is_adwords": true,
+                    "is_amazon": true,
                     "is_bing_ads": true,
                     "is_facebook": true,
+                    "is_gemini": false,
+                    "is_google_analytics": false,
                     "is_linkedin": true,
+                    "is_pinterest": true,
+                    "is_quora": true,
+                    "is_spotify": true,
                     "is_twitter": true,
                     "is_account": true,
                     "is_campaign": true,
