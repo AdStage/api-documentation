@@ -2,19 +2,14 @@
 AdStage Data API Documentation for our external customers using [API Blueprint](https://apiblueprint.org/).
 
 ## Developer Setup
-1. Install the correct node version with `asdf install`.
-1. Install the dev packages with `yarn install`.
+Run `make deps` to install the documentation toolset.
 
 ## Modular Blueprints
 We use [Hercule](https://github.com/jamesramsay/hercule/) as recommended by the API Blueprint crew to transclude resources into an ultimate blueprint file from modular sources. The downside is that we can not edit the blueprint in the native UI with this setup. Instead, edit this in your favorite local editor, run the blueprint generation process below, and push the output file to github.
 
 ### Blueprint generation
-Generate the full `apiary.apib` file from the modules:
-```
-hercule src/root.apib -o apiary.apib
-```
-
-If you need a Markdown format output for text exitor previews, just use `cp apiary.apib apiary.md`; the `.md` file will be ignored for other developers.
+Generate the full `apiary.apib` file from the modules with `make generate-docs`.
+This will also create a `apiary.md` that can preview the docs in any Markdown viewer.
 
 ## API Blueprint Tips and Tricks
 Please update this section as you come across and solve challenges with writing our APIary docs.
