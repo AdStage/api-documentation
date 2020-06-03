@@ -55,8 +55,10 @@ Use the `GET /me` endpoint to get the current user ID.
 | ---------------------- | ------------------------------ | ----------------- |
 | Account Group ID       | `account_group_id`             |                   |
 | Account Group Name     | `account_group_name`           |                   |
-| Folder ID              | `folder_names.{id}`            | `folder_names.40` |
-| Folder Name            | `folder_ids.{id}`              | `folder_ids.40`   |
+| Folder Name            | `folder_names.{id}`            | `folder_names.40` |
+| Folder ID              | `folder_ids.{id}`              | `folder_ids.40`   |
+
+*Note that `folder_names` and `folder_ids` will automatically infer your the requesting user's ID, though data will still be returned under the fully qualified field name (e.g. a request for `folder_names` might list results under `folder_names.40`).*
 
 #### Long IDs
 
