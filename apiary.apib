@@ -1430,6 +1430,25 @@ This type of report will return one row per requested entity with metrics aggreg
             * `adwords` provider dimensions change by report, described here: [Google Ads Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
             * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
 
+        + `relative_to`: "America/Los_Angeles" (string)
+            NOTE: This parameter is deprecated but supported for compatibility; prefer `relative_to_time_zone` and/or `relative_to_datetime` for new requests.
+            An ISO 8601 short date or datetime string without time zone or UTC offset (`YYYY-MM-DD` or `YYYY-MM-DDTHH:MM:SS`); or a TZ Info time zone string (such as `America/Los_Angeles`).
+            When a date is provided, the request's `date_range` parameter will be interpreted with the current moment set to this date (at midnight, if no timestamp is given).
+            When a time zone is provided, the request's `date_range` parameter will be interpreted as the actual current moment, set in this time zone.
+            This is especially useful when used with relative `date_range` strings: for example, `today` might be January 1st in New York, but January 2nd in Sydney.
+
+        + `relative_to_datetime`: "2020-03-14" (string)
+            An ISO 8601 short date or datetime string, with or without UTC offset (`YYYY-MM-DD`, `YYYY-MM-DDTHH:MM:SS`, or `YYYY-MM-DDTHH:MM:SS±HH:MM`).
+            When provided, the request's `date_range` parameter will be interpreted with the current moment set to this date (at midnight, if no timestamp is given).
+            When omitted, requests will assume midnight of the current day.
+
+        + `relative_to_time_zone`: "America/Los_Angeles" (string)
+            A TZ Info time zone string (such as `America/Los_Angeles`).
+            When provided, the request's `date_range` parameter will be set in this time zone.
+            This is especially useful when used with relative `date_range` strings: for example, `today` might be January 1st in New York, but January 2nd in Sydney.
+            When combined with the `relative_to_datetime` parameter, that datetime will converted to its equivalent in this time zone.
+            When omitted, requests will assume UTC.
+
     + Body
 
             {
@@ -1596,6 +1615,25 @@ The request is the same as a standard report but using the `"aggregate_by"` opti
             * `facebook` provider dimensions here: [Insights breakdowns](https://developers.facebook.com/docs/marketing-api/insights/breakdowns/v2.9#ageandgender)
             * `adwords` provider dimensions change by report, described here: [Google Ads Reports](https://developers.google.com/adwords/api/docs/appendix/reports)
             * `gemini` provider dimensions change by report (described as cubes) - details: [Reporting > Cubes](https://developer.yahoo.com/gemini/guide/reporting/cubes/)
+
+        + `relative_to`: "America/Los_Angeles" (string)
+            NOTE: This parameter is deprecated but supported for compatibility; prefer `relative_to_time_zone` and/or `relative_to_datetime` for new requests.
+            An ISO 8601 short date or datetime string without time zone or UTC offset (`YYYY-MM-DD` or `YYYY-MM-DDTHH:MM:SS`); or a TZ Info time zone string (such as `America/Los_Angeles`).
+            When a date is provided, the request's `date_range` parameter will be interpreted with the current moment set to this date (at midnight, if no timestamp is given).
+            When a time zone is provided, the request's `date_range` parameter will be interpreted as the actual current moment, set in this time zone.
+            This is especially useful when used with relative `date_range` strings: for example, `today` might be January 1st in New York, but January 2nd in Sydney.
+
+        + `relative_to_datetime`: "2020-03-14" (string)
+            An ISO 8601 short date or datetime string, with or without UTC offset (`YYYY-MM-DD`, `YYYY-MM-DDTHH:MM:SS`, or `YYYY-MM-DDTHH:MM:SS±HH:MM`).
+            When provided, the request's `date_range` parameter will be interpreted with the current moment set to this date (at midnight, if no timestamp is given).
+            When omitted, requests will assume midnight of the current day.
+
+        + `relative_to_time_zone`: "America/Los_Angeles" (string)
+            A TZ Info time zone string (such as `America/Los_Angeles`).
+            When provided, the request's `date_range` parameter will be set in this time zone.
+            This is especially useful when used with relative `date_range` strings: for example, `today` might be January 1st in New York, but January 2nd in Sydney.
+            When combined with the `relative_to_datetime` parameter, that datetime will converted to its equivalent in this time zone.
+            When omitted, requests will assume UTC.
 
     + Body
 
@@ -2341,6 +2379,18 @@ This is shaped differently than time series data in a `series` formatted request
             + `all_inactive` - includes only `Paused` and `Completed` entities
             + `all_with_deleted` - includes `Active`, `Paused`, `Completed`, `Archived`, and `Deleted` entities
 
+        + `relative_to_datetime`: "2020-03-14" (string)
+            An ISO 8601 short date or datetime string, with or without UTC offset (`YYYY-MM-DD`, `YYYY-MM-DDTHH:MM:SS`, or `YYYY-MM-DDTHH:MM:SS±HH:MM`).
+            When provided, the request's `date_range` parameter will be interpreted with the current moment set to this date (at midnight, if no timestamp is given).
+            When omitted, requests will assume midnight of the current day.
+
+        + `relative_to_time_zone`: "America/Los_Angeles" (string)
+            A TZ Info time zone string (such as `America/Los_Angeles`).
+            When provided, the request's `date_range` parameter will be set in this time zone.
+            This is especially useful when used with relative `date_range` strings: for example, `today` might be January 1st in New York, but January 2nd in Sydney.
+            When combined with the `relative_to_datetime` parameter, that datetime will converted to its equivalent in this time zone.
+            When omitted, requests will assume UTC.
+
         + `page_token`: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
 
             A Base64 encoded string describing a specific page to lookup.
@@ -2905,6 +2955,18 @@ In contrast to the `series` formatted request, which splits out timeseries data 
             + `all_active` - includes only `Active` entities
             + `all_inactive` - includes only `Paused` and `Completed` entities
             + `all_with_deleted` - includes `Active`, `Paused`, `Completed`, `Archived`, and `Deleted` entities
+
+        + `relative_to_datetime`: "2020-03-14" (string)
+            An ISO 8601 short date or datetime string, with or without UTC offset (`YYYY-MM-DD`, `YYYY-MM-DDTHH:MM:SS`, or `YYYY-MM-DDTHH:MM:SS±HH:MM`).
+            When provided, the request's `date_range` parameter will be interpreted with the current moment set to this date (at midnight, if no timestamp is given).
+            When omitted, requests will assume midnight of the current day.
+
+        + `relative_to_time_zone`: "America/Los_Angeles" (string)
+            A TZ Info time zone string (such as `America/Los_Angeles`).
+            When provided, the request's `date_range` parameter will be set in this time zone.
+            This is especially useful when used with relative `date_range` strings: for example, `today` might be January 1st in New York, but January 2nd in Sydney.
+            When combined with the `relative_to_datetime` parameter, that datetime will converted to its equivalent in this time zone.
+            When omitted, requests will assume UTC.
 
         + `page_token`: "g3QAAAADZAAFbGltaXRhGWQABm9mZnNldGEAZAABdG0AAAAGb2Zmc2V0" (string)
 
