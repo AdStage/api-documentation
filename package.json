@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "devDependencies": {
     "hercule": "~4.1.1",
-    "lodash": "^4.17.13"
+    "lodash": "^4.17.21"
   }
 }
